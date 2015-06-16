@@ -76,7 +76,7 @@ group :development, :test do
   gem 'test-queue', '0.2.11'
   gem 'ruby-prof'
   gem 'pry-byebug'
-  gem 'rubocop', require: false
+  gem 'govuk-lint', github: "alphagov/govuk-lint", branch: "initial-commit"
 end
 
 group :development do
