@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 class Frontend::StatisticsAnnouncementsFilterTest < ActiveSupport::TestCase
   def build(attrs = {})
@@ -19,7 +19,7 @@ class Frontend::StatisticsAnnouncementsFilterTest < ActiveSupport::TestCase
   end
 
   test "#page= casts to integer" do
-    assert build(page: '2').page.is_a? Integer
+    assert build(page: "2").page.is_a? Integer
   end
 
   test "page default to 1" do
@@ -36,7 +36,7 @@ class Frontend::StatisticsAnnouncementsFilterTest < ActiveSupport::TestCase
   end
 
   test "organisations= ignores any shenanigans" do
-    filter = build(organisations: [{ hax: '1'}])
+    filter = build(organisations: [{ hax: "1"}])
     assert_equal [], filter.organisations
   end
 
@@ -55,7 +55,7 @@ class Frontend::StatisticsAnnouncementsFilterTest < ActiveSupport::TestCase
   end
 
   test "topics= ignores any shenanigans" do
-    filter = build(topics: [{ hax: '1'}])
+    filter = build(topics: [{ hax: "1"}])
     assert_equal [], filter.topics
   end
 
@@ -107,7 +107,7 @@ class Frontend::StatisticsAnnouncementsFilterTest < ActiveSupport::TestCase
 
     stub_provider = mock
     stub_provider.stubs(:search).with({page: 1, per_page: 40}).returns(normal_resultset)
-    stub_provider.stubs(:search).with({page: 1, per_page: 40, statistics_announcement_state: 'cancelled', from_date: 1.month.ago.to_date, to_date: Time.zone.now.to_date}).returns(cancelled_and_past_resultset)
+    stub_provider.stubs(:search).with({page: 1, per_page: 40, statistics_announcement_state: "cancelled", from_date: 1.month.ago.to_date, to_date: Time.zone.now.to_date}).returns(cancelled_and_past_resultset)
 
     filter = build
     filter.stubs(:provider).returns(stub_provider)
@@ -127,7 +127,7 @@ class Frontend::StatisticsAnnouncementsFilterTest < ActiveSupport::TestCase
     stub_provider.stubs(:search).returns((1..50).to_a)
     filter.stubs(:provider).returns(stub_provider)
 
-    assert_equal({ keywords: 'keyword', page: 3 }, filter.next_page_params)
+    assert_equal({ keywords: "keyword", page: 3 }, filter.next_page_params)
   end
 
   test "#previous_page_params returns valid_filter_params with the page number incremented by 1" do
@@ -137,6 +137,6 @@ class Frontend::StatisticsAnnouncementsFilterTest < ActiveSupport::TestCase
     stub_provider.stubs(:search).returns((1..50).to_a)
     filter.stubs(:provider).returns(stub_provider)
 
-    assert_equal({ keywords: 'keyword', page: 1 }, filter.previous_page_params)
+    assert_equal({ keywords: "keyword", page: 1 }, filter.previous_page_params)
   end
 end

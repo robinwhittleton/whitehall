@@ -1,5 +1,5 @@
 # encoding: UTF-8
-require 'test_helper'
+require "test_helper"
 
 class Admin::AdminGovspeakHelperTest < ActionView::TestCase
   include Admin::EditionRoutesHelper
@@ -59,7 +59,7 @@ class Admin::AdminGovspeakHelperTest < ActionView::TestCase
   end
 
   test "should rewrite link to destroyed supporting page in admin preview" do
-    html = govspeak_to_admin_html("this and [that](#{admin_supporting_page_path("doesnt-exist", "missing-id")})")
+    html = govspeak_to_admin_html("this and [that](#{admin_supporting_page_path('doesnt-exist', 'missing-id')})")
     assert_select_within_html html, "del", text: "that"
   end
 
@@ -110,21 +110,21 @@ class Admin::AdminGovspeakHelperTest < ActionView::TestCase
     assert_select_within_html html, ".govspeak figure.image.embedded img[src=?]", "https://some.cdn.com/image.jpg"
   end
 
-  test 'uses the frontend contacts/_contact partial when rendering embedded contacts, not the admin partial' do
+  test "uses the frontend contacts/_contact partial when rendering embedded contacts, not the admin partial" do
     contact = build(:contact)
-    Contact.stubs(:find_by).with(id: '1').returns(contact)
-    input = '[Contact:1]'
+    Contact.stubs(:find_by).with(id: "1").returns(contact)
+    input = "[Contact:1]"
     output = govspeak_to_admin_html(input)
-    contact_html = render('contacts/contact', contact: contact, heading_tag: 'h3')
+    contact_html = render("contacts/contact", contact: contact, heading_tag: "h3")
     assert_equivalent_html "<div class=\"govspeak\">#{contact_html}</div>", output
   end
 
-  test 'use the frontend html version of the contact partial, even if the view context is for a different format' do
+  test "use the frontend html version of the contact partial, even if the view context is for a different format" do
     contact = build(:contact)
-    Contact.stubs(:find_by).with(id: '1').returns(contact)
-    input = '[Contact:1]'
-    contact_html = render('contacts/contact', contact: contact, heading_tag: 'h3')
-    @controller.lookup_context.formats = ['atom']
+    Contact.stubs(:find_by).with(id: "1").returns(contact)
+    input = "[Contact:1]"
+    contact_html = render("contacts/contact", contact: contact, heading_tag: "h3")
+    @controller.lookup_context.formats = ["atom"]
     assert_nothing_raised(ActionView::MissingTemplate) do
       assert_equivalent_html "<div class=\"govspeak\">#{contact_html}</div>", govspeak_to_admin_html(input)
     end

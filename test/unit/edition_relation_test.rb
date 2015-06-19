@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 class EditionRelationTest < ActiveSupport::TestCase
   test "should be invalid without a edition_id" do
@@ -16,7 +16,7 @@ class EditionRelationTest < ActiveSupport::TestCase
     relation = build(:edition_relation,
       edition: existing_relation.edition,
       document: existing_relation.document
-    )
+                    )
     refute relation.valid?
   end
 

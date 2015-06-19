@@ -1,21 +1,21 @@
-require 'test_helper'
-require 'data_hygiene/tag_changes_processor'
+require "test_helper"
+require "data_hygiene/tag_changes_processor"
 require "gds_api/panopticon"
-require 'gds_api/test_helpers/panopticon'
-require 'data_hygiene/tag_changes_exporter'
+require "gds_api/test_helpers/panopticon"
+require "data_hygiene/tag_changes_exporter"
 
 class TopicChangesProcessorTest < ActiveSupport::TestCase
   include DataHygiene
   include GdsApi::TestHelpers::Panopticon
 
   setup do
-    @csv_file = Tempfile.new('tag_changes')
+    @csv_file = Tempfile.new("tag_changes")
     @published_edition = create(:published_publication)
     @draft_edition = create(:draft_publication)
     @published_edition2 = create(:published_publication)
     @draft_edition2 = create(:draft_publication)
-    @old_tag = 'oil-and-gas/offshore'
-    @new_tag = 'oil-and-gas/really-far-out'
+    @old_tag = "oil-and-gas/offshore"
+    @new_tag = "oil-and-gas/really-far-out"
     @gds_user = create(:gds_team_user)
   end
 
@@ -52,7 +52,7 @@ class TopicChangesProcessorTest < ActiveSupport::TestCase
     create(:specialist_sector, tag: @old_tag, edition: @draft_edition2)
     create(:specialist_sector, tag: @old_tag, edition: @published_edition2)
 
-    TagChangesExporter.new(@csv_file.path, 'oil-and-gas/offshore', 'oil-and-gas/really-far-out').export
+    TagChangesExporter.new(@csv_file.path, "oil-and-gas/offshore", "oil-and-gas/really-far-out").export
 
     panopticon_published_edition = stub_registration(@published_edition, [@new_tag])
     panopticon_published_edition2 = stub_registration(@published_edition2, [@new_tag])

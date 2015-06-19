@@ -11,7 +11,7 @@ class Edition::WorkflowTest < ActiveSupport::TestCase
     end
 
     assert_equal [:imported, :draft, :submitted, :rejected, :scheduled], pre
-    assert_equal [:published, :superseded , :deleted, :withdrawn], post
+    assert_equal [:published, :superseded, :deleted, :withdrawn], post
   end
 
   test "rejecting a submitted edition transitions it into the rejected state" do
@@ -87,8 +87,8 @@ class Edition::WorkflowTest < ActiveSupport::TestCase
   test "#edit_as updates the edition" do
     attributes = stub(:attributes)
     edition = create(:policy)
-    edition.edit_as(create(:user), title: 'new-title')
-    assert_equal 'new-title', edition.reload.title
+    edition.edit_as(create(:user), title: "new-title")
+    assert_equal "new-title", edition.reload.title
   end
 
   test "#edit_as records new creator if edit succeeds" do
@@ -208,5 +208,4 @@ class Edition::WorkflowTest < ActiveSupport::TestCase
 
     assert_empty dependable_speech.dependent_editions.reload
   end
-
 end

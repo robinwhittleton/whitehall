@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 class Admin::StatisticsAnnouncementsControllerTest < ActionController::TestCase
   setup do
@@ -37,29 +37,29 @@ class Admin::StatisticsAnnouncementsControllerTest < ActionController::TestCase
 
   test "POST :create saves the announcement to the database and redirects to the dashboard" do
     post :create, statistics_announcement: {
-                    title: 'Beard stats 2014',
-                    summary: 'Summary text',
+                    title: "Beard stats 2014",
+                    summary: "Summary text",
                     publication_type_id: PublicationType::Statistics.id,
                     organisation_ids: [@organisation.id],
                     topic_ids: [@topic.id],
                     current_release_date_attributes: {
                       release_date: 1.year.from_now,
                       precision: StatisticsAnnouncementDate::PRECISION[:one_month],
-                      confirmed: '0'
+                      confirmed: "0"
                     }
                   }
 
     assert_response :redirect
     assert announcement = StatisticsAnnouncement.last
-    assert_equal 'Beard stats 2014', announcement.title
+    assert_equal "Beard stats 2014", announcement.title
     assert_includes announcement.organisations, @organisation
     assert_equal @user, announcement.creator
-    assert_equal 'November 2012', announcement.display_date
+    assert_equal "November 2012", announcement.display_date
     assert_equal @user, announcement.current_release_date.creator
   end
 
   view_test "POST :create re-renders the form if the announcement is invalid" do
-    post :create, statistics_announcement: { title: '', summary: 'Summary text' }
+    post :create, statistics_announcement: { title: "", summary: "Summary text" }
 
     assert_response :success
     assert_select "ul.errors li", text: "Title can't be blank"
@@ -71,7 +71,7 @@ class Admin::StatisticsAnnouncementsControllerTest < ActionController::TestCase
     get :show, id: announcement
 
     assert_response :success
-    assert_select 'h1 .stats-heading', text: announcement.title
+    assert_select "h1 .stats-heading", text: announcement.title
   end
 
   view_test "GET :edit renders the edit form for the  announcement" do
@@ -87,12 +87,12 @@ class Admin::StatisticsAnnouncementsControllerTest < ActionController::TestCase
     put :update, id: announcement.id, statistics_announcement: { title: "New announcement title" }
 
     assert_response :redirect
-    assert_equal 'New announcement title', announcement.reload.title
+    assert_equal "New announcement title", announcement.reload.title
   end
 
   view_test "PUT :update re-renders edit form if changes are not valid" do
     announcement = create(:statistics_announcement)
-    put :update, id: announcement.id, statistics_announcement: { title: '' }
+    put :update, id: announcement.id, statistics_announcement: { title: "" }
 
     assert_response :success
     assert_select "ul.errors li", text: "Title can't be blank"

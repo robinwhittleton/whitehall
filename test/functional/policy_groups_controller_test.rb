@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 require "gds_api/test_helpers/rummager"
 
 class PolicyGroupsControllerTest < ActionController::TestCase
@@ -9,11 +9,11 @@ class PolicyGroupsControllerTest < ActionController::TestCase
   end
 
   test "show sets meta description" do
-    policy_group = create(:policy_group, summary: 'my meta description')
+    policy_group = create(:policy_group, summary: "my meta description")
 
     get :show, id: policy_group
 
-    assert_equal 'my meta description', assigns(:meta_description)
+    assert_equal "my meta description", assigns(:meta_description)
   end
 
   view_test "should display the group's policies" do

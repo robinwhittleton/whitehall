@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 class Admin::PublicationsControllerTest < ActionController::TestCase
   setup do
@@ -33,7 +33,7 @@ class Admin::PublicationsControllerTest < ActionController::TestCase
     end
   end
 
-  test 'GET :new pre-fills the pubication when a statistics announcement id is provided' do
+  test "GET :new pre-fills the pubication when a statistics announcement id is provided" do
     statistics_announcement = create(:statistics_announcement)
     get :new, statistics_announcement_id: statistics_announcement.id
 
@@ -45,13 +45,13 @@ class Admin::PublicationsControllerTest < ActionController::TestCase
     assert_equal statistics_announcement.release_date.to_i, assigns(:edition).scheduled_publication.to_i
   end
 
-  test 'POST :create with an statistics announcement id assigns the publication to the announcement' do
+  test "POST :create with an statistics announcement id assigns the publication to the announcement" do
     statistics_announcement = create(:statistics_announcement)
     post :create, edition: controller_attributes_for(:publication,
       publication_type_id: PublicationType::Statistics.id,
       lead_organisation_ids: [@organisation.id],
       statistics_announcement_id: statistics_announcement.id
-    )
+                                                    )
 
     assert publication = Publication.last, assigns(:edition).errors.full_messages.inspect
     assert_redirected_to admin_publication_path(publication)
@@ -62,7 +62,7 @@ class Admin::PublicationsControllerTest < ActionController::TestCase
     post :create, edition: controller_attributes_for(:publication,
       first_published_at: Time.zone.parse("2001-10-21 00:00:00"),
       publication_type_id: PublicationType::ResearchAndAnalysis.id
-    )
+                                                    )
 
     created_publication = Publication.last
     assert_equal Time.zone.parse("2001-10-21 00:00:00"), created_publication.first_published_at
@@ -75,7 +75,7 @@ class Admin::PublicationsControllerTest < ActionController::TestCase
   end
 
   test "should validate first_published_at field on create if previously_published is true" do
-    post :create, edition: (controller_attributes_for(:publication).merge(previously_published: 'true'))
+    post :create, edition: (controller_attributes_for(:publication).merge(previously_published: "true"))
     assert_equal "First published at can't be blank", assigns(:edition).errors.full_messages.last
   end
 
@@ -119,7 +119,8 @@ class Admin::PublicationsControllerTest < ActionController::TestCase
   end
 
   test "prevents CRUD operations on access-limited publications" do
-    my_organisation, other_organisation = create(:organisation), create(:organisation)
+    my_organisation = create(:organisation)
+    other_organisation = create(:organisation)
     login_as(create(:user, organisation: my_organisation))
     inaccessible = create(:draft_publication, publication_type: PublicationType::NationalStatistics, access_limited: true, organisations: [other_organisation])
 

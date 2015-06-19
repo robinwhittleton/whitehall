@@ -1,7 +1,6 @@
 require "test_helper"
 
 class Edition::SearchableTest < ActiveSupport::TestCase
-
   test "should return search index suitable for Rummageable" do
     edition = create(:published_edition, title: "edition-title")
 
@@ -48,7 +47,7 @@ class Edition::SearchableTest < ActiveSupport::TestCase
     first = create(:published_edition)
 
     major = first.create_draft(user)
-    major.change_note = 'This was a major change'
+    major.change_note = "This was a major change"
     force_publish(major)
 
     assert_equal "This was a major change", major.search_index["latest_change_note"]
@@ -56,7 +55,7 @@ class Edition::SearchableTest < ActiveSupport::TestCase
 
   test "should not add edition to search index if it is not available in English" do
     I18n.locale = :fr
-    french_edition = create(:submitted_edition, title: 'French Title', body: 'French Body', primary_locale: :fr)
+    french_edition = create(:submitted_edition, title: "French Title", body: "French Body", primary_locale: :fr)
     I18n.locale = I18n.default_locale
     stub_panopticon_registration(french_edition)
     stub_publishing_api_registration_for(french_edition)

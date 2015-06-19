@@ -12,7 +12,7 @@ class SpeechesControllerTest < ActionController::TestCase
   view_test "should display generic details about the speech" do
     home_office = create(:organisation, name: "Home Office")
     home_secretary = create(:ministerial_role, name: "Secretary of State", organisations: [home_office])
-    theresa_may = create(:person, forename: "Theresa", surname: "May", image: fixture_file_upload('minister-of-funk.960x640.jpg'))
+    theresa_may = create(:person, forename: "Theresa", surname: "May", image: fixture_file_upload("minister-of-funk.960x640.jpg"))
     theresa_may_appointment = create(:role_appointment, role: home_secretary, person: theresa_may)
     speech_type = SpeechType::Transcript
     published_speech = create(:published_speech, speech_type: speech_type, role_appointment: theresa_may_appointment, delivered_on: Time.zone.parse("2011-06-01 00:00:00"), location: "The Guidhall")
@@ -27,7 +27,7 @@ class SpeechesControllerTest < ActionController::TestCase
   view_test "should display who gave the speech even if they are not appointed to the same position anymore" do
     home_office = create(:organisation, name: "Home Office")
     home_secretary = create(:ministerial_role, name: "Secretary of State", organisations: [home_office])
-    theresa_may = create(:person, forename: "Theresa", surname: "May", image: fixture_file_upload('minister-of-funk.960x640.jpg'))
+    theresa_may = create(:person, forename: "Theresa", surname: "May", image: fixture_file_upload("minister-of-funk.960x640.jpg"))
     theresa_may_appointment = create(:role_appointment, role: home_secretary, person: theresa_may, started_at: 1.year.ago, ended_at: 1.day.ago)
     subsequent_appointment = create(:role_appointment, role: home_secretary, started_at: 1.day.ago)
     speech_type = SpeechType::Transcript
@@ -102,7 +102,7 @@ class SpeechesControllerTest < ActionController::TestCase
   end
 
   view_test "should omit location if not given" do
-    published_speech = create(:published_speech, location: '')
+    published_speech = create(:published_speech, location: "")
 
     get :show, id: published_speech.document
     refute_select ".location"

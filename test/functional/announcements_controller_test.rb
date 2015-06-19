@@ -71,8 +71,8 @@ class AnnouncementsControllerTest < ActionController::TestCase
   end
 
   view_test "index shows related organisations for each type of article" do
-    first_org = create(:organisation, name: 'first-org', acronym: "FO")
-    second_org = create(:organisation, name: 'second-org', acronym: "SO")
+    first_org = create(:organisation, name: "first-org", acronym: "FO")
+    second_org = create(:organisation, name: "second-org", acronym: "SO")
     news_article = create(:published_news_article, first_published_at: 4.days.ago, organisations: [first_org, second_org])
     speech = create(:published_speech, delivered_on: 5.days.ago, organisations: [second_org])
 
@@ -97,13 +97,13 @@ class AnnouncementsControllerTest < ActionController::TestCase
   end
 
   view_test "index shows selected announcement type filter option in the title" do
-    get :index, announcement_filter_option: 'news-stories'
+    get :index, announcement_filter_option: "news-stories"
 
-    assert_select 'h1 span', ': news stories'
+    assert_select "h1 span", ": news stories"
   end
 
   view_test "index indicates selected announcement type filter option in the filter selector" do
-    get :index, announcement_filter_option: 'news-stories'
+    get :index, announcement_filter_option: "news-stories"
 
     assert_select "select[name='announcement_filter_option']" do
       assert_select "option[selected='selected']", text: Whitehall::AnnouncementFilterOption::NewsStory.label
@@ -159,12 +159,12 @@ class AnnouncementsControllerTest < ActionController::TestCase
     end
   end
 
-  view_test 'index has atom feed autodiscovery link' do
+  view_test "index has atom feed autodiscovery link" do
     get :index
     assert_select_autodiscovery_link announcements_url(format: "atom", host: Whitehall.public_host, protocol: Whitehall.public_protocol)
   end
 
-  view_test 'index atom feed autodiscovery link includes any present filters' do
+  view_test "index atom feed autodiscovery link includes any present filters" do
     topic = create(:topic)
     organisation = create(:organisation)
 
@@ -179,13 +179,13 @@ class AnnouncementsControllerTest < ActionController::TestCase
     get :index, format: :atom, departments: [org.to_param]
 
     assert_select_atom_feed do
-      assert_select 'feed > id', 1
-      assert_select 'feed > title', 1
-      assert_select 'feed > author, feed > entry > author'
-      assert_select 'feed > updated', 1
-      assert_select 'feed > link[rel=?][type=?][href=?]', 'self', 'application/atom+xml',
+      assert_select "feed > id", 1
+      assert_select "feed > title", 1
+      assert_select "feed > author, feed > entry > author"
+      assert_select "feed > updated", 1
+      assert_select "feed > link[rel=?][type=?][href=?]", "self", "application/atom+xml",
                     announcements_url(format: :atom, departments: [org.to_param]), 1
-      assert_select 'feed > link[rel=?][type=?][href=?]', 'alternate', 'text/html', root_url, 1
+      assert_select "feed > link[rel=?][type=?][href=?]", "alternate", "text/html", root_url, 1
     end
   end
 
@@ -206,19 +206,19 @@ class AnnouncementsControllerTest < ActionController::TestCase
     news = create(:published_news_story, first_published_at: 1.week.ago)
     speech = create(:published_speech, delivered_on: 3.days.ago)
 
-    get :index, format: :atom, announcement_type_option: 'news-stories'
+    get :index, format: :atom, announcement_type_option: "news-stories"
 
     assert_select_atom_feed do
       assert_select_atom_entries([news])
     end
   end
 
-  view_test 'index atom feed should return a valid feed if there are no matching documents' do
+  view_test "index atom feed should return a valid feed if there are no matching documents" do
     get :index, format: :atom
 
     assert_select_atom_feed do
-      assert_select 'feed > updated', text: Time.zone.now.iso8601
-      assert_select 'feed > entry', count: 0
+      assert_select "feed > updated", text: Time.zone.now.iso8601
+      assert_select "feed > entry", count: 0
     end
   end
 
@@ -234,32 +234,32 @@ class AnnouncementsControllerTest < ActionController::TestCase
     assert_equal json["email_signup_url"], new_email_signups_path(email_signup: { feed: atom_url })
   end
 
-  view_test 'index only lists documents in the given locale' do
+  view_test "index only lists documents in the given locale" do
     english_article = create(:published_news_article)
     spanish_article = create(:published_news_article, translated_into: [:fr])
-    get :index, locale: 'fr'
+    get :index, locale: "fr"
 
     assert_select_object spanish_article
     refute_select_object english_article
   end
 
-  view_test 'index for non-english locale copes when a nil page is specified' do
+  view_test "index for non-english locale copes when a nil page is specified" do
     english_article = create(:published_news_article)
     spanish_article = create(:published_news_article, translated_into: [:fr])
-    get :index, locale: 'fr', page: nil
+    get :index, locale: "fr", page: nil
 
     assert_response :success
   end
 
-  view_test 'index for non-english locales only allows filtering by world location' do
-    get :index, locale: 'fr'
+  view_test "index for non-english locales only allows filtering by world location" do
+    get :index, locale: "fr"
 
-    assert_select '.filter', count: 1
+    assert_select ".filter", count: 1
     assert_select "select#world_locations"
   end
 
-  view_test 'index for non-english locales skips results summary' do
-    get :index, locale: 'fr'
-    refute_select '.filter-results-summary'
+  view_test "index for non-english locales skips results summary" do
+    get :index, locale: "fr"
+    refute_select ".filter-results-summary"
   end
 end

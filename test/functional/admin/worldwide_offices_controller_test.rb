@@ -1,7 +1,6 @@
-require 'test_helper'
+require "test_helper"
 
 class Admin::WorldwideOfficesControllerTest < ActionController::TestCase
-
   setup do
     login_as :departmental_editor
   end
@@ -23,7 +22,7 @@ class Admin::WorldwideOfficesControllerTest < ActionController::TestCase
 
     assert_redirected_to admin_worldwide_organisation_worldwide_offices_path(worldwide_organisation)
     assert_equal 1, worldwide_organisation.offices.count
-    assert_equal 'Main office', worldwide_organisation.offices.first.contact.title
+    assert_equal "Main office", worldwide_organisation.offices.first.contact.title
   end
 
   test "post create creates worldwide office on the home page of the world org if told to" do
@@ -36,12 +35,12 @@ class Admin::WorldwideOfficesControllerTest < ActionController::TestCase
           title: "Main office",
           contact_type_id: ContactType::General.id
         },
-        show_on_home_page: '1'
+        show_on_home_page: "1"
       },
       worldwide_organisation_id: worldwide_organisation.id
 
     new_office = worldwide_organisation.offices.last
-    assert_equal 'Main office', new_office.contact.title
+    assert_equal "Main office", new_office.contact.title
     assert worldwide_organisation.office_shown_on_home_page?(new_office)
   end
 
@@ -55,12 +54,12 @@ class Admin::WorldwideOfficesControllerTest < ActionController::TestCase
           title: "Main office",
           contact_type_id: ContactType::General.id
         },
-        show_on_home_page: '0'
+        show_on_home_page: "0"
       },
       worldwide_organisation_id: worldwide_organisation.id
 
     new_office = worldwide_organisation.offices.last
-    assert_equal 'Main office', new_office.contact.title
+    assert_equal "Main office", new_office.contact.title
     refute worldwide_organisation.office_shown_on_home_page?(new_office)
   end
 
@@ -78,7 +77,7 @@ class Admin::WorldwideOfficesControllerTest < ActionController::TestCase
       worldwide_organisation_id: worldwide_organisation.id
 
     new_office = worldwide_organisation.offices.last
-    assert_equal 'Main office', new_office.contact.title
+    assert_equal "Main office", new_office.contact.title
     refute worldwide_organisation.office_shown_on_home_page?(new_office)
   end
 
@@ -99,7 +98,7 @@ class Admin::WorldwideOfficesControllerTest < ActionController::TestCase
       worldwide_organisation_id: worldwide_organisation.id
 
     assert_equal 1, worldwide_organisation.offices.count
-    assert_equal [service1, service2], worldwide_organisation.offices.first.services.sort_by {|s| s.id}
+    assert_equal [service1, service2], worldwide_organisation.offices.first.services.sort_by(&:id)
   end
 
   test "post create creates associated phone numbers" do
@@ -148,7 +147,7 @@ class Admin::WorldwideOfficesControllerTest < ActionController::TestCase
           id: office.contact.id,
           title: "Head office"
         },
-        show_on_home_page: '1'
+        show_on_home_page: "1"
       },
       id: office,
       worldwide_organisation_id: worldwide_organisation
@@ -167,7 +166,7 @@ class Admin::WorldwideOfficesControllerTest < ActionController::TestCase
           id: office.contact.id,
           title: "Head office"
         },
-        show_on_home_page: '0'
+        show_on_home_page: "0"
       },
       id: office,
       worldwide_organisation_id: worldwide_organisation
@@ -207,7 +206,7 @@ class Admin::WorldwideOfficesControllerTest < ActionController::TestCase
       id: office,
       worldwide_organisation_id: worldwide_organisation
 
-    assert_equal [service2, service3], office.reload.services.sort_by {|s| s.id}
+    assert_equal [service2, service3], office.reload.services.sort_by(&:id)
   end
 
   test "put update updates associated phone numbers" do
@@ -244,7 +243,7 @@ class Admin::WorldwideOfficesControllerTest < ActionController::TestCase
               id: contact_number.id,
               label: contact_number.label,
               number: contact_number.number,
-              _destroy: 'true'
+              _destroy: "true"
             }
           }
         },
@@ -276,7 +275,7 @@ class Admin::WorldwideOfficesControllerTest < ActionController::TestCase
     assert worldwide_organisation.office_shown_on_home_page?(office)
   end
 
-  test 'POST on :reorder_for_home_page takes id => ordering mappings and reorders the list based on this' do
+  test "POST on :reorder_for_home_page takes id => ordering mappings and reorders the list based on this" do
     worldwide_organisation, office_1 = create_worldwide_organisation_and_office
     office_2 = worldwide_organisation.offices.create(
       worldwide_office_type_id: WorldwideOfficeType::Other.id,
@@ -298,9 +297,9 @@ class Admin::WorldwideOfficesControllerTest < ActionController::TestCase
 
     post :reorder_for_home_page, worldwide_organisation_id: worldwide_organisation,
       ordering: {
-        office_1.id.to_s => '3',
-        office_2.id.to_s => '1',
-        office_3.id.to_s => '2'
+        office_1.id.to_s => "3",
+        office_2.id.to_s => "1",
+        office_3.id.to_s => "2"
       }
 
     assert_redirected_to admin_worldwide_organisation_worldwide_offices_url(worldwide_organisation)
@@ -314,8 +313,8 @@ class Admin::WorldwideOfficesControllerTest < ActionController::TestCase
 
     post :reorder_for_home_page, worldwide_organisation_id: worldwide_organisation,
       ordering: {
-        office.id.to_s => '2',
-        '1000000' => '1'
+        office.id.to_s => "2",
+        "1000000" => "1"
       }
 
     assert_redirected_to admin_worldwide_organisation_worldwide_offices_url(worldwide_organisation)

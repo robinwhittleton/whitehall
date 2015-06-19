@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 class WorldwideOfficeTest < ActiveSupport::TestCase
   %w{name service_type_id}.each do |param|
@@ -11,5 +11,4 @@ class WorldwideOfficeTest < ActiveSupport::TestCase
     worldwide_service = build(:worldwide_service, service_type: WorldwideServiceType::OtherServices)
     assert worldwide_service.valid?
   end
-
 end

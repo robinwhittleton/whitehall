@@ -1,12 +1,12 @@
 require "test_helper"
 
 class ServiceListeners::EditionDependenciesTest < ActiveSupport::TestCase
-
-  ['publish', 'force publish'].each do |transition|
-    service_name = transition.parameterize.underscore + 'er'
+  ["publish", "force publish"].each do |transition|
+    service_name = transition.parameterize.underscore + "er"
 
     test "#{transition}ing an edition populates its dependencies" do
-      contact, speech = create(:contact), create(:speech)
+      contact = create(:contact)
+      speech = create(:speech)
       news_article = create(:submitted_news_article, body: "For more information, get in touch at:
         [Contact:#{contact.id}] or read our [official statement](/government/admin/speeches/#{speech.id})", major_change_published_at: Time.zone.now)
       stub_panopticon_registration(news_article)
@@ -92,5 +92,4 @@ class ServiceListeners::EditionDependenciesTest < ActiveSupport::TestCase
 
     [dependable_speech, dependent_article]
   end
-
 end

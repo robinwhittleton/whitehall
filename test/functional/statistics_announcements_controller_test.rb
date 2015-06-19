@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 class StatisticsAnnouncementsControllerTest < ActionController::TestCase
   include TextAssertions
@@ -52,7 +52,7 @@ class StatisticsAnnouncementsControllerTest < ActionController::TestCase
       assert_equal 1, assigns(:filter).results.size
 
       rendered = Nokogiri::HTML::Document.parse(response.body)
-      list_item = rendered.css('.document-list li').first
+      list_item = rendered.css(".document-list li").first
 
       assert_string_includes "Average beard lengths 2015", list_item.text
       assert_string_includes "national statistics", list_item.text
@@ -93,7 +93,7 @@ class StatisticsAnnouncementsControllerTest < ActionController::TestCase
     xhr :get, :index
 
     assert_response :success
-    assert_template layout: nil, partial: 'statistics_announcements/_filter_results'
+    assert_template layout: nil, partial: "statistics_announcements/_filter_results"
   end
 
   test "#show renders announcements that have no linked published publication" do

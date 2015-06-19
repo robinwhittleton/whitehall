@@ -1,5 +1,5 @@
-require 'test_helper'
-require 'gds_api/test_helpers/router'
+require "test_helper"
+require "gds_api/test_helpers/router"
 
 module DataHygiene
   class DuplicateStatisticsAnnouncementTest < ActiveSupport::TestCase

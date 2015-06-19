@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-require 'test_helper'
+require "test_helper"
 
 class DocumentHelperTest < ActionView::TestCase
   include PublicDocumentRoutesHelper
@@ -17,7 +17,7 @@ class DocumentHelperTest < ActionView::TestCase
   test '#edition_organisation_class returns "no_organisation" if doc has no organisation' do
     edition = build(:publication)
     edition.organisations = []
-    assert_equal 'unknown_organisation', edition_organisation_class(edition)
+    assert_equal "unknown_organisation", edition_organisation_class(edition)
   end
 
   test "should generate a national statistics logo for a national statistic" do
@@ -65,12 +65,12 @@ class DocumentHelperTest < ActionView::TestCase
   end
 
   test "should return DOC specific thumbnail for DOC files" do
-    attachment = create(:file_attachment, file: fixture_file_upload('sample.docx', 'application/msword'))
+    attachment = create(:file_attachment, file: fixture_file_upload("sample.docx", "application/msword"))
     assert_match /pub-cover-doc\.png/, attachment_thumbnail(attachment)
   end
 
   test "should return spreadsheet specific thumbnail for spreadsheet files" do
-    attachment = create(:file_attachment, file: fixture_file_upload('sample-from-excel.csv', 'text/csv'))
+    attachment = create(:file_attachment, file: fixture_file_upload("sample-from-excel.csv", "text/csv"))
     assert_match /pub-cover-spreadsheet\.png/, attachment_thumbnail(attachment)
   end
 
@@ -131,7 +131,7 @@ class DocumentHelperTest < ActionView::TestCase
       locale: "it",
       id: "a-world-location"
     })
-    assert_dom_equal %Q(<a href="#{world_location_path("a-world-location", :de)}">Deutsch</a>),
+    assert_dom_equal %(<a href="#{world_location_path('a-world-location', :de)}">Deutsch</a>),
       link_to_translation(:de)
   end
 
@@ -146,7 +146,7 @@ class DocumentHelperTest < ActionView::TestCase
     collection = create(:published_document_collection, :with_group)
     collection.groups.first.documents = [edition.document]
 
-    metadata_links = part_of_metadata(edition).join(' ')
+    metadata_links = part_of_metadata(edition).join(" ")
     assert_select_within_html metadata_links,
                               "a[href=?]",
                               public_document_path(collection),
@@ -157,7 +157,7 @@ class DocumentHelperTest < ActionView::TestCase
     statistical_data_set = create(:published_statistical_data_set)
     edition = create(:published_publication, statistical_data_sets: [statistical_data_set])
 
-    metadata_links = part_of_metadata(edition).join(' ')
+    metadata_links = part_of_metadata(edition).join(" ")
     assert_select_within_html metadata_links,
                               "a[href=?]",
                               public_document_path(statistical_data_set),
@@ -168,7 +168,7 @@ class DocumentHelperTest < ActionView::TestCase
     topical_event = create(:topical_event)
     edition = create(:news_article, topical_events: [topical_event])
 
-    metadata_links = part_of_metadata(edition).join(' ')
+    metadata_links = part_of_metadata(edition).join(" ")
     assert_select_within_html metadata_links,
                               "a[href=?]",
                               topical_event_path(topical_event),
@@ -179,7 +179,7 @@ class DocumentHelperTest < ActionView::TestCase
     policy = create(:published_policy)
     edition = create(:news_article, related_policy_ids: [policy.id])
 
-    metadata_links = part_of_metadata(edition, [policy]).join(' ')
+    metadata_links = part_of_metadata(edition, [policy]).join(" ")
     assert_select_within_html metadata_links,
                               "a[href=?]",
                               public_document_path(policy),
@@ -190,7 +190,7 @@ class DocumentHelperTest < ActionView::TestCase
     mainstream_category = create(:mainstream_category)
     guide = create(:news_article)
 
-    metadata_links = part_of_metadata(guide, [], nil, mainstream_category).join(' ')
+    metadata_links = part_of_metadata(guide, [], nil, mainstream_category).join(" ")
     assert_select_within_html metadata_links,
                               "a[href=?]",
                               mainstream_category_path(mainstream_category),
@@ -201,7 +201,7 @@ class DocumentHelperTest < ActionView::TestCase
     world_location = create(:world_location)
     edition = create(:published_publication, world_locations: [world_location])
 
-    metadata_links = part_of_metadata(edition).join(' ')
+    metadata_links = part_of_metadata(edition).join(" ")
     assert_select_within_html metadata_links,
                               "a[href=?]",
                               world_location_path(world_location),
@@ -212,7 +212,7 @@ class DocumentHelperTest < ActionView::TestCase
     org = create(:organisation)
     edition = create(:speech, lead_organisations: [org])
 
-    metadata_links = from_metadata(edition).join(' ')
+    metadata_links = from_metadata(edition).join(" ")
     assert_select_within_html metadata_links,
                               "a[href=?]",
                               organisation_path(org),
@@ -225,7 +225,7 @@ class DocumentHelperTest < ActionView::TestCase
     role_appointment = create(:role_appointment, role: ministerial_role, person: person)
     speech = create(:published_speech, role_appointment: role_appointment)
 
-    metadata_links = from_metadata(speech).join(' ')
+    metadata_links = from_metadata(speech).join(" ")
     assert_select_within_html metadata_links,
                               "a[href=?]",
                               person_path(person),
@@ -238,7 +238,7 @@ class DocumentHelperTest < ActionView::TestCase
     role_appointment = create(:role_appointment, role: ministerial_role, person: person)
     edition = create(:news_article, role_appointments: [role_appointment])
 
-    metadata_links = from_metadata(edition).join(' ')
+    metadata_links = from_metadata(edition).join(" ")
     assert_select_within_html metadata_links,
                               "a[href=?]",
                               person_path(person),
@@ -249,7 +249,7 @@ class DocumentHelperTest < ActionView::TestCase
     organisation = create(:worldwide_organisation)
     edition = create(:draft_worldwide_priority, worldwide_organisations: [organisation])
 
-    metadata_links = from_metadata(edition).join(' ')
+    metadata_links = from_metadata(edition).join(" ")
     assert_select_within_html metadata_links,
                               "a[href=?]",
                               worldwide_organisation_path(organisation),
@@ -260,7 +260,7 @@ class DocumentHelperTest < ActionView::TestCase
     policy_group = create(:policy_group)
     edition = create(:policy, policy_groups: [policy_group])
 
-    metadata_links = from_metadata(edition).join(' ')
+    metadata_links = from_metadata(edition).join(" ")
     assert_select_within_html metadata_links,
                               "a[href=?]",
                               policy_group_path(policy_group),
@@ -271,7 +271,7 @@ class DocumentHelperTest < ActionView::TestCase
     org = create(:organisation)
     edition = create(:speech, supporting_organisations: [org])
 
-    metadata_links = from_metadata(edition).join(' ')
+    metadata_links = from_metadata(edition).join(" ")
     assert_select_within_html metadata_links,
                               "a[href=?]",
                               organisation_path(org),

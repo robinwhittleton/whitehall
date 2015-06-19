@@ -1,9 +1,9 @@
-require 'test_helper'
+require "test_helper"
 
 class TopicsHelperTest < ActionView::TestCase
   include TextAssertions
 
-  test 'classification_contents_breakdown generates a sentence that ends with the number of published detailed guides belonging to the classification' do
+  test "classification_contents_breakdown generates a sentence that ends with the number of published detailed guides belonging to the classification" do
     t = create(:topic)
 
     assert_match(/0 published detailed guides/, classification_contents_breakdown(t))
@@ -16,10 +16,10 @@ class TopicsHelperTest < ActionView::TestCase
   end
 
   test "#topic_links_sentence generates a sentence of topic links" do
-    topics = 3.times.map { |n| create(:topic) }
+    topics = 3.times.map { |_n| create(:topic) }
 
     rendered = Nokogiri::HTML::DocumentFragment.parse(topic_links_sentence(topics))
-    links = rendered.css('a')
+    links = rendered.css("a")
 
     assert_equal topics.map(&:name),              links.map(&:text)
     assert_equal topics.map { |t| topic_path(t) }, links.map { |link| link[:href] }

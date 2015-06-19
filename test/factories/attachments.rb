@@ -8,7 +8,7 @@ FactoryGirl.define do
   factory :file_attachment, traits: [:abstract_attachment] do
     sequence(:title) { |index| "file-attachment-title-#{index}" }
     transient do
-      file { File.open(Rails.root.join('test', 'fixtures', 'greenpaper.pdf')) }
+      file { File.open(Rails.root.join("test", "fixtures", "greenpaper.pdf")) }
     end
     after(:build) do |attachment, evaluator|
       attachment.attachment_data ||= build(:attachment_data, file: evaluator.file)
@@ -17,7 +17,7 @@ FactoryGirl.define do
 
   factory :csv_attachment, parent: :file_attachment do
     transient do
-      file { File.open(Rails.root.join('test', 'fixtures', 'sample.csv')) }
+      file { File.open(Rails.root.join("test", "fixtures", "sample.csv")) }
     end
   end
 
@@ -33,9 +33,9 @@ FactoryGirl.define do
     # and is automatically set on the internal GovspeakContent instance.
     after :build do |attachment, evaluator|
       attachment.build_govspeak_content(
-                   body: evaluator.body,
-                   manually_numbered_headings: evaluator.manually_numbered_headings
-                 )
+        body: evaluator.body,
+        manually_numbered_headings: evaluator.manually_numbered_headings
+      )
     end
   end
 

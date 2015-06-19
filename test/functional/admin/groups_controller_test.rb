@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 class Admin::GroupsControllerTest < ActionController::TestCase
   setup do
@@ -29,7 +29,8 @@ class Admin::GroupsControllerTest < ActionController::TestCase
   end
 
   test "create should create a new group with new members ignoring blank members" do
-    person_one, person_two = create(:person), create(:person)
+    person_one = create(:person)
+    person_two = create(:person)
 
     post :create, organisation_id: @organisation.id, group: attributes_for(:group,
       name: "group-name",
@@ -39,7 +40,7 @@ class Admin::GroupsControllerTest < ActionController::TestCase
         "1" => { person_id: person_two.id },
         "2" => { person_id: "" }
       }
-    )
+                                                                          )
 
     assert group = Group.last
     assert_equal "group-name", group.name
@@ -57,7 +58,7 @@ class Admin::GroupsControllerTest < ActionController::TestCase
   test "create should inform the user when a group is created successfully" do
     post :create, organisation_id: @organisation.id, group: attributes_for(:group,
       name: "group-name"
-    )
+                                                                          )
 
     assert_equal %{"group-name" created.}, flash[:notice]
   end
@@ -65,7 +66,7 @@ class Admin::GroupsControllerTest < ActionController::TestCase
   view_test "create with invalid data should display errors" do
     post :create, organisation_id: @organisation.id, group: attributes_for(:group,
       name: nil
-    )
+                                                                          )
 
     assert_select ".form-errors"
   end
@@ -79,7 +80,7 @@ class Admin::GroupsControllerTest < ActionController::TestCase
         "0" => { person_id: person.id },
         "1" => { person_id: person.id }
       }
-    )
+                                                                          )
 
     assert_select ".form-errors", /The same person has been added more than once/
   end
@@ -150,7 +151,8 @@ class Admin::GroupsControllerTest < ActionController::TestCase
   end
 
   test "update should update a member" do
-    person_one, person_two = create(:person), create(:person)
+    person_one = create(:person)
+    person_two = create(:person)
     group = create(:group, name: "group-name", organisation: @organisation)
     membership_one = create(:group_membership, group: group, person: person_one)
 
@@ -211,13 +213,14 @@ class Admin::GroupsControllerTest < ActionController::TestCase
 
     put :update, organisation_id: @organisation.id, id: group, group: attributes_for(:group,
       name: nil
-    )
+                                                                                    )
 
     assert_select ".form-errors"
   end
 
   view_test "update should not allow the same person to be added to the same group" do
-    group, person = create(:group), create(:person)
+    group = create(:group)
+    person = create(:person)
     membership = create(:group_membership, group: group, person: person)
 
     put :update, organisation_id: @organisation.id, id: group, group: attributes_for(:group,
@@ -225,7 +228,7 @@ class Admin::GroupsControllerTest < ActionController::TestCase
         "0" => { id: membership.id, person_id: person.id, _destroy: 0 },
         "1" => { person_id: person.id }
       }
-    )
+                                                                                    )
 
     assert_select ".form-errors", /The same person has been added more than once/
   end

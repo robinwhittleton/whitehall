@@ -50,6 +50,5 @@ class Edition::HasMainstreamCategoriesTest < ActiveSupport::TestCase
 
     assert_nil published_guide.primary_mainstream_category_id
     assert published_guide.other_mainstream_category_ids.empty?
-
   end
 end

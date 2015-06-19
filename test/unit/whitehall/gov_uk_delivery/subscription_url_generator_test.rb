@@ -1,8 +1,7 @@
 # encoding: utf-8
-require 'test_helper'
+require "test_helper"
 
 class Whitehall::GovUkDelivery::SubscriptionUrlGeneratorTest < ActiveSupport::TestCase
-
   def feed_url(url_fragment)
     "#{Whitehall.public_protocol}://#{Whitehall.public_host}/government/#{url_fragment}"
   end
@@ -38,7 +37,7 @@ class Whitehall::GovUkDelivery::SubscriptionUrlGeneratorTest < ActiveSupport::Te
     )
   end
 
-  test '#subscription_urls returns an atom feed url for the organisation and a topic' do
+  test "#subscription_urls returns an atom feed url for the organisation and a topic" do
     topic = create(:topic)
     organisation = create(:ministerial_department)
     @edition = create(:policy, topics: [topic], organisations: [organisation])
@@ -46,7 +45,7 @@ class Whitehall::GovUkDelivery::SubscriptionUrlGeneratorTest < ActiveSupport::Te
     assert_subscription_urls_for_edition_include("policies.atom?departments%5B%5D=#{organisation.slug}&topics%5B%5D=#{topic.slug}")
   end
 
-  test '#subscription_urls for a policy returns an atom feed url for each topic/organisation combination' do
+  test "#subscription_urls for a policy returns an atom feed url for each topic/organisation combination" do
     topic1 = create(:topic)
     topic2 = create(:topic)
     organisation = create(:ministerial_department)
@@ -58,7 +57,7 @@ class Whitehall::GovUkDelivery::SubscriptionUrlGeneratorTest < ActiveSupport::Te
     )
   end
 
-  test '#subscription_urls for a policy returns an atom feed url that does not include topics' do
+  test "#subscription_urls for a policy returns an atom feed url that does not include topics" do
     topic = create(:topic)
     organisation = create(:ministerial_department)
     @edition = create(:policy, topics: [topic], organisations: [organisation])
@@ -66,7 +65,7 @@ class Whitehall::GovUkDelivery::SubscriptionUrlGeneratorTest < ActiveSupport::Te
     assert_subscription_urls_for_edition_include("policies.atom?departments%5B%5D=#{organisation.slug}")
   end
 
-  test '#subscription_urls for a policy returns an atom feed url that does not include departments' do
+  test "#subscription_urls for a policy returns an atom feed url that does not include departments" do
     topic = create(:topic)
     organisation = create(:ministerial_department)
     @edition = create(:policy, topics: [topic], organisations: [organisation])
@@ -74,7 +73,7 @@ class Whitehall::GovUkDelivery::SubscriptionUrlGeneratorTest < ActiveSupport::Te
     assert_subscription_urls_for_edition_include("policies.atom?topics%5B%5D=#{topic.slug}")
   end
 
-  test '#subscription_urls for a policy returns an atom feed url that does not include departments or topics' do
+  test "#subscription_urls for a policy returns an atom feed url that does not include departments or topics" do
     topic = create(:topic)
     organisation = create(:ministerial_department)
     @edition = create(:policy, topics: [topic], organisations: [organisation])
@@ -82,7 +81,7 @@ class Whitehall::GovUkDelivery::SubscriptionUrlGeneratorTest < ActiveSupport::Te
     assert_subscription_urls_for_edition_include("policies.atom")
   end
 
-  test '#subscription_urls for a publication returns an atom feed url for the organisation and a topic (with and without the publication_filter_option param)' do
+  test "#subscription_urls for a publication returns an atom feed url for the organisation and a topic (with and without the publication_filter_option param)" do
     topic = create(:topic)
     organisation = create(:ministerial_department)
     @edition = create(:publication, organisations: [organisation], publication_type: PublicationType::CorporateReport)
@@ -94,7 +93,7 @@ class Whitehall::GovUkDelivery::SubscriptionUrlGeneratorTest < ActiveSupport::Te
     )
   end
 
-  test '#subscription_urls for a publication returns an atom feed url for each topic/organisation combination' do
+  test "#subscription_urls for a publication returns an atom feed url for each topic/organisation combination" do
     topic1 = create(:topic)
     topic2 = create(:topic)
     organisation = create(:ministerial_department)
@@ -109,7 +108,7 @@ class Whitehall::GovUkDelivery::SubscriptionUrlGeneratorTest < ActiveSupport::Te
     )
   end
 
-  test '#subscription_urls for a publication returns an atom feed url that does not include topics (with and without the publication_filter_option param)' do
+  test "#subscription_urls for a publication returns an atom feed url that does not include topics (with and without the publication_filter_option param)" do
     topic = create(:topic)
     organisation = create(:ministerial_department)
     @edition = create(:publication, organisations: [organisation], publication_type: PublicationType::CorporateReport)
@@ -121,7 +120,7 @@ class Whitehall::GovUkDelivery::SubscriptionUrlGeneratorTest < ActiveSupport::Te
     )
   end
 
-  test '#subscription_urls for a publication returns an atom feed url that does not include departments (with and without the publication_filter_option param)' do
+  test "#subscription_urls for a publication returns an atom feed url that does not include departments (with and without the publication_filter_option param)" do
     topic = create(:topic)
     organisation = create(:ministerial_department)
     @edition = create(:publication, organisations: [organisation], publication_type: PublicationType::CorporateReport)
@@ -133,7 +132,7 @@ class Whitehall::GovUkDelivery::SubscriptionUrlGeneratorTest < ActiveSupport::Te
     )
   end
 
-  test '#subscription_urls for a publication returns an atom feed url that does not include departments or topics (with and without the publication_filter_option param)' do
+  test "#subscription_urls for a publication returns an atom feed url that does not include departments or topics (with and without the publication_filter_option param)" do
     topic = create(:topic)
     organisation = create(:ministerial_department)
     @edition = create(:publication, organisations: [organisation], publication_type: PublicationType::CorporateReport)
@@ -145,7 +144,7 @@ class Whitehall::GovUkDelivery::SubscriptionUrlGeneratorTest < ActiveSupport::Te
     )
   end
 
-  test '#subscription_urls for a publication with a type that is not available as a filter returns an atom feed without a publication_filter_option' do
+  test "#subscription_urls for a publication with a type that is not available as a filter returns an atom feed without a publication_filter_option" do
     topic = create(:topic)
     organisation = create(:ministerial_department)
     @edition = create(:imported_publication, organisations: [organisation], publication_type: PublicationType::Unknown)
@@ -154,7 +153,7 @@ class Whitehall::GovUkDelivery::SubscriptionUrlGeneratorTest < ActiveSupport::Te
     refute urls_for(@edition).any? { |feed_url| feed_url =~ /publication_filter_option\=/ }
   end
 
-  test '#subscription_urls for an announcement returns an atom feed url for the organisation and a topic (with and without the publication_filter_option param)' do
+  test "#subscription_urls for an announcement returns an atom feed url for the organisation and a topic (with and without the publication_filter_option param)" do
     topic = create(:topic)
     organisation = create(:ministerial_department)
     @edition = create(:news_article, organisations: [organisation], news_article_type: NewsArticleType::PressRelease)
@@ -166,7 +165,7 @@ class Whitehall::GovUkDelivery::SubscriptionUrlGeneratorTest < ActiveSupport::Te
     )
   end
 
-  test '#subscription_urls for an announcement returns an atom feed url for each topic/organisation combination' do
+  test "#subscription_urls for an announcement returns an atom feed url for each topic/organisation combination" do
     topic1 = create(:topic)
     topic2 = create(:topic)
     organisation = create(:ministerial_department)
@@ -181,7 +180,7 @@ class Whitehall::GovUkDelivery::SubscriptionUrlGeneratorTest < ActiveSupport::Te
     )
   end
 
-  test '#subscription_urls for an announcement returns an atom feed url that does not include topics (with and without the publication_filter_option param)' do
+  test "#subscription_urls for an announcement returns an atom feed url that does not include topics (with and without the publication_filter_option param)" do
     topic = create(:topic)
     organisation = create(:ministerial_department)
     @edition = create(:news_article, organisations: [organisation], news_article_type: NewsArticleType::PressRelease)
@@ -193,7 +192,7 @@ class Whitehall::GovUkDelivery::SubscriptionUrlGeneratorTest < ActiveSupport::Te
     )
   end
 
-  test '#subscription_urls for an announcement returns an atom feed url that does not include departments (with and without the publication_filter_option param)' do
+  test "#subscription_urls for an announcement returns an atom feed url that does not include departments (with and without the publication_filter_option param)" do
     topic = create(:topic)
     organisation = create(:ministerial_department)
     @edition = create(:news_article, organisations: [organisation], news_article_type: NewsArticleType::PressRelease)
@@ -205,7 +204,7 @@ class Whitehall::GovUkDelivery::SubscriptionUrlGeneratorTest < ActiveSupport::Te
     )
   end
 
-  test '#subscription_urls for an announcement returns an atom feed url that does not include departments or topics (with and without the publication_filter_option param)' do
+  test "#subscription_urls for an announcement returns an atom feed url that does not include departments or topics (with and without the publication_filter_option param)" do
     topic = create(:topic)
     organisation = create(:ministerial_department)
     @edition = create(:news_article, organisations: [organisation], news_article_type: NewsArticleType::PressRelease)
@@ -217,7 +216,7 @@ class Whitehall::GovUkDelivery::SubscriptionUrlGeneratorTest < ActiveSupport::Te
     )
   end
 
-  test '#subscription_urls for an announcement with a type that is not available as a filter returns an atom feed without a announcement_filter_option' do
+  test "#subscription_urls for an announcement with a type that is not available as a filter returns an atom feed without a announcement_filter_option" do
     topic = create(:topic)
     organisation = create(:ministerial_department)
     @edition = create(:news_article, organisations: [organisation])
@@ -227,7 +226,7 @@ class Whitehall::GovUkDelivery::SubscriptionUrlGeneratorTest < ActiveSupport::Te
     refute urls_for(@edition).any? { |feed_url| feed_url =~ /announcement_filter_option\=/ }
   end
 
-  test '#subscription_urls for an announcement includes the atom feed for the associated role and person' do
+  test "#subscription_urls for an announcement includes the atom feed for the associated role and person" do
     appointment1 = create(:ministerial_role_appointment)
     appointment2 = create(:ministerial_role_appointment)
 
@@ -241,13 +240,13 @@ class Whitehall::GovUkDelivery::SubscriptionUrlGeneratorTest < ActiveSupport::Te
     )
   end
 
-  test '#subscription_urls handles speeches that have a person override instead of a role appointment' do
-    @edition = create(:speech, role_appointment: nil, person_override: 'The Queen')
+  test "#subscription_urls handles speeches that have a person override instead of a role appointment" do
+    @edition = create(:speech, role_appointment: nil, person_override: "The Queen")
 
-    assert_subscription_urls_for_edition_include('announcements.atom')
+    assert_subscription_urls_for_edition_include("announcements.atom")
   end
 
-  test '#subscription_urls for a speech includes the atom feed for the associated role and person' do
+  test "#subscription_urls for a speech includes the atom feed for the associated role and person" do
     appointment1 = create(:ministerial_role_appointment)
 
     @edition = create(:speech, role_appointment: appointment1)
@@ -258,7 +257,7 @@ class Whitehall::GovUkDelivery::SubscriptionUrlGeneratorTest < ActiveSupport::Te
     )
   end
 
-  test '#subscription_urls for an edition related to topics includes the atom feed for both the generic feed and the specific topic feed' do
+  test "#subscription_urls for an edition related to topics includes the atom feed for both the generic feed and the specific topic feed" do
     topic = create(:topic)
     @edition = create(:news_article, topics: [topic])
 
@@ -268,14 +267,14 @@ class Whitehall::GovUkDelivery::SubscriptionUrlGeneratorTest < ActiveSupport::Te
     )
   end
 
-  test '#subscription_urls for an edition related to topical events includes the atom feed for the specific topical_event feed' do
+  test "#subscription_urls for an edition related to topical events includes the atom feed for the specific topical_event feed" do
     topical_event = create(:topical_event)
     @edition = create(:news_article, topical_events: [topical_event])
 
     assert_subscription_urls_for_edition_include("topical-events/#{topical_event.slug}.atom")
   end
 
-  test '#subscription_urls for an edition related to a world location includes the atom feed for the specific world location feed' do
+  test "#subscription_urls for an edition related to a world location includes the atom feed for the specific world location feed" do
     world_location = create(:world_location)
     @edition = create(:world_location_news_article, world_locations: [world_location])
 
@@ -296,13 +295,13 @@ class Whitehall::GovUkDelivery::SubscriptionUrlGeneratorTest < ActiveSupport::Te
     policy = create(:published_policy)
     @edition = create(:news_article, related_policy_ids: [policy.id])
 
-    FeatureFlag.find_or_create_by(key: 'future_policies')
-    FeatureFlag.set('future_policies', true)
+    FeatureFlag.find_or_create_by(key: "future_policies")
+    FeatureFlag.set("future_policies", true)
 
     refute urls_for(@edition).any? { |feed_url| feed_url =~ /policies/ }
   end
 
-  test '#subscription_urls excludes relevant_to_local_government variations if new policies enabled' do
+  test "#subscription_urls excludes relevant_to_local_government variations if new policies enabled" do
     role_appointment = create(:ministerial_role_appointment)
     role = role_appointment.role
     person = role_appointment.person
@@ -317,10 +316,10 @@ class Whitehall::GovUkDelivery::SubscriptionUrlGeneratorTest < ActiveSupport::Te
       topics: [topic],
       topical_events: [topical_event],
       world_locations: [world_location]
-    )
+                     )
 
-    FeatureFlag.find_or_create_by(key: 'future_policies')
-    FeatureFlag.set('future_policies', true)
+    FeatureFlag.find_or_create_by(key: "future_policies")
+    FeatureFlag.set("future_policies", true)
 
     refute urls_for(@edition).any? { |feed_url| feed_url =~ /policies/ }
     refute urls_for(@edition).any? { |feed_url| feed_url =~ /relevant_to_local_government/ }

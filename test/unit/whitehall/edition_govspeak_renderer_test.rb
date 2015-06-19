@@ -1,8 +1,8 @@
-require 'test_helper'
+require "test_helper"
 
 class Whitehall::EditionGovspeakRendererTest < ActiveSupport::TestCase
   test "Renders basic govspeak" do
-    edition = build(:edition, body: 'Some content')
+    edition = build(:edition, body: "Some content")
 
     assert_equivalent_html '<div class="govspeak"><p>Some content</p></div>',
       render_govspeak(edition).body
@@ -29,7 +29,7 @@ class Whitehall::EditionGovspeakRendererTest < ActiveSupport::TestCase
   end
 
   test "renders unpublishing explanation as govspeak" do
-    edition = create(:unpublishing, explanation: 'Some explanation').edition
+    edition = create(:unpublishing, explanation: "Some explanation").edition
     assert_equivalent_html '<div class="govspeak"><p>Some explanation</p></div>',
       render_govspeak(edition).unpublishing_explanation
   end

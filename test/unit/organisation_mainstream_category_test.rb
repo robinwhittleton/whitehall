@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 class OrganisationMainstreamCategoryTest < ActiveSupport::TestCase
   setup do
@@ -6,19 +6,19 @@ class OrganisationMainstreamCategoryTest < ActiveSupport::TestCase
     @mainstream_category = create(:mainstream_category)
   end
 
-  test 'it is invalid without an organisation' do
+  test "it is invalid without an organisation" do
     refute build(:organisation_mainstream_category, organisation: nil).valid?
   end
 
-  test 'it is invalid without a mainstream category' do
+  test "it is invalid without a mainstream category" do
     refute build(:organisation_mainstream_category, mainstream_category: nil).valid?
   end
 
-  test 'it is invalid without an ordering' do
+  test "it is invalid without an ordering" do
     refute build(:organisation_mainstream_category, ordering: nil).valid?
   end
 
-  test 'it is invalid if the organisation already has that mainstream category' do
+  test "it is invalid if the organisation already has that mainstream category" do
     existing = create(:organisation_mainstream_category, mainstream_category: @mainstream_category, organisation: @organisation)
     refute build(:organisation_mainstream_category, mainstream_category: @mainstream_category, organisation: @organisation).valid?
   end

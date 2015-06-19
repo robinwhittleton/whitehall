@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 class Admin::GenericEditionsController::AuditTrailTest < ActionController::TestCase
   tests Admin::GenericEditionsController
@@ -8,7 +8,7 @@ class Admin::GenericEditionsController::AuditTrailTest < ActionController::TestC
       tom = login_as(create(:gds_editor, name: "Tom", email: "tom@example.com"))
       draft_edition = create(:draft_edition)
 
-      request.env['HTTPS'] = 'on'
+      request.env["HTTPS"] = "on"
       get action, id: draft_edition
 
       assert_select "#history", text: /Created by Tom/ do

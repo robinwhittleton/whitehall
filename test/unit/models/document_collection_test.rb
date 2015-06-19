@@ -50,13 +50,13 @@ class DocumentCollectionTest < ActiveSupport::TestCase
   end
 
   test "it should not create a group if it's already been given one" do
-    doc_collection = create(:document_collection, groups: [build(:document_collection_group, heading: 'not documents')])
+    doc_collection = create(:document_collection, groups: [build(:document_collection_group, heading: "not documents")])
     assert_equal 1, doc_collection.groups.length
     refute_equal "Documents", doc_collection.groups[0].heading
   end
 
   def assert_collection_groups_are_the_same(original, draft)
-    relevant_attributes = ->(g) { g.attributes.slice('heading', 'body', 'ordering') }
+    relevant_attributes = ->(g) { g.attributes.slice("heading", "body", "ordering") }
     original_attributes = original.groups.map(&relevant_attributes)
     draft_attributes = draft.groups.map(&relevant_attributes)
 
@@ -83,19 +83,19 @@ class DocumentCollectionTest < ActiveSupport::TestCase
     assert create(:published_document_collection).can_index_in_search?
   end
 
-  test 'indexes the title as title' do
-    collection = create(:document_collection, title: 'a title')
-    assert_equal 'a title', collection.search_index['title']
+  test "indexes the title as title" do
+    collection = create(:document_collection, title: "a title")
+    assert_equal "a title", collection.search_index["title"]
   end
 
-  test 'indexes the full URL to the collection show page as link' do
+  test "indexes the full URL to the collection show page as link" do
     collection = create(:document_collection)
-    assert_equal "/government/collections/#{collection.slug}", collection.search_index['link']
+    assert_equal "/government/collections/#{collection.slug}", collection.search_index["link"]
   end
 
-  test 'indexes the slug' do
+  test "indexes the slug" do
     collection = create(:published_document_collection)
-    assert_equal collection.slug, collection.search_index['slug']
+    assert_equal collection.slug, collection.search_index["slug"]
   end
 
   test "indexes the body without markup as indexable_content" do
@@ -104,19 +104,19 @@ class DocumentCollectionTest < ActiveSupport::TestCase
     assert_match /^This is a body$/, collection.search_index["indexable_content"]
   end
 
-  test 'indexes the group headings and body copy without markup as indexable_content' do
-    group = create(:document_collection_group, heading: 'The Heading', body: 'The *Body*')
+  test "indexes the group headings and body copy without markup as indexable_content" do
+    group = create(:document_collection_group, heading: "The Heading", body: "The *Body*")
     collection = create(:document_collection, groups: [group])
-    assert_match /^The Heading$/, collection.search_index['indexable_content']
-    assert_match /^The Body$/, collection.search_index['indexable_content']
+    assert_match /^The Heading$/, collection.search_index["indexable_content"]
+    assert_match /^The Body$/, collection.search_index["indexable_content"]
   end
 
-  test 'indexes the summary as description' do
-    collection = create(:document_collection, summary: 'a summary')
-    assert_match 'a summary', collection.search_index['description']
+  test "indexes the summary as description" do
+    collection = create(:document_collection, summary: "a summary")
+    assert_match "a summary", collection.search_index["description"]
   end
 
-  test 'published_editions returns published editions from collection in reverse chronological order' do
+  test "published_editions returns published editions from collection in reverse chronological order" do
     collection = create(:document_collection, :with_group)
     draft = create(:draft_publication)
     old = create(:published_publication, first_published_at: 2.days.ago)
@@ -127,7 +127,7 @@ class DocumentCollectionTest < ActiveSupport::TestCase
     assert_equal [new, old], collection.published_editions
   end
 
-  test 'scheduled_editions returns editions that are scheduled for publishing in the collection' do
+  test "scheduled_editions returns editions that are scheduled for publishing in the collection" do
     collection = create(:document_collection, :with_group)
     publication = create(:published_publication, first_published_at: 2.days.ago)
     scheduled_publication = create(:scheduled_publication)

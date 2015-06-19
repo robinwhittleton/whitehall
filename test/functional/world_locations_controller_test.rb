@@ -32,7 +32,7 @@ class WorldLocationsControllerTest < ActionController::TestCase
     world_location = create(:world_location,
       title: "UK in country-name",
       mission_statement: "country-mission-statement"
-    )
+                           )
     get :show, id: world_location
     assert_select "h1", text: "UK in country-name"
     assert_select ".mission_statement", text: "country-mission-statement"
@@ -49,7 +49,7 @@ class WorldLocationsControllerTest < ActionController::TestCase
   test "show responds with not found if appropriate translation doesn't exist" do
     world_location = create(:world_location)
     assert_raise(ActiveRecord::RecordNotFound) do
-      get :show, id: world_location, locale: 'fr'
+      get :show, id: world_location, locale: "fr"
     end
   end
 
@@ -59,7 +59,7 @@ class WorldLocationsControllerTest < ActionController::TestCase
     assert_redirected_to api_world_location_path(world_location, format: :json)
   end
 
-  view_test 'show has atom feed autodiscovery link' do
+  view_test "show has atom feed autodiscovery link" do
     world_location = create(:world_location)
 
     get :show, id: world_location
@@ -67,7 +67,7 @@ class WorldLocationsControllerTest < ActionController::TestCase
     assert_select_autodiscovery_link atom_feed_url_for(world_location)
   end
 
-  view_test 'show includes a link to the atom feed' do
+  view_test "show includes a link to the atom feed" do
     world_location = create(:world_location)
 
     get :show, id: world_location
@@ -191,8 +191,8 @@ class WorldLocationsControllerTest < ActionController::TestCase
 
     assert_select "#announcements" do
       assert_select_object announcement_1 do
-        assert_select '.publication-date abbr[title=?]', 1.days.ago.iso8601
-        assert_select '.document-type', "Press release"
+        assert_select ".publication-date abbr[title=?]", 1.days.ago.iso8601
+        assert_select ".document-type", "Press release"
       end
       assert_select_object announcement_2
       refute_select_object announcement_3
@@ -225,8 +225,8 @@ class WorldLocationsControllerTest < ActionController::TestCase
 
     assert_select "#publications" do
       assert_select_object publication_2 do
-        assert_select '.publication-date abbr[title=?]', 2.days.ago.to_date.to_datetime.iso8601
-        assert_select '.document-type', "Policy paper"
+        assert_select ".publication-date abbr[title=?]", 2.days.ago.to_date.to_datetime.iso8601
+        assert_select ".document-type", "Policy paper"
       end
       assert_select_object publication_3
       refute_select_object publication_1
@@ -253,12 +253,12 @@ class WorldLocationsControllerTest < ActionController::TestCase
 
     assert_select "#statistics-publications" do
       assert_select_object publication_1 do
-        assert_select '.publication-date abbr[title=?]', 1.days.ago.to_date.to_datetime.iso8601
-        assert_select '.document-type', "Statistics - national statistics"
+        assert_select ".publication-date abbr[title=?]", 1.days.ago.to_date.to_datetime.iso8601
+        assert_select ".document-type", "Statistics - national statistics"
       end
       assert_select_object publication_2
       refute_select_object publication_3
-      assert_select "a[href=?]", publications_filter_path(world_location, publication_filter_option: 'statistics')
+      assert_select "a[href=?]", publications_filter_path(world_location, publication_filter_option: "statistics")
     end
   end
 
@@ -268,7 +268,7 @@ class WorldLocationsControllerTest < ActionController::TestCase
     create(:published_publication, world_locations: [world_location], translated_into: [:fr])
     create(:published_policy, world_locations: [world_location], translated_into: [:fr])
 
-    get :show, id: world_location, locale: 'fr'
+    get :show, id: world_location, locale: "fr"
 
     assert_select ".type", "Localisation"
     assert_select "#publications .see-all a", /Voir toutes nos publications/
@@ -280,7 +280,7 @@ class WorldLocationsControllerTest < ActionController::TestCase
     translated_speech = create(:published_speech, world_locations: [world_location], translated_into: [:fr])
     untranslated_speech = create(:published_speech, world_locations: [world_location])
 
-    get :show, id: world_location, locale: 'fr'
+    get :show, id: world_location, locale: "fr"
 
     assert_equal [translated_speech], assigns(:announcements).object
   end
@@ -291,7 +291,7 @@ class WorldLocationsControllerTest < ActionController::TestCase
     translated_publication = create(:published_publication, world_locations: [world_location], translated_into: [:fr])
     untranslated_publication = create(:published_publication, world_locations: [world_location])
 
-    get :show, id: world_location, locale: 'fr'
+    get :show, id: world_location, locale: "fr"
 
     assert_equal [translated_publication], assigns(:non_statistics_publications).object
   end
@@ -302,7 +302,7 @@ class WorldLocationsControllerTest < ActionController::TestCase
     translated_statistics = create(:published_statistics, world_locations: [world_location], translated_into: [:fr])
     untranslated_statistics = create(:published_statistics, world_locations: [world_location])
 
-    get :show, id: world_location, locale: 'fr'
+    get :show, id: world_location, locale: "fr"
 
     assert_equal [translated_statistics], assigns(:statistics_publications).object
   end
@@ -313,7 +313,7 @@ class WorldLocationsControllerTest < ActionController::TestCase
     translated_publication = create(:published_publication, world_locations: [world_location], translated_into: [:fr])
     untranslated_publication = create(:published_publication, world_locations: [world_location])
 
-    get :show, id: world_location, locale: 'fr'
+    get :show, id: world_location, locale: "fr"
 
     assert_equal [translated_publication], assigns(:recently_updated)
   end
@@ -324,7 +324,7 @@ class WorldLocationsControllerTest < ActionController::TestCase
     translated_edition = create(:published_publication, world_locations: [world_location], translated_into: [:fr])
     untranslated_edition = create(:published_publication, world_locations: [world_location])
 
-    get :show, id: world_location, format: :atom, locale: 'fr'
+    get :show, id: world_location, format: :atom, locale: "fr"
 
     assert_select_atom_feed do
       with_locale :fr do
@@ -339,7 +339,7 @@ class WorldLocationsControllerTest < ActionController::TestCase
 
     get :show, id: world_location
 
-    assert_select '.featured-links' do
+    assert_select ".featured-links" do
       assert_select "a[href='#{featured_link.url}']", text: featured_link.title
     end
   end

@@ -40,8 +40,10 @@ FactoryGirl.define do
   end
 
   factory :gds_admin, parent: :user do
-    permissions { [User::Permissions::SIGNIN, User::Permissions::GDS_EDITOR,
-                   User::Permissions::GDS_ADMIN] }
+    permissions {
+      [User::Permissions::SIGNIN, User::Permissions::GDS_EDITOR,
+       User::Permissions::GDS_ADMIN]
+    }
   end
 
   factory :gds_editor, parent: :user do
@@ -62,12 +64,14 @@ FactoryGirl.define do
 
   factory :gds_team_user, parent: :user do
     name "GDS Inside Government Team"
-    email 'govuk-whitehall@digital.cabinet-office.gov.uk'
-    permissions { [
+    email "govuk-whitehall@digital.cabinet-office.gov.uk"
+    permissions {
+      [
                     User::Permissions::SIGNIN,
                     User::Permissions::DEPARTMENTAL_EDITOR,
                     User::Permissions::GDS_EDITOR,
                     User::Permissions::FORCE_PUBLISH_ANYTHING,
-                  ] }
+                  ]
+    }
   end
 end

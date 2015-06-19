@@ -142,32 +142,32 @@ class TopicsControllerTest < ActionController::TestCase
     assert_select_autodiscovery_link atom_feed_url_for(topic)
   end
 
-  view_test 'GET :show for atom feed has the right elements' do
+  view_test "GET :show for atom feed has the right elements" do
     topic = create(:topic)
     policy = create(:published_policy, topics: [topic])
 
     get :show, id: topic, format: :atom
 
     assert_select_atom_feed do
-      assert_select 'feed > id', 1
-      assert_select 'feed > title', 1
-      assert_select 'feed > author, feed > entry > author'
-      assert_select 'feed > updated', 1
-      assert_select 'feed > link[rel=?][type=?][href=?]', 'self', 'application/atom+xml', topic_url(topic, format: 'atom'), 1
-      assert_select 'feed > link[rel=?][type=?][href=?]', 'alternate', 'text/html', topic_url(topic), 1
+      assert_select "feed > id", 1
+      assert_select "feed > title", 1
+      assert_select "feed > author, feed > entry > author"
+      assert_select "feed > updated", 1
+      assert_select "feed > link[rel=?][type=?][href=?]", "self", "application/atom+xml", topic_url(topic, format: "atom"), 1
+      assert_select "feed > link[rel=?][type=?][href=?]", "alternate", "text/html", topic_url(topic), 1
 
       assert_select_atom_entries([policy])
     end
   end
 
-  test 'GET :show has a 5 minute expiry time' do
+  test "GET :show has a 5 minute expiry time" do
     topic = create(:topic)
     get :show, id: topic
 
     assert_cache_control("max-age=#{5.minutes}")
   end
 
-  test 'GET :show caps max expiry to 5 minute when there are future scheduled editions' do
+  test "GET :show caps max expiry to 5 minute when there are future scheduled editions" do
     topic = create(:topic)
     create(:scheduled_publication, scheduled_publication: 1.day.from_now, topics: [topic])
 
@@ -176,7 +176,7 @@ class TopicsControllerTest < ActionController::TestCase
     assert_cache_control("max-age=#{5.minutes}")
   end
 
-  test 'GET :show sets analytics organisation headers' do
+  test "GET :show sets analytics organisation headers" do
     organisation = create(:organisation)
     topic = create(:topic)
     topic.organisations << organisation

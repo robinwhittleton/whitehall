@@ -1,5 +1,5 @@
-require 'test_helper'
-require 'support/importer_test_logger'
+require "test_helper"
+require "support/importer_test_logger"
 
 class Whitehall::Uploader::Finders::OrganisationFinderTest < ActiveSupport::TestCase
   def setup
@@ -20,20 +20,20 @@ class Whitehall::Uploader::Finders::OrganisationFinderTest < ActiveSupport::Test
   end
 
   test "returns the supplied default organisation if the name is blank" do
-    assert_equal [@default_organisation], Whitehall::Uploader::Finders::OrganisationFinder.find('', @log, @line_number, @default_organisation)
+    assert_equal [@default_organisation], Whitehall::Uploader::Finders::OrganisationFinder.find("", @log, @line_number, @default_organisation)
   end
 
   test "doesn't log a warning if name is blank" do
-    Whitehall::Uploader::Finders::OrganisationFinder.find('', @log, @line_number, @default_organisation)
-    assert_equal '', @log_buffer.string
+    Whitehall::Uploader::Finders::OrganisationFinder.find("", @log, @line_number, @default_organisation)
+    assert_equal "", @log_buffer.string
   end
 
   test "returns an empty array if the organisation can't be found" do
-    assert_equal [], Whitehall::Uploader::Finders::OrganisationFinder.find('made-up-organisation-name', @log, @line_number, @default_organisation)
+    assert_equal [], Whitehall::Uploader::Finders::OrganisationFinder.find("made-up-organisation-name", @log, @line_number, @default_organisation)
   end
 
   test "logs a warning if the organisation can't be found" do
-    Whitehall::Uploader::Finders::OrganisationFinder.find('made-up-organisation-name', @log, @line_number, @default_organisation)
+    Whitehall::Uploader::Finders::OrganisationFinder.find("made-up-organisation-name", @log, @line_number, @default_organisation)
     assert_match /Unable to find Organisation named 'made-up-organisation-name'/, @log_buffer.string
   end
 end

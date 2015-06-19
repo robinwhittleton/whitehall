@@ -1,5 +1,5 @@
 require "test_helper"
-require 'support/importer_test_logger'
+require "support/importer_test_logger"
 
 class Whitehall::Uploader::AttachmentCacheTest < ActiveSupport::TestCase
   setup do
@@ -116,7 +116,7 @@ class Whitehall::Uploader::AttachmentCacheTest < ActiveSupport::TestCase
     url = "http://example.com/attachment"
     stub_request(:get, url).to_return(body: "",
       status: 200,
-      headers: {"Content-Disposition" => 'attachment; filename=my-file.docx'})
+      headers: {"Content-Disposition" => "attachment; filename=my-file.docx"})
     assert_equal "my-file.docx", File.basename(@cache.fetch(url, @line_number).path)
   end
 
@@ -130,26 +130,26 @@ class Whitehall::Uploader::AttachmentCacheTest < ActiveSupport::TestCase
     assert_equal "download.pdf", File.basename(@cache.fetch(url, @line_number).path)
   end
 
-  test 'adds a PDF extension if the content-type suggests thats what the file is and the file has no extension' do
+  test "adds a PDF extension if the content-type suggests thats what the file is and the file has no extension" do
     url = "http://example.com/attachment"
-    stub_request(:get, url).to_return(body: "", status: 200, headers: {'Content-type' => 'application/pdf'})
+    stub_request(:get, url).to_return(body: "", status: 200, headers: {"Content-type" => "application/pdf"})
     assert_equal "attachment.pdf", File.basename(@cache.fetch(url, @line_number).path)
   end
 
-  test 'adds an extension if the current extension is invalid and we can detect one' do
+  test "adds an extension if the current extension is invalid and we can detect one" do
     url = "http://example.com/attachment.random"
-    stub_request(:get, url).to_return(body: "", status: 200, headers: {'Content-type' => 'application/pdf'})
+    stub_request(:get, url).to_return(body: "", status: 200, headers: {"Content-type" => "application/pdf"})
     assert_equal "attachment.random.pdf", File.basename(@cache.fetch(url, @line_number).path)
   end
 
   test 'doesn\'t look at the file type if there is a content-type header and the file has no extension' do
     url = "http://example.com/attachment"
-    stub_request(:get, url).to_return(body: "", status: 200, headers: {'Content-type' => 'application/pdf'})
+    stub_request(:get, url).to_return(body: "", status: 200, headers: {"Content-type" => "application/pdf"})
     Whitehall::Uploader::AttachmentCache::FileTypeDetector.expects(:detected_file_type).never
     @cache.fetch(url, @line_number)
   end
 
-  test 'falls back to the file type if there is no content-type header and the file has no extension' do
+  test "falls back to the file type if there is no content-type header and the file has no extension" do
     url = "http://example.com/attachment"
     stub_request(:get, url).to_return(body: "", status: 200)
     Whitehall::Uploader::AttachmentCache::FileTypeDetector.expects(:detected_file_type).once
@@ -158,7 +158,7 @@ class Whitehall::Uploader::AttachmentCacheTest < ActiveSupport::TestCase
 
   test 'falls back to the file type if there is a content-type header but it\'s an IGNORED_CONTENT_TYPES and the file has no extension' do
     url = "http://example.com/attachment"
-    stub_request(:get, url).to_return(body: "", status: 200, headers: {'Content-type' => Whitehall::Uploader::AttachmentCache::FileTypeDetector::IGNORED_CONTENT_TYPES.first})
+    stub_request(:get, url).to_return(body: "", status: 200, headers: {"Content-type" => Whitehall::Uploader::AttachmentCache::FileTypeDetector::IGNORED_CONTENT_TYPES.first})
     Whitehall::Uploader::AttachmentCache::FileTypeDetector.expects(:detected_file_type).once
     @cache.fetch(url, @line_number)
   end
@@ -186,7 +186,7 @@ class Whitehall::Uploader::AttachmentCacheTest < ActiveSupport::TestCase
 
   test "doesn\'t duplicate the extension if the filename already has one" do
     url = "http://example.com/attachment.pdf"
-    stub_request(:get, url).to_return(body: "", status: 200, headers: {'Content-type' => 'application/pdf'})
+    stub_request(:get, url).to_return(body: "", status: 200, headers: {"Content-type" => "application/pdf"})
     assert_equal "attachment.pdf", File.basename(@cache.fetch(url, @line_number).path)
   end
 

@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 class Edition::ImagesTest < ActiveSupport::TestCase
   class EditionWithImages < Edition
@@ -9,14 +9,14 @@ class Edition::ImagesTest < ActiveSupport::TestCase
 
   test "editions can be created with multiple images" do
     edition = EditionWithImages.create!(valid_edition_attributes.merge(
-      images_attributes: [
-      {alt_text: "Something about this image",
-       caption: "Text to be visible along with the image",
-       image_data_attributes: {file: fixture_file_upload('minister-of-funk.960x640.jpg')}},
-      {alt_text: "alt-text-2",
-       caption: "caption-2",
-       image_data_attributes: {file: fixture_file_upload('minister-of-funk.960x640.jpg')}}
-    ]))
+                                          images_attributes: [
+                                          {alt_text: "Something about this image",
+                                           caption: "Text to be visible along with the image",
+                                           image_data_attributes: {file: fixture_file_upload("minister-of-funk.960x640.jpg")}},
+                                          {alt_text: "alt-text-2",
+                                           caption: "caption-2",
+                                           image_data_attributes: {file: fixture_file_upload("minister-of-funk.960x640.jpg")}}
+                                        ]))
 
     assert_equal 2, edition.images.count
     assert_equal "Something about this image", edition.images[0].alt_text
@@ -28,15 +28,15 @@ class Edition::ImagesTest < ActiveSupport::TestCase
   test "#create_draft should include copies of image attributes" do
     image = create(:image)
     published_edition = EditionWithImages.create!(valid_edition_attributes.merge(
-      state: 'published',
-      major_change_published_at: Time.zone.now,
-      first_published_at: Time.zone.now,
-      images: [image]
+                                                    state: "published",
+                                                    major_change_published_at: Time.zone.now,
+                                                    first_published_at: Time.zone.now,
+                                                    images: [image]
     ))
     VirusScanHelpers.simulate_virus_scan
 
     draft_edition = published_edition.create_draft(build(:user))
-    draft_edition.change_note = 'change-note'
+    draft_edition.change_note = "change-note"
 
     assert draft_edition.valid?
 
@@ -49,10 +49,10 @@ class Edition::ImagesTest < ActiveSupport::TestCase
   test "#create_draft should not duplicate the actual image data" do
     image = create(:image)
     published_edition = EditionWithImages.create!(valid_edition_attributes.merge(
-      state: 'published',
-      major_change_published_at: Time.zone.now,
-      first_published_at: Time.zone.now,
-      images: [image]
+                                                    state: "published",
+                                                    major_change_published_at: Time.zone.now,
+                                                    first_published_at: Time.zone.now,
+                                                    images: [image]
     ))
     VirusScanHelpers.simulate_virus_scan
 
@@ -64,16 +64,16 @@ class Edition::ImagesTest < ActiveSupport::TestCase
 
   test "#create_draft should carry-over images even when there are validation errors in image data" do
     published_edition = EditionWithImages.new(valid_edition_attributes.merge(
-      state: 'published',
-      major_change_published_at: Time.zone.now,
-      first_published_at: Time.zone.now,
-      images_attributes: [{
-        alt_text: "image smaller than 960x640",
-        caption: "some-caption",
-        image_data_attributes: {
-          file: fixture_file_upload('horrible-image.64x96.jpg')
-        }
-      }]
+                                                state: "published",
+                                                major_change_published_at: Time.zone.now,
+                                                first_published_at: Time.zone.now,
+                                                images_attributes: [{
+                                                  alt_text: "image smaller than 960x640",
+                                                  caption: "some-caption",
+                                                  image_data_attributes: {
+                                                    file: fixture_file_upload("horrible-image.64x96.jpg")
+                                                  }
+                                                }]
     ))
     published_edition.save(validate: false)
     VirusScanHelpers.simulate_virus_scan
@@ -87,16 +87,16 @@ class Edition::ImagesTest < ActiveSupport::TestCase
 
   test "captions for images can be changed between versions" do
     published_edition = EditionWithImages.create!(valid_edition_attributes.merge(
-      state: 'published',
-      major_change_published_at: Time.zone.now,
-      first_published_at: Time.zone.now,
-      images_attributes:  [{
-        alt_text: "alt-text",
-        caption: "original-caption",
-        image_data_attributes: {
-          file: fixture_file_upload('minister-of-funk.960x640.jpg')
-        }
-      }]
+                                                    state: "published",
+                                                    major_change_published_at: Time.zone.now,
+                                                    first_published_at: Time.zone.now,
+                                                    images_attributes:  [{
+                                                      alt_text: "alt-text",
+                                                      caption: "original-caption",
+                                                      image_data_attributes: {
+                                                        file: fixture_file_upload("minister-of-funk.960x640.jpg")
+                                                      }
+                                                    }]
     ))
     VirusScanHelpers.simulate_virus_scan
 
@@ -121,9 +121,9 @@ class Edition::ImagesTest < ActiveSupport::TestCase
 
   def valid_edition_attributes
     {
-      title:   'edition-title',
-      body:    'edition-body',
-      summary: 'edition-summary',
+      title:   "edition-title",
+      body:    "edition-body",
+      summary: "edition-summary",
       creator: build(:user)
     }
   end

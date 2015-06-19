@@ -39,28 +39,28 @@ class NewsArticleTest < ActiveSupport::TestCase
   end
 
   test 'imported news article are valid when the news_article_type is \'imported-awaiting-type\'' do
-    news_article = build(:news_article, state: 'imported', news_article_type: NewsArticleType.find_by_slug('imported-awaiting-type'))
+    news_article = build(:news_article, state: "imported", news_article_type: NewsArticleType.find_by_slug("imported-awaiting-type"))
     assert news_article.valid?
   end
 
   test 'imported news article are not valid_as_draft? when the news_article_type is \'imported-awaiting-type\'' do
-    news_article = build(:news_article, state: 'imported', news_article_type: NewsArticleType.find_by_slug('imported-awaiting-type'))
+    news_article = build(:news_article, state: "imported", news_article_type: NewsArticleType.find_by_slug("imported-awaiting-type"))
     refute news_article.valid_as_draft?
   end
 
-  test 'imported news article are valid when the first_published_at is blank' do
-    news_article = build(:news_article, state: 'imported', first_published_at: nil)
+  test "imported news article are valid when the first_published_at is blank" do
+    news_article = build(:news_article, state: "imported", first_published_at: nil)
     assert news_article.valid?
   end
 
-  test 'imported news article are not valid_as_draft? when the first_published_at is blank, but draft articles are' do
-    refute build(:news_article, state: 'imported', first_published_at: nil).valid_as_draft?
-    assert build(:news_article, state: 'draft', first_published_at: nil).valid_as_draft?
+  test "imported news article are not valid_as_draft? when the first_published_at is blank, but draft articles are" do
+    refute build(:news_article, state: "imported", first_published_at: nil).valid_as_draft?
+    assert build(:news_article, state: "draft", first_published_at: nil).valid_as_draft?
   end
 
   [:draft, :scheduled, :published, :submitted, :rejected].each do |state|
     test "#{state} news article is not valid when the news article type is 'imported-awaiting-type'" do
-      news_article = build(:news_article, state: state, news_article_type: NewsArticleType.find_by_slug('imported-awaiting-type'))
+      news_article = build(:news_article, state: state, news_article_type: NewsArticleType.find_by_slug("imported-awaiting-type"))
       refute news_article.valid?
     end
   end
@@ -70,20 +70,20 @@ class NewsArticleTest < ActiveSupport::TestCase
     assert_equal news_article.role_appointments.map(&:slug), news_article.search_index["people"]
   end
 
-  test 'search_format_types tags the news article as a news-article and announcement' do
+  test "search_format_types tags the news article as a news-article and announcement" do
     news_article = build(:news_article)
-    assert news_article.search_format_types.include?('news-article')
-    assert news_article.search_format_types.include?('announcement')
+    assert news_article.search_format_types.include?("news-article")
+    assert news_article.search_format_types.include?("announcement")
   end
 
-  test 'search_format_types includes search_format_types of the speech_type' do
+  test "search_format_types includes search_format_types of the speech_type" do
     news_article_type = mock
     news_article_type.responds_like(NewsArticleType.new)
-    news_article_type.stubs(:search_format_types).returns (['stuff-innit', 'other-thing'])
+    news_article_type.stubs(:search_format_types).returns (["stuff-innit", "other-thing"])
     news_article = build(:news_article)
     news_article.stubs(:news_article_type).returns(news_article_type)
-    assert news_article.search_format_types.include?('stuff-innit')
-    assert news_article.search_format_types.include?('other-thing')
+    assert news_article.search_format_types.include?("stuff-innit")
+    assert news_article.search_format_types.include?("other-thing")
   end
 
   test "should be translatable" do

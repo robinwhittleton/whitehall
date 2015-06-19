@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 class Admin::FeaturedTopicsAndPoliciesListsControllerTest < ActionController::TestCase
   setup do
@@ -25,7 +25,7 @@ class Admin::FeaturedTopicsAndPoliciesListsControllerTest < ActionController::Te
     refute list.persisted?
   end
 
-  test 'GET show will fetch only the current featured_items for the list' do
+  test "GET show will fetch only the current featured_items for the list" do
     org = create(:organisation)
     featured_topics_and_policies_list = create(:featured_topics_and_policies_list, organisation: org)
     current_item = create(:featured_topic_item, featured_topics_and_policies_list: featured_topics_and_policies_list)
@@ -37,7 +37,7 @@ class Admin::FeaturedTopicsAndPoliciesListsControllerTest < ActionController::Te
     refute items.include?(ended_item)
   end
 
-  test 'GET show will add an unsaved featured_item for a topic to the end of the fetched featured items' do
+  test "GET show will add an unsaved featured_item for a topic to the end of the fetched featured items" do
     org = create(:organisation)
 
     get :show, organisation_id: org
@@ -45,28 +45,28 @@ class Admin::FeaturedTopicsAndPoliciesListsControllerTest < ActionController::Te
     items = assigns(:featured_items)
     assert_equal 1, items.size
     refute items.first.persisted?
-    assert_equal 'Topic', items.first.item_type
+    assert_equal "Topic", items.first.item_type
   end
 
   test "PUT update will save the supplied changes to the featured topics and policies list for the supplied org" do
     org = create(:organisation)
     featured_topics_and_policies_list = create(:featured_topics_and_policies_list, organisation: org)
 
-    put :update, organisation_id: org, featured_topics_and_policies_list: { summary: 'Wooo' }
+    put :update, organisation_id: org, featured_topics_and_policies_list: { summary: "Wooo" }
 
-    assert_equal 'Wooo', featured_topics_and_policies_list.reload.summary
+    assert_equal "Wooo", featured_topics_and_policies_list.reload.summary
   end
 
   test "PUT update will create a featured topics and policies list for the supplied org if it doesn't already have one" do
     org = create(:organisation)
 
-    put :update, organisation_id: org, featured_topics_and_policies_list: { summary: 'Wooo' }
+    put :update, organisation_id: org, featured_topics_and_policies_list: { summary: "Wooo" }
 
     list = assigns(:featured_topics_and_policies_list)
     assert list
     assert_equal org, list.organisation
     assert list.persisted?
-    assert_equal 'Wooo', list.summary
+    assert_equal "Wooo", list.summary
   end
 
   test "PUT update with an unfeature param set to 1 will set the ended_at date of the featured item (making it no longer current)" do
@@ -79,9 +79,9 @@ class Admin::FeaturedTopicsAndPoliciesListsControllerTest < ActionController::Te
 
     put :update, organisation_id: org, featured_topics_and_policies_list: {
       featured_items_attributes: {
-        :"0" => {
+        "0": {
           id: item.id,
-          unfeature: '1'
+          unfeature: "1"
         }
       }
     }
@@ -101,9 +101,9 @@ class Admin::FeaturedTopicsAndPoliciesListsControllerTest < ActionController::Te
 
     put :update, organisation_id: org, featured_topics_and_policies_list: {
       featured_items_attributes: {
-        :"0" => {
+        "0": {
           id: item.id,
-          unfeature: '0'
+          unfeature: "0"
         }
       }
     }
@@ -121,17 +121,17 @@ class Admin::FeaturedTopicsAndPoliciesListsControllerTest < ActionController::Te
 
     put :update, organisation_id: org, featured_topics_and_policies_list: {
       featured_items_attributes: {
-        :"0" => {
-          item_type: 'Topic',
+        "0": {
+          item_type: "Topic",
           topic_id: t.id.to_s,
           document_id: p.document.id.to_s,
-          ordering: '1'
+          ordering: "1"
         },
-        :"1" => {
-          item_type: 'Document',
+        "1": {
+          item_type: "Document",
           topic_id: t.id.to_s,
           document_id: p.document.id.to_s,
-          ordering: '2'
+          ordering: "2"
         }
       }
     }
@@ -151,12 +151,12 @@ class Admin::FeaturedTopicsAndPoliciesListsControllerTest < ActionController::Te
     org = create(:organisation)
     featured_topics_and_policies_list = create(:featured_topics_and_policies_list, organisation: org)
 
-    put :update, organisation_id: org, featured_topics_and_policies_list: { summary: ('a' * 65_536) }
+    put :update, organisation_id: org, featured_topics_and_policies_list: { summary: ("a" * 65_536) }
 
     assert_template :show
   end
 
-  test 'PUT update that fails will fetch only the existing current featured items (including those about to become un-current by user action), or unpersisted ones, in order' do
+  test "PUT update that fails will fetch only the existing current featured items (including those about to become un-current by user action), or unpersisted ones, in order" do
     org = create(:organisation)
     t = create(:topic)
     featured_topics_and_policies_list = create(:featured_topics_and_policies_list, organisation: org)
@@ -168,23 +168,23 @@ class Admin::FeaturedTopicsAndPoliciesListsControllerTest < ActionController::Te
     featured_topics_and_policies_list.featured_items << to_be_ended_item
 
     put :update, organisation_id: org, featured_topics_and_policies_list: {
-      summary: ('a' * 65_536),
+      summary: ("a" * 65_536),
       featured_items_attributes: {
-        :"0" => {
+        "0": {
           id: current_item.id,
           item_type: current_item.item_type,
           topic_id: current_item.topic_id,
-          ordering: '2'
+          ordering: "2"
         },
-        :"1" => {
-          item_type: 'Topic',
+        "1": {
+          item_type: "Topic",
           topic_id: t.id.to_s,
-          ordering: '1'
+          ordering: "1"
         },
-        :"2" => {
+        "2": {
           id: to_be_ended_item.id,
-          unfeature: '1',
-          ordering: '3'
+          unfeature: "1",
+          ordering: "3"
         }
       }
     }

@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 class ImageUploaderTest < ActiveSupport::TestCase
   include ActionDispatch::TestProcess
@@ -26,7 +26,7 @@ class ImageUploaderTest < ActiveSupport::TestCase
     model = stub("AR Model", id: 1)
     @uploader = ImageUploader.new(model, "mounted-as")
 
-    @uploader.store!(fixture_file_upload('minister-of-funk.960x640.jpg'))
+    @uploader.store!(fixture_file_upload("minister-of-funk.960x640.jpg"))
 
     [[712, 480], [630, 420], [465, 310], [300, 195], [216, 140]].each do |(width, height)|
       assert_image_size [width, height], @uploader.send(:"s#{width}")
@@ -38,7 +38,7 @@ class ImageUploaderTest < ActiveSupport::TestCase
   def assert_image_size(dimensions, uploader_version)
     width, height = dimensions
     image = MiniMagick::Image.open(uploader_version.path)
-    assert_equal width, image[:width], "#{dimensions.join("x")} image version should be #{width}px wide, but was #{image[:width]}"
-    assert_equal height, image[:height], "#{dimensions.join("x")} image version should be #{height}px high, but was #{image[:height]}"
+    assert_equal width, image[:width], "#{dimensions.join('x')} image version should be #{width}px wide, but was #{image[:width]}"
+    assert_equal height, image[:height], "#{dimensions.join('x')} image version should be #{height}px high, but was #{image[:height]}"
   end
 end

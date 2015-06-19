@@ -13,7 +13,7 @@ class WorldwidePrioritiesControllerTest < ActionController::TestCase
     priority = create(:published_worldwide_priority,
       title: "priority-title",
       body: "priority-body",
-    )
+                     )
 
     get :show, id: priority.document
 
@@ -22,7 +22,7 @@ class WorldwidePrioritiesControllerTest < ActionController::TestCase
     refute_select "nav.activity-navigation"
   end
 
-  view_test '#show includes navigation tabs when there are related published prioritys' do
+  view_test "#show includes navigation tabs when there are related published prioritys" do
     priority = create(:published_worldwide_priority)
     news     = create(:published_world_location_news_article, related_editions: [priority])
 
@@ -56,19 +56,19 @@ class WorldwidePrioritiesControllerTest < ActionController::TestCase
   end
 
   view_test "should display translated page labels when requested in a different locale" do
-    priority = create(:published_worldwide_priority, translated_into: 'fr')
+    priority = create(:published_worldwide_priority, translated_into: "fr")
 
-    get :show, id: priority.document, locale: 'fr'
+    get :show, id: priority.document, locale: "fr"
 
     assert_select ".type", /Priorité internationale/
   end
 
-  test '#activity loads the recently changed documents related to the priority and appropriate to the current locale' do
-    priority = create(:published_worldwide_priority, translated_into: 'fr')
+  test "#activity loads the recently changed documents related to the priority and appropriate to the current locale" do
+    priority = create(:published_worldwide_priority, translated_into: "fr")
     news     = create(:published_world_location_news_article, related_editions: [priority])
     speech   = create(:published_speech, related_editions: [priority])
     draft    = create(:draft_world_location_news_article, related_editions: [priority])
-    french   = create(:published_news_article, related_editions: [priority], translated_into: 'fr')
+    french   = create(:published_news_article, related_editions: [priority], translated_into: "fr")
 
     get :activity, id: priority.document
 
@@ -77,7 +77,7 @@ class WorldwidePrioritiesControllerTest < ActionController::TestCase
     assert_equal priority, assigns(:document)
     assert_equal [french, speech, news], assigns(:related_editions)
 
-    get :activity, id: priority.document, locale: 'fr'
+    get :activity, id: priority.document, locale: "fr"
 
     assert_response :success
     assert_equal [french], assigns(:related_editions)

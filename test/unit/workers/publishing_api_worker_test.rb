@@ -1,5 +1,5 @@
-require 'test_helper'
-require 'gds_api/test_helpers/publishing_api'
+require "test_helper"
+require "gds_api/test_helpers/publishing_api"
 
 class PublishingApiWorkerTest < ActiveSupport::TestCase
   include GdsApi::TestHelpers::PublishingApi
@@ -38,7 +38,7 @@ class PublishingApiWorkerTest < ActiveSupport::TestCase
   end
 
   test "fails gracefully if the model cannot be found" do
-    PublishingApiWorker.new.perform('Edition', non_existant_id = 12)
+    PublishingApiWorker.new.perform("Edition", non_existant_id = 12)
   end
 
   test "passes the update_type option to the presenter" do
@@ -64,7 +64,7 @@ class PublishingApiWorkerTest < ActiveSupport::TestCase
       @spanish_request = stub_publishing_api_put_item(presenter.base_path, presenter.as_json)
     end
 
-    PublishingApiWorker.new.perform(organisation.class.name, organisation.id, nil, 'es')
+    PublishingApiWorker.new.perform(organisation.class.name, organisation.id, nil, "es")
 
     assert_requested @spanish_request
   end

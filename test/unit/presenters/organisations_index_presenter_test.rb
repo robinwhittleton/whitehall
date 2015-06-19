@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 class OrganisationsIndexPresenterTest < ActiveSupport::TestCase
   def organisation_variety_pack

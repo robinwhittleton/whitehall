@@ -2,7 +2,7 @@ require "test_helper"
 
 class OperationalFieldTest < ActiveSupport::TestCase
   test "should be invalid without a name" do
-    operational_field = build(:operational_field, name: '')
+    operational_field = build(:operational_field, name: "")
     refute operational_field.valid?
   end
 
@@ -12,14 +12,14 @@ class OperationalFieldTest < ActiveSupport::TestCase
     refute new_operational_field.valid?
   end
 
-  test 'should set a slug from the field name' do
-    field = create(:operational_field, name: 'Field Name')
-    assert_equal 'field-name', field.slug
+  test "should set a slug from the field name" do
+    field = create(:operational_field, name: "Field Name")
+    assert_equal "field-name", field.slug
   end
 
-  test 'should not change the slug when the field name changes' do
-    field = create(:operational_field, name: 'Field Name')
-    field.update_attributes(name: 'New Field Name')
-    assert_equal 'field-name', field.slug
+  test "should not change the slug when the field name changes" do
+    field = create(:operational_field, name: "Field Name")
+    field.update_attributes(name: "New Field Name")
+    assert_equal "field-name", field.slug
   end
 end

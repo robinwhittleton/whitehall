@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 class Admin::FatalityNoticesControllerTest < ActionController::TestCase
   setup do
@@ -60,7 +60,7 @@ class Admin::FatalityNoticesControllerTest < ActionController::TestCase
       fatality_notice_casualties_attributes: {"0" => {
         personal_details: "Personal details"
       }}
-    )
+                                          )
 
     post :create, edition: attributes
     assert fatality_notice = FatalityNotice.last

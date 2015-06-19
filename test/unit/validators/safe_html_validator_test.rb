@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 class SafeHtmlValidatorTest < ActiveSupport::TestCase
   def setup
@@ -6,7 +6,7 @@ class SafeHtmlValidatorTest < ActiveSupport::TestCase
   end
 
   test "it marks HTML-unsafe attributes as such" do
-    test_model = build(:publication, body: '<script>alert("hax!")</script>', title: 'Safe title')
+    test_model = build(:publication, body: '<script>alert("hax!")</script>', title: "Safe title")
 
     SafeHtmlValidator.new({}).validate(test_model)
 
@@ -15,9 +15,9 @@ class SafeHtmlValidatorTest < ActiveSupport::TestCase
   end
 
   test "span and div elements are considered safe" do
-     test_model = GovspeakContent.new(computed_body_html: '<div class="govspeak"><span class="number">1</span></div>')
+    test_model = GovspeakContent.new(computed_body_html: '<div class="govspeak"><span class="number">1</span></div>')
 
-     SafeHtmlValidator.new({}).validate(test_model)
-     assert test_model.errors.empty?, test_model.errors.full_messages.inspect
+    SafeHtmlValidator.new({}).validate(test_model)
+    assert test_model.errors.empty?, test_model.errors.full_messages.inspect
   end
 end

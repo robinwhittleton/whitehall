@@ -55,15 +55,15 @@ class Edition::IdentifiableTest < ActiveSupport::TestCase
   end
 
   test "should return nil if the edition isn't translated into the supplied locale" do
-    policy = create(:published_policy, translated_into: 'fr')
+    policy = create(:published_policy, translated_into: "fr")
 
-    assert_nil Policy.published_as(policy.slug, 'zh')
+    assert_nil Policy.published_as(policy.slug, "zh")
   end
 
   test "should return the edition if it is translated into the supplied locale" do
-    policy = create(:published_policy, translated_into: 'fr')
+    policy = create(:published_policy, translated_into: "fr")
 
-    assert_equal policy, Policy.published_as(policy.slug, 'fr')
+    assert_equal policy, Policy.published_as(policy.slug, "fr")
   end
 
   test "should return the edition if it is translated into the default locale when none is specified" do
@@ -109,35 +109,35 @@ class Edition::IdentifiableTest < ActiveSupport::TestCase
 
   test "should not update the slug of an existing edition when saved in the presence of a new edition with the same title" do
     existing_edition = create(:draft_policy, title: "This is my policy")
-    assert_equal 'this-is-my-policy', existing_edition.document.reload.slug
+    assert_equal "this-is-my-policy", existing_edition.document.reload.slug
 
     new_edition_with_same_title = create(:draft_policy, title: "This is my policy")
-    assert_equal 'this-is-my-policy--2', new_edition_with_same_title.document.reload.slug
+    assert_equal "this-is-my-policy--2", new_edition_with_same_title.document.reload.slug
 
     existing_edition.save!
-    assert_equal 'this-is-my-policy', existing_edition.document.reload.slug
+    assert_equal "this-is-my-policy", existing_edition.document.reload.slug
   end
 
   test "non-English editions get a slug based on the document id rather than the title" do
-    edition = create(:world_location_news_article, title: 'Faire la fête', primary_locale: 'fr')
+    edition = create(:world_location_news_article, title: "Faire la fête", primary_locale: "fr")
     document = edition.document
     assert_equal document.id.to_s, document.slug
   end
 
   test "non-English editions do not get confused when documents exists with dodgy-nil-based slugs" do
-    edition1 = create(:world_location_news_article, title: 'Faire la fête', primary_locale: 'fr')
-    edition1.document.update_column(:slug, '--1')
+    edition1 = create(:world_location_news_article, title: "Faire la fête", primary_locale: "fr")
+    edition1.document.update_column(:slug, "--1")
 
-    edition2 = create(:world_location_news_article, title: 'Faire la fête', primary_locale: 'fr')
+    edition2 = create(:world_location_news_article, title: "Faire la fête", primary_locale: "fr")
     document = edition2.document
     assert_equal document.id.to_s, document.slug
   end
 
-  test 'updating an edition updates the parent document timestamp' do
+  test "updating an edition updates the parent document timestamp" do
     edition = create(:edition)
 
     Timecop.travel 1.month do
-      edition.update_attributes!(title: 'Title updated')
+      edition.update_attributes!(title: "Title updated")
       assert_equal edition.updated_at.to_i, edition.document.updated_at.to_i
     end
   end

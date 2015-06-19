@@ -1,17 +1,17 @@
 # encoding: utf-8
 
-require 'test_helper'
+require "test_helper"
 
 class HtmlAttachmentTest < ActiveSupport::TestCase
-  test '#govspeak_content_body_html returns the computed HTML as an HTML safe string' do
-    attachment = create(:html_attachment, body: 'Some govspeak')
+  test "#govspeak_content_body_html returns the computed HTML as an HTML safe string" do
+    attachment = create(:html_attachment, body: "Some govspeak")
 
     assert attachment.reload.govspeak_content_body_html.html_safe?
     assert_equivalent_html "<div class=\"govspeak\"><p>Some govspeak</p></div>",
       attachment.govspeak_content_body_html
   end
 
-  test 'associated govspeak content is deleted with the html attachment' do
+  test "associated govspeak content is deleted with the html attachment" do
     attachment = create(:html_attachment)
     govspeak_content = attachment.govspeak_content
 
@@ -20,7 +20,7 @@ class HtmlAttachmentTest < ActiveSupport::TestCase
     refute GovspeakContent.exists?(govspeak_content.id)
   end
 
-  test '#deep_clone deep clones the HTML attachment and body' do
+  test "#deep_clone deep clones the HTML attachment and body" do
     attachment = create(:html_attachment)
 
     clone = attachment.deep_clone
@@ -31,7 +31,7 @@ class HtmlAttachmentTest < ActiveSupport::TestCase
     assert_equal attachment.govspeak_content_body, clone.govspeak_content_body
   end
 
-  test '#url returns absolute path' do
+  test "#url returns absolute path" do
     edition = create(:published_publication, :with_html_attachment)
     attachment = edition.attachments.first
     expected = "/government/publications/#{edition.slug}/#{attachment.slug}"

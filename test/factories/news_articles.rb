@@ -29,5 +29,4 @@ FactoryGirl.define do
   factory :published_news_story, parent: :published_news_article do
     news_article_type_id { NewsArticleType::NewsStory.id }
   end
-
 end

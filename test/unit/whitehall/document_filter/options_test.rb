@@ -1,9 +1,8 @@
-require 'test_helper'
+require "test_helper"
 
 module Whitehall
   module DocumentFilter
     class OptionsTest < ActiveSupport::TestCase
-
       def filter_options
         @filter_options ||= Options.new
       end
@@ -38,7 +37,7 @@ module Whitehall
         assert_equal "All locations", filter_options.label_for("world_locations", "all")
       end
 
-      test '#label_for downcases topics' do
+      test "#label_for downcases topics" do
         topic = create(:topic, name: "Example Topic", slug: "example-topic")
         topical_event = create(:topical_event, :active, name: "Example Topical Event", slug: "example-topical-event")
 
@@ -47,7 +46,7 @@ module Whitehall
         assert_equal "All topics", filter_options.label_for("topics", "all")
       end
 
-      test '#label_for downcases official docs' do
+      test "#label_for downcases official docs" do
         assert_equal "Command or act papers", filter_options.label_for("official_document_status", "command_and_act_papers")
         assert_equal "All documents", filter_options.label_for("official_document_status", "all")
       end
@@ -102,18 +101,18 @@ module Whitehall
       end
 
       test "valid_resource_filter_options? returns false when filtered resources do not exist" do
-        refute filter_options.valid_resource_filter_options?(topics: ['no-such-topic'])
+        refute filter_options.valid_resource_filter_options?(topics: ["no-such-topic"])
       end
 
       test "valid_resource_filter_options? doesn't choke on string values" do
-        refute filter_options.valid_resource_filter_options?(topics: 'string-option')
+        refute filter_options.valid_resource_filter_options?(topics: "string-option")
       end
 
       test "can get the list of options for publication_type" do
         options = filter_options.for(:publication_type)
         assert_equal ["All publication types", "all"], options.all
         assert_equal [], options.ungrouped
-        assert_includes options.grouped.values.flatten(1), ["Statistics", "statistics"]
+        assert_includes options.grouped.values.flatten(1), %w(Statistics statistics)
       end
 
       test "can get the list of options for announcement_type" do
@@ -133,7 +132,7 @@ module Whitehall
           "Other departments & public bodies" => [],
           "Closed organisations" => []
         }
-        assert_equal ['All departments', 'all'], options.all
+        assert_equal ["All departments", "all"], options.all
         assert_equal expected_grouped_options, options.grouped
         assert_equal [], options.ungrouped
       end
@@ -156,7 +155,7 @@ module Whitehall
       test "can get the list of options for official documents" do
         options = filter_options.for(:official_documents)
         assert_equal ["All documents", "all"], options.all
-        assert_includes options.ungrouped, ['Command or act papers', 'command_and_act_papers']
+        assert_includes options.ungrouped, ["Command or act papers", "command_and_act_papers"]
         assert_equal({}, options.grouped)
       end
 

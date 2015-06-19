@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 module Govspeak
   class ExtractorTest < ActiveSupport::TestCase
@@ -14,31 +14,31 @@ module Govspeak
       admin_path = Whitehall.url_maker.admin_speech_path(speech)
       public_url = Whitehall.url_maker.public_document_url(speech)
       extractor  = LinkExtractor.new(govspeak_with_admin_link(admin_path))
-      expected_links = ['http://first-link.com', public_url]
+      expected_links = ["http://first-link.com", public_url]
 
       assert_equal expected_links, extractor.links
     end
 
     test "converts absolute paths to full URLs" do
       extractor = LinkExtractor.new(govspeak_with_paths)
-      expected_links = ['http://full.com/url', "#{Whitehall.public_root}/path-only"]
+      expected_links = ["http://full.com/url", "#{Whitehall.public_root}/path-only"]
 
       assert_equal expected_links, extractor.links
     end
 
     test "ignores mailto links" do
       extractor = LinkExtractor.new("A [mailto](mailto:email@domain.com) and a [link](http://example.com)")
-      assert_equal ['http://example.com'], extractor.links
+      assert_equal ["http://example.com"], extractor.links
     end
 
     test "ignores anchor links to sections on the same page" do
       extractor = LinkExtractor.new("[Index](#index) and a [link](http://example.com)")
-      assert_equal ['http://example.com'], extractor.links
+      assert_equal ["http://example.com"], extractor.links
     end
 
     test "extracts URLs with anchor links" do
       extractor = LinkExtractor.new("[Index](#index) and a [link](http://example.com#index)")
-      assert_equal ['http://example.com#index'], extractor.links
+      assert_equal ["http://example.com#index"], extractor.links
     end
 
   private

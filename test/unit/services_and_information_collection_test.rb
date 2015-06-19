@@ -4,7 +4,7 @@ class ServicesAndInformationCollectionTest < ActiveSupport::TestCase
   test ".build_collection_group_from creates an array of collections" do
     search_results = [{
       title: "Example subsector",
-      examples: [ { title: "A document title", link: "/a-document-link" } ],
+      examples: [{ title: "A document title", link: "/a-document-link" }],
       document_count: 1,
       subsector_link: "sector/example-subsector"
     }]
@@ -22,7 +22,7 @@ class ServicesAndInformationCollectionTest < ActiveSupport::TestCase
     collection = ServicesAndInformationCollection.new(
       title: "Example subsector",
       subsector_link: "/example-subsector",
-      examples: [ { title: "A document title", link: "/a-document-link" } ],
+      examples: [{ title: "A document title", link: "/a-document-link" }],
       document_count: 1
     )
 
@@ -33,7 +33,7 @@ class ServicesAndInformationCollectionTest < ActiveSupport::TestCase
     collection = ServicesAndInformationCollection.new(
       title: "Example subsector",
       subsector_link: "/example-subsector",
-      examples: [ { title: "A document title", link: "/a-document-link" } ],
+      examples: [{ title: "A document title", link: "/a-document-link" }],
       document_count: 1
     )
 
@@ -44,14 +44,14 @@ class ServicesAndInformationCollectionTest < ActiveSupport::TestCase
     collection_with_same = ServicesAndInformationCollection.new(
       title: "Example subsector",
       subsector_link: "/example-subsector",
-      examples: [ { title: "A document title", link: "/a-document-link" } ],
+      examples: [{ title: "A document title", link: "/a-document-link" }],
       document_count: 1
     )
 
     collection_with_more = ServicesAndInformationCollection.new(
       title: "Example subsector",
       subsector_link: "/example-subsector",
-      examples: [ { title: "A document title", link: "/a-document-link" } ],
+      examples: [{ title: "A document title", link: "/a-document-link" }],
       document_count: 2
     )
 

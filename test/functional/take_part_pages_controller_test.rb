@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 class TakePartPagesControllerTest < ActionController::TestCase
   should_be_a_public_facing_controller
@@ -9,6 +9,6 @@ class TakePartPagesControllerTest < ActionController::TestCase
     get :show, id: take_part_page
 
     assert_response :success
-    assert_select 'h1', text: take_part_page.title
+    assert_select "h1", text: take_part_page.title
   end
 end

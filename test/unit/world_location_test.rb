@@ -1,9 +1,9 @@
-require 'test_helper'
+require "test_helper"
 
 class WorldLocationTest < ActiveSupport::TestCase
   should_protect_against_xss_and_content_attacks_on :name, :mission_statement
 
-  test 'should be invalid without a name' do
+  test "should be invalid without a name" do
     world_location = build(:world_location, name: nil)
     refute world_location.valid?
   end
@@ -13,30 +13,30 @@ class WorldLocationTest < ActiveSupport::TestCase
     refute world_location.valid?
   end
 
-  test 'should set a slug from the name' do
-    world_location = create(:world_location, name: 'Costa Rica')
-    assert_equal 'costa-rica', world_location.slug
+  test "should set a slug from the name" do
+    world_location = create(:world_location, name: "Costa Rica")
+    assert_equal "costa-rica", world_location.slug
   end
 
-  test 'should not change the slug when the name is changed' do
-    world_location = create(:world_location, name: 'New Holland')
-    world_location.update_attributes(name: 'Australia')
-    assert_equal 'new-holland', world_location.slug
+  test "should not change the slug when the name is changed" do
+    world_location = create(:world_location, name: "New Holland")
+    world_location.update_attributes(name: "Australia")
+    assert_equal "new-holland", world_location.slug
   end
 
   test "should not include apostrophes in slug" do
     world_location = create(:world_location, name: "Bob's bike")
-    assert_equal 'bobs-bike', world_location.slug
+    assert_equal "bobs-bike", world_location.slug
   end
 
-  test 'should set an analytics identifier on create' do
-    world_location = create(:world_location, name: 'Costa Rica')
-    assert_equal 'WL' + world_location.id.to_s, world_location.analytics_identifier
+  test "should set an analytics identifier on create" do
+    world_location = create(:world_location, name: "Costa Rica")
+    assert_equal "WL" + world_location.id.to_s, world_location.analytics_identifier
   end
 
   test "has name of its world location type as display type" do
     world_location_type = WorldLocationType::WorldLocation
-    world_location_type.stubs(:name).returns('The Moon')
+    world_location_type.stubs(:name).returns("The Moon")
     world_location = build(:world_location, world_location_type: world_location_type)
     assert_equal "The Moon", world_location.display_type
   end
@@ -44,8 +44,8 @@ class WorldLocationTest < ActiveSupport::TestCase
   test ".worldwide_organisations_with_sponsoring_organisations returns all related organisations" do
     world_location = create(:world_location, :with_worldwide_organisations)
     related_organisations = world_location.worldwide_organisations +
-                              world_location.worldwide_organisations
-                                .map { |orgs| orgs.sponsoring_organisations.to_a }.flatten
+                            world_location.worldwide_organisations
+                            .map { |orgs| orgs.sponsoring_organisations.to_a }.flatten
 
     assert_equal related_organisations, world_location.worldwide_organisations_with_sponsoring_organisations
   end
@@ -70,24 +70,24 @@ class WorldLocationTest < ActiveSupport::TestCase
     assert_same_elements [world_location], WorldLocation.with_publications
   end
 
-  test 'ordered_by_name sorts by the I18n.default_locale translation for name' do
-    world_location_1 = create(:world_location, name: 'Neverland')
-    world_location_2 = create(:world_location, name: 'Middle Earth')
-    world_location_3 = create(:world_location, name: 'Narnia')
+  test "ordered_by_name sorts by the I18n.default_locale translation for name" do
+    world_location_1 = create(:world_location, name: "Neverland")
+    world_location_2 = create(:world_location, name: "Middle Earth")
+    world_location_3 = create(:world_location, name: "Narnia")
 
     I18n.with_locale(I18n.default_locale) do
       assert_equal [world_location_2, world_location_3, world_location_1], WorldLocation.ordered_by_name
     end
   end
 
-  test 'ordered_by_name uses the I18n.default_locale ordering even if the current locale is not I18n.default_locale' do
-    world_location_1 = create(:world_location, name: 'Neverland')
-    world_location_2 = create(:world_location, name: 'Middle Earth')
-    world_location_3 = create(:world_location, name: 'Narnia')
+  test "ordered_by_name uses the I18n.default_locale ordering even if the current locale is not I18n.default_locale" do
+    world_location_1 = create(:world_location, name: "Neverland")
+    world_location_2 = create(:world_location, name: "Middle Earth")
+    world_location_3 = create(:world_location, name: "Narnia")
 
     I18n.with_locale(:fr) do
-      world_location_1.name = 'Pays imaginaire'; world_location_1.save
-      world_location_2.name = 'Terre du Milieu'; world_location_2.save
+      world_location_1.name = "Pays imaginaire"; world_location_1.save
+      world_location_2.name = "Terre du Milieu"; world_location_2.save
 
       assert_equal [world_location_2, world_location_3, world_location_1], WorldLocation.ordered_by_name
     end
@@ -97,11 +97,11 @@ class WorldLocationTest < ActiveSupport::TestCase
     world_location_type = WorldLocationType::WorldLocation
     delegation_type = WorldLocationType::InternationalDelegation
 
-    location_1 = create(:world_location, world_location_type: world_location_type, name: 'Narnia')
-    location_2 = create(:world_location, world_location_type: delegation_type, name: 'Neverland')
-    location_3 = create(:world_location, world_location_type: world_location_type, name: 'Middle Earth')
+    location_1 = create(:world_location, world_location_type: world_location_type, name: "Narnia")
+    location_2 = create(:world_location, world_location_type: delegation_type, name: "Neverland")
+    location_3 = create(:world_location, world_location_type: world_location_type, name: "Middle Earth")
 
-    assert_equal [[world_location_type, [location_3, location_1]] , [delegation_type, [location_2]]], WorldLocation.all_by_type
+    assert_equal [[world_location_type, [location_3, location_1]], [delegation_type, [location_2]]], WorldLocation.all_by_type
   end
 
   test "#feature_list_for_locale should return the feature list for the given locale, or build one if not" do
@@ -137,7 +137,7 @@ class WorldLocationTest < ActiveSupport::TestCase
     assert_equal "Wah wah", links[1].title
   end
 
-  test 'should ignore blank featured link attributes' do
+  test "should ignore blank featured link attributes" do
     params = {
       featured_links_attributes: [
         {url: "",
@@ -148,14 +148,14 @@ class WorldLocationTest < ActiveSupport::TestCase
     assert world_location.valid?
   end
 
-  test 'featured links are returned in order of creation' do
+  test "featured links are returned in order of creation" do
     world_location = create(:world_location)
-    link_1 = create(:featured_link, linkable: world_location, title: '2 days ago', created_at: 2.days.ago)
-    link_2 = create(:featured_link, linkable: world_location, title: '12 days ago', created_at: 12.days.ago)
-    link_3 = create(:featured_link, linkable: world_location, title: '1 hour ago', created_at: 1.hour.ago)
-    link_4 = create(:featured_link, linkable: world_location, title: '2 hours ago', created_at: 2.hours.ago)
-    link_5 = create(:featured_link, linkable: world_location, title: '20 minutes ago', created_at: 20.minutes.ago)
-    link_6 = create(:featured_link, linkable: world_location, title: '2 years ago', created_at: 2.years.ago)
+    link_1 = create(:featured_link, linkable: world_location, title: "2 days ago", created_at: 2.days.ago)
+    link_2 = create(:featured_link, linkable: world_location, title: "12 days ago", created_at: 12.days.ago)
+    link_3 = create(:featured_link, linkable: world_location, title: "1 hour ago", created_at: 1.hour.ago)
+    link_4 = create(:featured_link, linkable: world_location, title: "2 hours ago", created_at: 2.hours.ago)
+    link_5 = create(:featured_link, linkable: world_location, title: "20 minutes ago", created_at: 20.minutes.ago)
+    link_6 = create(:featured_link, linkable: world_location, title: "2 years ago", created_at: 2.years.ago)
 
     assert_equal [link_6, link_2, link_1, link_4, link_3, link_5], world_location.featured_links
     assert_equal [link_6, link_2, link_1, link_4, link_3], world_location.featured_links.only_the_initial_set
@@ -168,7 +168,7 @@ class WorldLocationTest < ActiveSupport::TestCase
     assert world_location.translated_locales.include?(:es)
   end
 
-  test 'we can find those that are countries' do
+  test "we can find those that are countries" do
     world_location = create(:world_location)
     international_delegation = create(:international_delegation)
 
@@ -177,7 +177,7 @@ class WorldLocationTest < ActiveSupport::TestCase
     refute countries.include?(international_delegation)
   end
 
-  test 'we can find those that represent something geographic (if not neccessarily a world location)' do
+  test "we can find those that represent something geographic (if not neccessarily a world location)" do
     world_location = create(:world_location)
     international_delegation = create(:international_delegation)
 
@@ -186,7 +186,7 @@ class WorldLocationTest < ActiveSupport::TestCase
     refute geographic.include?(international_delegation)
   end
 
-  test 'adds world location to search index on creating if it is active' do
+  test "adds world location to search index on creating if it is active" do
     active_location = build(:world_location, active: true)
 
     Whitehall::SearchIndex.expects(:add).with(active_location)
@@ -194,7 +194,7 @@ class WorldLocationTest < ActiveSupport::TestCase
     active_location.save
   end
 
-  test 'does not add world location to search index on creating if it is not active' do
+  test "does not add world location to search index on creating if it is not active" do
     inactive_location = build(:world_location, active: false)
 
     Whitehall::SearchIndex.expects(:add).with(inactive_location).never
@@ -202,25 +202,25 @@ class WorldLocationTest < ActiveSupport::TestCase
     inactive_location.save
   end
 
-  test 'adds world location to search index on updating if it is active' do
+  test "adds world location to search index on updating if it is active" do
     active_location = create(:world_location, active: true)
 
     Whitehall::SearchIndex.expects(:add).with(active_location)
 
-    active_location.name = 'Hat land'
+    active_location.name = "Hat land"
     active_location.save
   end
 
-  test 'does not add world location to search index on updating if it is inactive' do
+  test "does not add world location to search index on updating if it is inactive" do
     inactive_location = create(:world_location, active: false)
 
     Whitehall::SearchIndex.expects(:add).with(inactive_location).never
 
-    inactive_location.name = 'Hat land'
+    inactive_location.name = "Hat land"
     inactive_location.save
   end
 
-  test 'removes world location from search index on updating if it is becoming inactive' do
+  test "removes world location from search index on updating if it is becoming inactive" do
     inactive_location = create(:world_location, active: true)
 
     Whitehall::SearchIndex.expects(:delete).with(inactive_location)
@@ -229,38 +229,38 @@ class WorldLocationTest < ActiveSupport::TestCase
     inactive_location.save
   end
 
-  test 'removes world location role from search index on destroying if it is active' do
+  test "removes world location role from search index on destroying if it is active" do
     active_location = create(:world_location, active: true)
     Whitehall::SearchIndex.expects(:delete).with(active_location)
     active_location.destroy
   end
 
-  test 'removes world location role from search index on destroying if it is inactive' do
+  test "removes world location role from search index on destroying if it is inactive" do
     inactive_location = create(:world_location, active: false)
     Whitehall::SearchIndex.expects(:delete).with(inactive_location)
     inactive_location.destroy
   end
 
-  test 'search index data for a world location includes name, mission statement, the correct link and format' do
-    location = build(:world_location, name: 'hat land', slug: 'hat-land', mission_statement: 'helping people in hat land find out about other clothing')
+  test "search index data for a world location includes name, mission statement, the correct link and format" do
+    location = build(:world_location, name: "hat land", slug: "hat-land", mission_statement: "helping people in hat land find out about other clothing")
 
-    assert_equal({'title' => 'hat land',
-                  'link' => '/government/world/hat-land',
-                  'indexable_content' => 'helping people in hat land find out about other clothing',
-                  'format' => 'world_location',
-                  'description' => '',
-                  'slug' => 'hat-land'}, location.search_index)
+    assert_equal({"title" => "hat land",
+                  "link" => "/government/world/hat-land",
+                  "indexable_content" => "helping people in hat land find out about other clothing",
+                  "format" => "world_location",
+                  "description" => "",
+                  "slug" => "hat-land"}, location.search_index)
   end
 
-  test 'search index includes data for all active locations' do
-    active_location = create(:world_location, name: 'hat land', mission_statement: 'helping people in hat land find out about other clothing', active: true)
-    active_location = create(:world_location, name: 'sheep land', mission_statement: 'helping people in sheep land find out about other animals', active: false)
+  test "search index includes data for all active locations" do
+    active_location = create(:world_location, name: "hat land", mission_statement: "helping people in hat land find out about other clothing", active: true)
+    active_location = create(:world_location, name: "sheep land", mission_statement: "helping people in sheep land find out about other animals", active: false)
 
     assert_equal 1, WorldLocation.search_index.to_a.length
-    assert_equal ['/government/world/hat-land'], WorldLocation.search_index.map {|search_data| search_data['link']}
+    assert_equal ["/government/world/hat-land"], WorldLocation.search_index.map {|search_data| search_data["link"]}
   end
 
-  test 'only one feature list per language per world location' do
+  test "only one feature list per language per world location" do
     world_location1 = create(:world_location)
     world_location2 = create(:world_location)
     FeatureList.create!(featurable: world_location1, locale: :en)

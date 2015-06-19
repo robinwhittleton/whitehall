@@ -1,10 +1,10 @@
-require 'test_helper'
+require "test_helper"
 
 module Whitehall::Uploader
   class ConsultationRowTest < ActiveSupport::TestCase
     setup do
-      @attachment_cache = stub('attachment cache')
-      @default_organisation = stub('Organisation')
+      @attachment_cache = stub("attachment cache")
+      @default_organisation = stub("Organisation")
     end
 
     def consultation_row(data)
@@ -63,7 +63,7 @@ module Whitehall::Uploader
       assert_equal "date-object", row.opening_at
     end
     test "leaves opening on blank if the 'opening_date' column is blank" do
-      row = consultation_row("opening_date" => '')
+      row = consultation_row("opening_date" => "")
       assert_nil row.opening_at
     end
 
@@ -73,12 +73,12 @@ module Whitehall::Uploader
       assert_equal "date-object", row.closing_at
     end
     test "leaves closing on blank if the 'closing_date' column is blank" do
-      row = consultation_row("closing_date" => '')
+      row = consultation_row("closing_date" => "")
       assert_nil row.closing_at
     end
 
     test "finds related policies using the policy finder" do
-      policies = 5.times.map { stub('policy') }
+      policies = 5.times.map { stub("policy") }
       Finders::EditionFinder.any_instance.stubs(:find).with("first", "second", "third", "fourth").returns(policies)
       row = consultation_row("policy_1" => "first", "policy_2" => "second", "policy_3" => "third", "policy_4" => "fourth")
       assert_equal policies, row.related_editions
@@ -115,8 +115,8 @@ module Whitehall::Uploader
 
     test "builds a response from the whole row" do
       row_attributes = {}
-      response = stub('response')
-      response_builder = stub('response_builder', build: response)
+      response = stub("response")
+      response_builder = stub("response_builder", build: response)
       ConsultationRow::ResponseBuilder.stubs(:new).with(row_attributes, 1, @attachment_cache, anything).returns(response_builder)
       row = consultation_row(row_attributes)
       assert_equal response, row.outcome
@@ -139,8 +139,8 @@ module Whitehall::Uploader
     end
 
     setup do
-      @response_class = stub('response-class')
-      @attachment_cache = stub('attachment cache')
+      @response_class = stub("response-class")
+      @attachment_cache = stub("attachment cache")
     end
 
     test "takes summary from the 'response_summary' column" do
@@ -190,7 +190,7 @@ module Whitehall::Uploader
         builder.stubs(key).returns(key.to_s)
       end
       expected_attributes = attribute_keys.each.with_object({}) {|key, hash| hash[key] = key.to_s }
-      response = stub('response')
+      response = stub("response")
       @response_class.stubs(:new).with(expected_attributes).returns(response)
       assert_equal response, builder.build
     end

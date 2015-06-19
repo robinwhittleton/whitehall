@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 class FatalityNoticesControllerTest < ActionController::TestCase
   should_be_a_public_facing_controller
@@ -14,7 +14,7 @@ class FatalityNoticesControllerTest < ActionController::TestCase
   end
 
   view_test "renders the fatality notice summary from plain text" do
-    fatality_notice = create(:published_fatality_notice, summary: 'plain *text* & so on')
+    fatality_notice = create(:published_fatality_notice, summary: "plain *text* & so on")
     get :show, id: fatality_notice.document
 
     assert_select ".summary", text: "plain *text* & so on"

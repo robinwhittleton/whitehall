@@ -5,17 +5,17 @@ module OrganisationControllerTestHelpers
     def should_display_organisation_page_elements_for(org_type)
       test "#{org_type} sets meta description" do
         organisation = create(org_type)
-        create(:about_corporate_information_page, organisation: organisation, summary: 'my org description')
+        create(:about_corporate_information_page, organisation: organisation, summary: "my org description")
 
         get :show, id: organisation
 
-        assert_equal 'my org description', assigns(:meta_description)
+        assert_equal "my org description", assigns(:meta_description)
       end
 
       view_test "#{org_type}:shows organisation name" do
         organisation = create(org_type,
           logo_formatted_name: "unformatted name"
-        )
+                             )
         get :show, id: organisation
         assert_select ".organisation h1", text: "unformatted name"
       end
@@ -61,7 +61,7 @@ module OrganisationControllerTestHelpers
             { label: "Helpline", number: "02079460000" },
             { label: "Fax", number: "02079460001" }
           ],
-          country: create(:world_location, iso2: 'GB')
+          country: create(:world_location, iso2: "GB")
         )
         organisation.add_contact_to_home_page!(organisation.contacts.first)
         get :show, id: organisation
@@ -105,9 +105,9 @@ module OrganisationControllerTestHelpers
       view_test "#{org_type}:shows 3 most recently published editions associated with organisation when featuring a doc" do
         # different edition types sort on different attributes
         editions = [create(:published_policy, first_published_at: 1.days.ago),
-                  create(:published_publication, first_published_at: 2.days.ago),
-                  create(:published_consultation, first_published_at: 3.days.ago),
-                  create(:published_speech, first_published_at: 4.days.ago)]
+                    create(:published_publication, first_published_at: 2.days.ago),
+                    create(:published_consultation, first_published_at: 3.days.ago),
+                    create(:published_speech, first_published_at: 4.days.ago)]
 
         organisation = create(org_type, editions: editions)
 

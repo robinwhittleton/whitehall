@@ -19,21 +19,21 @@ class PoliciesControllerTest < ActionController::TestCase
     english_policy = create(:published_policy)
     french_policy = create(:published_policy, translated_into: [:fr])
 
-    get :index, locale: 'fr'
+    get :index, locale: "fr"
 
     assert_select_object french_policy
     refute_select_object english_policy
   end
 
   view_test "index for non-english locales does not yet allow any filtering" do
-    get :index, locale: 'fr'
+    get :index, locale: "fr"
 
-    refute_select '.filter'
+    refute_select ".filter"
   end
 
   view_test "index for non-english locales skips results summary" do
-    get :index, locale: 'fr'
-    refute_select '.filter-results-summary'
+    get :index, locale: "fr"
+    refute_select ".filter-results-summary"
   end
 
   view_test "show displays the date that the policy was updated" do
@@ -147,17 +147,17 @@ That's all
 
     get :show, id: policy.document
     assert_select "ol#document_sections" do
-      assert_select "li a[href='#{public_document_path(policy, anchor: 'first-section')}']", 'First Section'
-      assert_select "li a[href='#{public_document_path(policy, anchor: 'another-bit')}']", 'Another Bit'
-      assert_select "li a[href='#{public_document_path(policy, anchor: 'final-part')}']", 'Final Part'
+      assert_select "li a[href='#{public_document_path(policy, anchor: 'first-section')}']", "First Section"
+      assert_select "li a[href='#{public_document_path(policy, anchor: 'another-bit')}']", "Another Bit"
+      assert_select "li a[href='#{public_document_path(policy, anchor: 'final-part')}']", "Final Part"
     end
   end
 
   view_test "show displays the policy group responsible for this policy" do
-    policy_group = create(:policy_group, name: 'policy-group', email: 'policy-group@example.com')
+    policy_group = create(:policy_group, name: "policy-group", email: "policy-group@example.com")
     policy = create(:published_policy, policy_groups: [policy_group])
     get :show, id: policy.document
-    assert_select ".meta a[href='#{policy_group_path(policy_group)}']", text: 'policy-group'
+    assert_select ".meta a[href='#{policy_group_path(policy_group)}']", text: "policy-group"
   end
 
   view_test "activity displays the date that the policy was updated" do
@@ -249,7 +249,7 @@ That's all
     get :activity, id: policy.document
 
     assert_select_object edition do
-      assert_select '.date', text: %r{#{edition.first_published_at.to_date.to_s(:long_ordinal)}}
+      assert_select ".date", text: %r{#{edition.first_published_at.to_date.to_s(:long_ordinal)}}
     end
   end
 
@@ -263,15 +263,15 @@ That's all
     get :activity, id: policy.document
 
     assert_select_object first_major_edition do
-      assert_select '.document-row', text: /Published/
+      assert_select ".document-row", text: /Published/
     end
 
     assert_select_object first_minor_edition do
-      assert_select '.document-row', text: /Published/
+      assert_select ".document-row", text: /Published/
     end
 
     assert_select_object second_major_edition do
-      assert_select '.document-row', text: /Updated/
+      assert_select ".document-row", text: /Updated/
     end
   end
 
@@ -293,13 +293,13 @@ That's all
     publication_2 = create(:published_publication, first_published_at: 3.weeks.ago, related_editions: [policy])
     publication_3 = create(:published_publication, first_published_at: 3.weeks.ago, related_editions: [policy])
 
-    pagination = mock('pagination')
+    pagination = mock("pagination")
     pagination.expects(:per).with(40).once.returns(Edition.published.related_to(policy).page(2).per(1))
-    Edition.expects(:page).with('2').once.returns(pagination)
+    Edition.expects(:page).with("2").once.returns(pagination)
 
     get :activity, id: policy.document, page: 2
 
-    assert_select '#show-more-documents' do
+    assert_select "#show-more-documents" do
       assert_select "a[href='#{activity_policy_path(policy.document)}']"
       assert_select "a[href='#{activity_policy_path(policy.document, page: 3)}']"
     end
@@ -315,15 +315,15 @@ That's all
   end
 
   test "#activity loads content appropriate to the current locale" do
-    policy = create(:published_policy, translated_into: 'es')
+    policy = create(:published_policy, translated_into: "es")
     speech = create(:published_speech, related_editions: [policy])
-    spanish = create(:published_news_article, related_editions: [policy], translated_into: 'es')
+    spanish = create(:published_news_article, related_editions: [policy], translated_into: "es")
 
     get :activity, id: policy.document
     assert_response :success
     assert_equal [spanish, speech], assigns(:recently_changed_documents)
 
-    get :activity, id: policy.document, locale: 'es'
+    get :activity, id: policy.document, locale: "es"
     assert_equal [spanish], assigns(:recently_changed_documents)
   end
 
@@ -344,7 +344,7 @@ That's all
     get :show, id: policy.document
     assert_select "#document_sections:last-child", text: "Case studies"
     assert_select_object case_study do
-      assert_select '.summary', text: case_study.summary
+      assert_select ".summary", text: case_study.summary
     end
   end
 
@@ -352,7 +352,7 @@ That's all
     policy = create(:published_policy)
 
     get :show, id: policy.document
-    refute_select '.activity-navigation'
+    refute_select ".activity-navigation"
   end
 
   view_test "class is applied to policies page when navigation isn't shown" do
@@ -368,7 +368,7 @@ That's all
 
     get :show, id: policy.document
 
-    assert_select '.activity-navigation' do
+    assert_select ".activity-navigation" do
       assert_select "a[href='#{policy_path(policy.document)}']"
       assert_select "a[href='#{policy_supporting_pages_path(policy.document)}']"
     end
@@ -381,7 +381,7 @@ That's all
     assert_response :not_found
   end
 
-  view_test 'activity has an atom feed autodiscovery link' do
+  view_test "activity has an atom feed autodiscovery link" do
     policy = create(:published_policy)
     publication = create(:published_publication, related_editions: [policy])
 
@@ -390,7 +390,7 @@ That's all
     assert_select_autodiscovery_link atom_feed_url_for(policy)
   end
 
-  view_test 'activity shows a link to the atom feed' do
+  view_test "activity shows a link to the atom feed" do
     policy = create(:published_policy)
     publication = create(:published_publication, related_editions: [policy])
 
@@ -400,7 +400,7 @@ That's all
     assert_select "a.feed[href=?]", feed_url
   end
 
-  view_test 'activity atom feed shows latest 10 documents' do
+  view_test "activity atom feed shows latest 10 documents" do
     policy = create(:published_policy)
     11.times do
       create(:published_publication, related_editions: [policy])
@@ -408,11 +408,11 @@ That's all
     get :activity, id: policy.document, format: "atom"
 
     assert_select_atom_feed do
-      assert_select 'feed > entry', count: 10
+      assert_select "feed > entry", count: 10
     end
   end
 
-  view_test 'activity atom feed shows activity documents' do
+  view_test "activity atom feed shows activity documents" do
     policy = create(:published_policy)
     publication = create(:published_publication, first_published_at: 4.weeks.ago.to_date, related_editions: [policy])
     consultation = create(:published_consultation, opening_at: 1.weeks.ago, related_editions: [policy])
@@ -422,16 +422,16 @@ That's all
     get :activity, id: policy.document, format: "atom"
 
     assert_select_atom_feed do
-      assert_select 'feed > id', 1
-      assert_select 'feed > title', 1
-      assert_select 'feed > updated', consultation.public_timestamp.iso8601
-      assert_select 'feed > link[rel=?][type=?][href=?]', 'alternate', 'text/html', activity_policy_url(policy.document), 1
+      assert_select "feed > id", 1
+      assert_select "feed > title", 1
+      assert_select "feed > updated", consultation.public_timestamp.iso8601
+      assert_select "feed > link[rel=?][type=?][href=?]", "alternate", "text/html", activity_policy_url(policy.document), 1
 
       assert_select_atom_entries([consultation, speech, news_article, publication])
     end
   end
 
-  view_test 'activity shows a link to email signup' do
+  view_test "activity shows a link to email signup" do
     policy = create(:published_policy)
     publication = create(:published_publication, first_published_at: 4.weeks.ago, related_editions: [policy])
 

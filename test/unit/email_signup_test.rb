@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 class EmailSignupTest < ActiveSupport::TestCase
   test "#save ensures that a relevant topic exists in GovDelivery using the feed and the signup description" do
@@ -18,7 +18,7 @@ class EmailSignupTest < ActiveSupport::TestCase
   test "#save does not create a GovDelivery topic if the feed is invalid" do
     Whitehall.govuk_delivery_client.expects(:topic).never
 
-    refute EmailSignup.new(feed: 'http://fake/feed').save
+    refute EmailSignup.new(feed: "http://fake/feed").save
   end
 
   test "#govdelivery_url delegates to the govuk_delivery_client" do

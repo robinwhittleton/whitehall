@@ -1,9 +1,9 @@
-require 'test_helper'
+require "test_helper"
 
 class Edition::SpecialistSectorsTest < ActiveSupport::TestCase
-  test '#create_draft should copy specialist sectors' do
-    expected_primary_tag = 'tax/vat'
-    expected_secondary_tags = ['oil-and-gas/taxation', 'tax/corporation-tax']
+  test "#create_draft should copy specialist sectors" do
+    expected_primary_tag = "tax/vat"
+    expected_secondary_tags = ["oil-and-gas/taxation", "tax/corporation-tax"]
     edition = create(:published_policy, primary_specialist_sector_tag: expected_primary_tag, secondary_specialist_sector_tags: expected_secondary_tags)
 
     assert_equal 3, SpecialistSector.count
@@ -16,8 +16,8 @@ class Edition::SpecialistSectorsTest < ActiveSupport::TestCase
   end
 
   test "#specialist_sector_tags should return tags ordered from primary to secondary" do
-    expected_primary_tag = 'tax/vat'
-    expected_secondary_tags = ['oil-and-gas/taxation', 'tax/corporation-tax']
+    expected_primary_tag = "tax/vat"
+    expected_secondary_tags = ["oil-and-gas/taxation", "tax/corporation-tax"]
 
     edition = create(
       :published_edition,
@@ -44,20 +44,20 @@ class Edition::SpecialistSectorsTest < ActiveSupport::TestCase
 
   test "#live_specialist_sector_tags should filter out draft tags" do
     live_tag = stub(
-      title: 'Live subsector',
-      slug: 'live_super/live_primary',
+      title: "Live subsector",
+      slug: "live_super/live_primary",
       draft?: false,
       topics: []
     )
 
     edition = create(:edition,
-      primary_specialist_sector_tag: 'live_super/live_primary',
-      secondary_specialist_sector_tags: ['live_super/draft_secondary'],
-    )
+      primary_specialist_sector_tag: "live_super/live_primary",
+      secondary_specialist_sector_tags: ["live_super/draft_secondary"],
+                    )
 
     SpecialistSector.stubs(:live_subsectors).returns([live_tag])
 
-    assert_equal ['live_super/live_primary'], edition.live_specialist_sector_tags
+    assert_equal ["live_super/live_primary"], edition.live_specialist_sector_tags
   end
 
   test "moving a secondary tag to the primary tag doesn't fail" do

@@ -7,13 +7,13 @@ class WithdrawingTest < ActiveSupport::TestCase
   test "When an edition is withdrawn, it gets republished to the Publishing API with an withdrawn notice" do
     edition   = create(:published_case_study)
     presenter = PublishingApiPresenters.presenter_for(edition)
-    edition.build_unpublishing(explanation: 'Old information',
+    edition.build_unpublishing(explanation: "Old information",
       unpublishing_reason_id: UnpublishingReason::Withdrawn.id)
 
     stub_panopticon_registration(edition)
     perform_withdrawal(edition)
 
-    republish_url = Plek.current.find('publishing-api') + "/content" + presenter.base_path
+    republish_url = Plek.current.find("publishing-api") + "/content" + presenter.base_path
 
     assert_requested(:put, republish_url) { |req| archived_payload?(req.body) }
   end
@@ -27,7 +27,7 @@ private
 
   def archived_payload?(json)
     payload = JSON.parse(json)
-    payload['update_type'] == 'republish' &&
-      payload['details']['withdrawn_notice'].is_a?(Hash)
+    payload["update_type"] == "republish" &&
+      payload["details"]["withdrawn_notice"].is_a?(Hash)
   end
 end

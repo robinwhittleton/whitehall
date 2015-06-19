@@ -21,7 +21,7 @@ class SpeechTest < ActiveSupport::TestCase
 
   [:imported, :deleted].each do |state|
     test "#{state} editions are valid when the type is 'imported-awaiting-type'" do
-      speech = build(:speech, state: state, speech_type: SpeechType.find_by_slug('imported-awaiting-type'))
+      speech = build(:speech, state: state, speech_type: SpeechType.find_by_slug("imported-awaiting-type"))
       assert speech.valid?
     end
 
@@ -38,7 +38,7 @@ class SpeechTest < ActiveSupport::TestCase
 
   [:draft, :scheduled, :published, :submitted, :rejected].each do |state|
     test "#{state} editions are not valid when the publication type is 'imported-awaiting-type'" do
-      edition = build(:speech, state: state, speech_type: SpeechType.find_by_slug('imported-awaiting-type'))
+      edition = build(:speech, state: state, speech_type: SpeechType.find_by_slug("imported-awaiting-type"))
       refute edition.valid?
     end
 
@@ -64,7 +64,7 @@ class SpeechTest < ActiveSupport::TestCase
   end
 
   test "does not require an organisation or role appointment when being imported" do
-    speech = build(:speech, role_appointment: nil, create_default_organisation: false, state: 'imported')
+    speech = build(:speech, role_appointment: nil, create_default_organisation: false, state: "imported")
     assert speech.valid?
   end
 
@@ -147,23 +147,23 @@ class SpeechTest < ActiveSupport::TestCase
 
   test "search_index does not contain person when person_override is set" do
     speech = create(:published_speech, title: "my title", speech_type: SpeechType::Transcript, role_appointment: nil, person_override: "The Queen")
-    refute speech.search_index.has_key?('people')
+    refute speech.search_index.has_key?("people")
   end
 
-  test 'search_format_types tags the speech as a speech and announcement' do
+  test "search_format_types tags the speech as a speech and announcement" do
     speech = build(:speech)
-    assert speech.search_format_types.include?('speech')
-    assert speech.search_format_types.include?('announcement')
+    assert speech.search_format_types.include?("speech")
+    assert speech.search_format_types.include?("announcement")
   end
 
-  test 'search_format_types includes search_format_types of the speech_type' do
+  test "search_format_types includes search_format_types of the speech_type" do
     speech_type = mock
     speech_type.responds_like(SpeechType.new)
-    speech_type.stubs(:search_format_types).returns (['stuff-innit', 'other-thing'])
+    speech_type.stubs(:search_format_types).returns (["stuff-innit", "other-thing"])
     speech = build(:speech)
     speech.stubs(:speech_type).returns(speech_type)
-    assert speech.search_format_types.include?('stuff-innit')
-    assert speech.search_format_types.include?('other-thing')
+    assert speech.search_format_types.include?("stuff-innit")
+    assert speech.search_format_types.include?("other-thing")
   end
 
   test "should be translatable" do
@@ -182,9 +182,8 @@ class SpeechTest < ActiveSupport::TestCase
     assert_equal previous_government, speech.government
   end
 
-  test '#government returns nil for an speech without a delivered_on' do
+  test "#government returns nil for an speech without a delivered_on" do
     speech = create(:imported_speech, delivered_on: nil)
     assert_nil speech.government
   end
-
 end

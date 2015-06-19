@@ -23,7 +23,7 @@ class DetailedGuideTest < ActiveSupport::TestCase
   end
 
   test "should use detailed guidance as its format name" do
-    assert_equal 'detailed guidance', DetailedGuide.format_name
+    assert_equal "detailed guidance", DetailedGuide.format_name
   end
 
   test "should use detailed guidance as rummageable search index format" do
@@ -31,7 +31,7 @@ class DetailedGuideTest < ActiveSupport::TestCase
     assert_equal "detailed_guidance", guide.search_index["format"]
   end
 
-  test 'should be added to the detailed guides rummager index' do
+  test "should be added to the detailed guides rummager index" do
     assert_equal :detailed_guides, build(:detailed_guide).rummager_index
   end
 
@@ -123,10 +123,10 @@ class DetailedGuideTest < ActiveSupport::TestCase
     category = create(:mainstream_category,
       slug: "manufactured-goods-trade-compliance",
       parent_tag: "business/international-trade"
-    )
+                     )
     detailed_guide = create(:published_detailed_guide,
       primary_mainstream_category: category
-    )
+                           )
 
     index = detailed_guide.search_index
     assert_equal "business", index["section"]
@@ -134,8 +134,8 @@ class DetailedGuideTest < ActiveSupport::TestCase
     assert_equal "manufactured-goods-trade-compliance", index["subsubsection"]
   end
 
-  test 'search_format_types tags the detailed guide as detailed-guidance' do
+  test "search_format_types tags the detailed guide as detailed-guidance" do
     detailed_guide = build(:detailed_guide)
-    assert detailed_guide.search_format_types.include?('detailed-guidance')
+    assert detailed_guide.search_format_types.include?("detailed-guidance")
   end
 end

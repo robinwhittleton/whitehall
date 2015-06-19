@@ -1,5 +1,5 @@
-require 'test_helper'
-require 'gds_api/test_helpers/publishing_api'
+require "test_helper"
+require "gds_api/test_helpers/publishing_api"
 
 class PublishingApiWorkerTest < ActiveSupport::TestCase
   include GdsApi::TestHelpers::PublishingApi

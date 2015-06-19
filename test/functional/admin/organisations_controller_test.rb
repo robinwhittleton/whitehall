@@ -63,7 +63,7 @@ class Admin::OrganisationsControllerTest < ActionController::TestCase
       ],
       parent_organisation_ids: [parent_org_1.id, parent_org_2.id],
       organisation_type_key: :executive_agency,
-      govuk_status: 'exempt',
+      govuk_status: "exempt",
       featured_links_attributes: {
         "0" => {
           url: "http://www.gov.uk/mainstream/something",
@@ -84,18 +84,18 @@ class Admin::OrganisationsControllerTest < ActionController::TestCase
     assert_equal "Something on mainstream", organisation_top_task.title
     assert_same_elements [parent_org_1, parent_org_2], organisation.parent_organisations
     assert_equal OrganisationType.executive_agency, organisation.organisation_type
-    assert_equal 'exempt', organisation.govuk_status
+    assert_equal "exempt", organisation.govuk_status
   end
 
-  test 'POST :create can set a custom logo' do
+  test "POST :create can set a custom logo" do
     post :create, organisation: example_organisation_attributes.merge(
       organisation_logo_type_id: OrganisationLogoType::CustomLogo.id,
-      logo: fixture_file_upload('logo.png')
+      logo: fixture_file_upload("logo.png")
     )
     assert_match /logo.png/, Organisation.last.logo.file.filename
   end
 
-  test 'POST create can set number of important board members' do
+  test "POST create can set number of important board members" do
     post :create, organisation: example_organisation_attributes.merge(
       important_board_members: 1,
     )
@@ -105,8 +105,8 @@ class Admin::OrganisationsControllerTest < ActionController::TestCase
   test "POST on :create with invalid data re-renders the new form" do
     attributes = example_organisation_attributes
 
-    assert_no_difference('Organisation.count') do
-      post :create, organisation: attributes.merge(name: '')
+    assert_no_difference("Organisation.count") do
+      post :create, organisation: attributes.merge(name: "")
     end
     assert_response :success
     assert_template :new
@@ -278,7 +278,7 @@ class Admin::OrganisationsControllerTest < ActionController::TestCase
 
     get :edit, id: organisation
 
-    assert_select 'select#organisation_important_board_members option', count: 2
+    assert_select "select#organisation_important_board_members option", count: 2
   end
 
   test "PUT on :update allows updating of organisation role ordering" do
@@ -293,28 +293,28 @@ class Admin::OrganisationsControllerTest < ActionController::TestCase
     assert_equal 2, organisation_role.reload.ordering
   end
 
-  test 'PUT :update can set a custom logo' do
+  test "PUT :update can set a custom logo" do
     organisation = create(:organisation)
     put :update, id: organisation, organisation: {
       organisation_logo_type_id: OrganisationLogoType::CustomLogo.id,
-      logo: fixture_file_upload('logo.png')
+      logo: fixture_file_upload("logo.png")
     }
     assert_match /logo.png/, organisation.reload.logo.file.filename
   end
 
-  test 'PUT :update can set default news image' do
+  test "PUT :update can set default news image" do
     organisation = create(:organisation)
     put :update, id: organisation, organisation: {
       default_news_image_attributes: {
-        file: fixture_file_upload('minister-of-funk.960x640.jpg')
+        file: fixture_file_upload("minister-of-funk.960x640.jpg")
       }
     }
-    assert_equal 'minister-of-funk.960x640.jpg', organisation.reload.default_news_image.file.file.filename
+    assert_equal "minister-of-funk.960x640.jpg", organisation.reload.default_news_image.file.file.filename
   end
 
   test "PUT on :update with bad params does not update the organisation and renders the edit page" do
     ministerial_role = create(:ministerial_role)
-    organisation = create(:organisation, name: 'org name')
+    organisation = create(:organisation, name: "org name")
     create(:organisation_role, organisation: organisation, role: ministerial_role)
 
     put :update, id: organisation, organisation: {name: ""}
@@ -322,7 +322,7 @@ class Admin::OrganisationsControllerTest < ActionController::TestCase
     assert_response :success
     assert_template :edit
 
-    assert_equal 'org name', organisation.reload.name
+    assert_equal "org name", organisation.reload.name
   end
 
   test "PUT on :update should modify the organisation" do
@@ -341,10 +341,10 @@ class Admin::OrganisationsControllerTest < ActionController::TestCase
     organisation = create(:organisation)
 
     put :update, id: organisation, organisation: {
-      ocpa_regulated: 'false',
-      public_meetings: 'true',
-      public_minutes: 'true',
-      regulatory_function: 'false'
+      ocpa_regulated: "false",
+      public_meetings: "true",
+      public_minutes: "true",
+      regulatory_function: "false"
     }
 
     organisation.reload
@@ -356,19 +356,19 @@ class Admin::OrganisationsControllerTest < ActionController::TestCase
     refute organisation.regulatory_function?
   end
 
-  test 'PUT on :update handles existing featured link attributes' do
+  test "PUT on :update handles existing featured link attributes" do
     organisation = create(:organisation)
     featured_link = create(:featured_link, linkable: organisation)
 
-    put :update, id: organisation, organisation: { featured_links_attributes: { '0' => {
+    put :update, id: organisation, organisation: { featured_links_attributes: { "0" => {
       id: featured_link.id,
-      title: 'New title',
+      title: "New title",
       url: featured_link.url,
-      _destroy: 'false'
+      _destroy: "false"
     } } }
 
     assert_response :redirect
-    assert_equal 'New title', featured_link.reload.title
+    assert_equal "New title", featured_link.reload.title
   end
 
   view_test "Prevents unauthorized management of homepage priority" do
@@ -410,13 +410,13 @@ class Admin::OrganisationsControllerTest < ActionController::TestCase
   view_test "GET :features copes with topical events that have no dates" do
     topical_event = create(:topical_event)
     organisation = create(:organisation)
-    feature_list = organisation.load_or_create_feature_list('en')
+    feature_list = organisation.load_or_create_feature_list("en")
     feature_list.features.create!(topical_event: topical_event,
                                   image: image_fixture_file,
-                                  alt_text: 'Image alternative text')
+                                  alt_text: "Image alternative text")
 
 
-    get :features, id: organisation, locale: 'en'
+    get :features, id: organisation, locale: "en"
     assert_response :success
   end
 

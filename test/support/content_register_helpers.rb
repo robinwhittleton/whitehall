@@ -1,4 +1,4 @@
-require 'gds_api/test_helpers/content_register'
+require "gds_api/test_helpers/content_register"
 
 module ContentRegisterHelpers
   include GdsApi::TestHelpers::ContentRegister
@@ -17,7 +17,7 @@ module ContentRegisterHelpers
         policy_area_2,
         policy_area_3,
       ]
-    )
+                                 )
   end
 
   def content_register_has_policies(policy_titles)

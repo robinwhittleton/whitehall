@@ -21,7 +21,7 @@ module DocumentControllerTestHelpers
         assert_select_object(french_attachment)
       end
 
-      view_test 'displays localised HTML attachments' do
+      view_test "displays localised HTML attachments" do
         edition = create("published_#{document_type}", translated_into: [:en, :fr])
 
         attachment = create(:html_attachment, locale: nil, attachable: edition)
@@ -43,67 +43,67 @@ module DocumentControllerTestHelpers
     def should_display_attachments_for(document_type)
       view_test "show displays file attachments" do
         edition = create("published_#{document_type}", :with_alternative_format_provider, body: "!@1\n\n!@2", attachments: [
-          attachment_1 = build(:file_attachment, file: fixture_file_upload('greenpaper.pdf', 'application/pdf')),
-          attachment_2 = build(:file_attachment, file: fixture_file_upload('sample.rtf', 'text/rtf'))
+          attachment_1 = build(:file_attachment, file: fixture_file_upload("greenpaper.pdf", "application/pdf")),
+          attachment_2 = build(:file_attachment, file: fixture_file_upload("sample.rtf", "text/rtf"))
         ])
 
         get :show, id: edition.document
 
         assert_select_object(attachment_1) do
-          assert_select '.title', text: attachment_1.title
-          assert_select 'img[src$=?]', 'thumbnail_greenpaper.pdf.png'
+          assert_select ".title", text: attachment_1.title
+          assert_select "img[src$=?]", "thumbnail_greenpaper.pdf.png"
         end
         assert_select_object(attachment_2) do
-          assert_select '.title', text: attachment_2.title
-          assert_select 'img[src$=?]', 'pub-cover.png', message: 'should use default image for non-PDF attachments'
+          assert_select ".title", text: attachment_2.title
+          assert_select "img[src$=?]", "pub-cover.png", message: "should use default image for non-PDF attachments"
         end
       end
 
-      view_test 'show displays HTML attachments' do
-        edition = create("published_#{document_type}", :with_alternative_format_provider, :with_html_attachment, body: '!@1')
+      view_test "show displays HTML attachments" do
+        edition = create("published_#{document_type}", :with_alternative_format_provider, :with_html_attachment, body: "!@1")
         attachment = edition.attachments.first
         get :show, id: edition.document
         assert_select_object(attachment) do
-          assert_select '.title', text: attachment.title
-          assert_select 'img[src$=?]', 'pub-cover-html.png', message: 'should use HTML thumbnail for HTML attachments'
+          assert_select ".title", text: attachment.title
+          assert_select "img[src$=?]", "pub-cover-html.png", message: "should use HTML thumbnail for HTML attachments"
         end
       end
 
       view_test "show information about accessibility" do
         edition = create("published_#{document_type}", :with_alternative_format_provider, body: "!@1\n\n!@2", attachments: [
-          attachment_1 = build(:file_attachment, file: fixture_file_upload('greenpaper.pdf', 'application/pdf'), accessible: true),
-          attachment_2 = build(:file_attachment, file: fixture_file_upload('sample.rtf', 'text/rtf'))
+          attachment_1 = build(:file_attachment, file: fixture_file_upload("greenpaper.pdf", "application/pdf"), accessible: true),
+          attachment_2 = build(:file_attachment, file: fixture_file_upload("sample.rtf", "text/rtf"))
         ])
 
         get :show, id: edition.document
 
         assert_select_object(attachment_1) do
-          refute_select '.accessibility-warning'
+          refute_select ".accessibility-warning"
           refute_select "a.thumbnail[aria-describedby='attachment-#{attachment_1.id}-accessibility-help']"
         end
         assert_select_object(attachment_2) do
           assert_select "a.thumbnail[aria-describedby='attachment-#{attachment_2.id}-accessibility-help']"
-          assert_select '.accessibility-warning'
+          assert_select ".accessibility-warning"
         end
       end
 
       view_test "show alternative format contact email if given" do
         organisation = create(:organisation, alternative_format_contact_email: "alternative@example.com")
         edition = create("published_#{document_type}", body: "!@1", attachments: [
-          attachment_1 = build(:file_attachment, file: fixture_file_upload('greenpaper.pdf', 'application/pdf'), accessible: false)
+          attachment_1 = build(:file_attachment, file: fixture_file_upload("greenpaper.pdf", "application/pdf"), accessible: false)
         ], alternative_format_provider: organisation)
 
         get :show, id: edition.document
 
         assert_select_object(attachment_1) do
-          assert_select '.accessibility-warning' do
+          assert_select ".accessibility-warning" do
             assert_select 'a[href^="mailto:alternative@example.com"]'
           end
         end
       end
 
       view_test "show displays PDF attachment metadata" do
-        greenpaper_pdf = fixture_file_upload('greenpaper.pdf', 'application/pdf')
+        greenpaper_pdf = fixture_file_upload("greenpaper.pdf", "application/pdf")
         edition = create("published_#{document_type}", :with_alternative_format_provider, body: "!@1", attachments: [
           attachment = build(:file_attachment, file: greenpaper_pdf)
         ])
@@ -118,7 +118,7 @@ module DocumentControllerTestHelpers
       end
 
       view_test "show displays non-PDF attachment metadata" do
-        csv = fixture_file_upload('sample.rtf', 'text/rtf')
+        csv = fixture_file_upload("sample.rtf", "text/rtf")
         edition = create("published_#{document_type}", :with_alternative_format_provider, body: "!@1", attachments: [
           attachment = build(:file_attachment, file: csv)
         ])
@@ -140,16 +140,16 @@ module DocumentControllerTestHelpers
 
         get :show, id: edition.document
 
-        assert_select 'article figure.image.embedded img'
+        assert_select "article figure.image.embedded img"
       end
     end
 
     def should_show_related_policies_for(document_type)
       view_test "show displays related published policies for #{document_type}" do
         stub_content_register_policies
-        edition = create("published_#{document_type}", policy_content_ids: [policy_1['content_id'], policy_2['content_id']])
+        edition = create("published_#{document_type}", policy_content_ids: [policy_1["content_id"], policy_2["content_id"]])
         get :show, id: edition.document
-        assert_select '.meta a', text: "Policy 1"
+        assert_select ".meta a", text: "Policy 1"
       end
 
       view_test "show doesn't display related unpublished policies for #{document_type}" do
@@ -267,7 +267,7 @@ module DocumentControllerTestHelpers
         edition = create("published_#{document_type}")
         get :show, id: edition.document
         Whitehall.stubs(:default_cache_max_age).returns(30.minutes)
-        assert_equal 'max-age=1800, public', response.headers['Cache-Control']
+        assert_equal "max-age=1800, public", response.headers["Cache-Control"]
       end
     end
 
@@ -283,7 +283,7 @@ module DocumentControllerTestHelpers
         login_as create(:departmental_editor)
         get :show, id: document.id, preview: draft_edition.id
         assert_response 200
-        assert_cache_control 'no-cache'
+        assert_cache_control "no-cache"
       end
 
       test "#{document_type} preview should be hidden from public" do
@@ -305,7 +305,7 @@ module DocumentControllerTestHelpers
         get :show, id: draft.document.id, preview: draft.id
 
         assert_response 200
-        assert_cache_control 'no-cache'
+        assert_cache_control "no-cache"
       end
 
       test "access limited #{document_type} preview should be hidden for unauthorised users" do

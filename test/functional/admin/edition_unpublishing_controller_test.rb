@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 class Admin::EditionUnpublishingControllerTest < ActionController::TestCase
   include Admin::EditionRoutesHelper
@@ -39,5 +39,4 @@ class Admin::EditionUnpublishingControllerTest < ActionController::TestCase
     assert_equal "The public explanation could not be updated", flash[:alert]
     assert_equal "Content is mislidding", unpublishing.reload.explanation
   end
-
 end

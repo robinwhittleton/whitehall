@@ -1,5 +1,5 @@
 # encoding: utf-8
-require 'test_helper'
+require "test_helper"
 
 module Whitehall
   class RedirectorDocumentMappingsTest < ActiveSupport::TestCase
@@ -106,7 +106,7 @@ Old Url,New Url,Status,Slug,Admin Url,State
 
     test "exports documents with translated sources points to localised version" do
       article = create(:news_article)
-      translation_source = create(:document_source, document: article.document, locale: 'es')
+      translation_source = create(:document_source, document: article.document, locale: "es")
       source = create(:document_source, document: article.document)
 
       assert_extraction_contains <<-EOF.strip_heredoc

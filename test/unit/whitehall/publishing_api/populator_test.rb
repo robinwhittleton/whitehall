@@ -1,9 +1,8 @@
-require 'whitehall/publishing_api'
+require "whitehall/publishing_api"
 
 module Whitehall
   class PublishingApi
     class PopulatorTest < ActiveSupport::TestCase
-
       test "calls the sender for each item" do
         items = [stub("edition")]
         sender = stub("sender")

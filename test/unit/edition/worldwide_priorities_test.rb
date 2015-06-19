@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 class Edition::WorldwidePrioritiesTest < ActiveSupport::TestCase
   class EditionWithWorldwidePriorities < Edition
@@ -7,9 +7,9 @@ class Edition::WorldwidePrioritiesTest < ActiveSupport::TestCase
 
   def valid_edition_attributes
     {
-      title:   'edition-title',
-      body:    'edition-body',
-      summary: 'edition-summary',
+      title:   "edition-title",
+      body:    "edition-body",
+      summary: "edition-summary",
       creator: build(:user)
     }
   end
@@ -80,5 +80,4 @@ class Edition::WorldwidePrioritiesTest < ActiveSupport::TestCase
     assert_equal [new_priority], edition.worldwide_priorities
     assert_equal [old_policy], edition.related_policies
   end
-
 end

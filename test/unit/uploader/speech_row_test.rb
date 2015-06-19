@@ -1,11 +1,11 @@
-require 'test_helper'
-require 'support/importer_test_logger'
+require "test_helper"
+require "support/importer_test_logger"
 
 module Whitehall::Uploader
   class SpeechRowTest < ActiveSupport::TestCase
     setup do
-      @attachment_cache = stub('attachment cache')
-      @default_organisation = stub('organisation', url: 'url')
+      @attachment_cache = stub("attachment cache")
+      @default_organisation = stub("organisation", url: "url")
       @logged = StringIO.new
       @logger = ImporterTestLogger.new(@logged)
     end
@@ -22,8 +22,8 @@ module Whitehall::Uploader
     test "finds role appointment for person who delivered speech based on delivered_by column and delivered_on date" do
       minister = create(:person)
       role = create(:ministerial_role)
-      role_appointment_1 = create(:role_appointment, role: role, person: minister, started_at: Date.parse('14-May-2009'), ended_at: Date.parse('20-Oct-2009'))
-      role_appointment_2 = create(:role_appointment, role: role, person: minister, started_at: Date.parse('21-Oct-2009'))
+      role_appointment_1 = create(:role_appointment, role: role, person: minister, started_at: Date.parse("14-May-2009"), ended_at: Date.parse("20-Oct-2009"))
+      role_appointment_2 = create(:role_appointment, role: role, person: minister, started_at: Date.parse("21-Oct-2009"))
       row = new_speech_row({ "delivered_by" => minister.slug, "delivered_on" => "16-May-2009" })
       assert_equal role_appointment_1, row.role_appointment
     end
@@ -31,15 +31,15 @@ module Whitehall::Uploader
     test "leaves role appointment blank if delivered on is blank" do
       minister = create(:person)
       role = create(:ministerial_role)
-      role_appointment_1 = create(:role_appointment, role: role, person: minister, started_at: Date.parse('14-May-2009'), ended_at: Date.parse('20-Oct-2009'))
-      role_appointment_2 = create(:role_appointment, role: role, person: minister, started_at: Date.parse('21-Oct-2009'))
-      row = new_speech_row({ "delivered_by" => minister.slug, "delivered_on" => '' })
+      role_appointment_1 = create(:role_appointment, role: role, person: minister, started_at: Date.parse("14-May-2009"), ended_at: Date.parse("20-Oct-2009"))
+      role_appointment_2 = create(:role_appointment, role: role, person: minister, started_at: Date.parse("21-Oct-2009"))
+      row = new_speech_row({ "delivered_by" => minister.slug, "delivered_on" => "" })
       assert_nil row.role_appointment
     end
 
     test "warns about discarded delivered_by information if delivered on is blank" do
-      minister = create(:person, forename: 'Brian', surname: 'Jones')
-      row = new_speech_row({ "delivered_by" => minister.slug, "delivered_on" => '' })
+      minister = create(:person, forename: "Brian", surname: "Jones")
+      row = new_speech_row({ "delivered_by" => minister.slug, "delivered_on" => "" })
       row.role_appointment
       assert_match /Discarding delivered_by information "brian-jones" because delivered_on is missing/, @logged.string
     end
@@ -74,17 +74,17 @@ module Whitehall::Uploader
     end
 
     test "leaves the delivered_on blank if the delivered_on column is blank" do
-      row = new_speech_row({"delivered_on" => ''})
+      row = new_speech_row({"delivered_on" => ""})
       assert_nil row.delivered_on
     end
 
     test "leaves the first_published_at blank if the delivered_on column is blank" do
-      row = new_speech_row({"delivered_on" => ''})
+      row = new_speech_row({"delivered_on" => ""})
       assert_nil row.first_published_at
     end
 
     test "finds related world locations using the world location finder" do
-      world_locations = 5.times.map { stub('world_location') }
+      world_locations = 5.times.map { stub("world_location") }
       Whitehall::Uploader::Finders::WorldLocationsFinder.stubs(:find).with("first", "second", "third", "fourth", anything, anything).returns(world_locations)
       row = new_speech_row({
           "country_1" => "first",
@@ -98,11 +98,11 @@ module Whitehall::Uploader
     test "returns translation attributes" do
       row = new_speech_row(
         {
-          'title_translation' => 'translated title',
-          'body_translation' => 'translated body',
-          'summary_translation' => 'translated summary'
+          "title_translation" => "translated title",
+          "body_translation" => "translated body",
+          "summary_translation" => "translated summary"
         })
-      expected_attributes = { title: 'translated title', summary: 'translated summary', body: 'translated body'}
+      expected_attributes = { title: "translated title", summary: "translated summary", body: "translated body"}
 
       assert_equal expected_attributes, row.translation_attributes
     end

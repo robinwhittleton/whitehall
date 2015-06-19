@@ -1,9 +1,9 @@
-require 'test_helper'
+require "test_helper"
 
 module DataHygiene
   class EditionUnwithdrawerTest < ActiveSupport::TestCase
     setup do
-      @edition = FactoryGirl.create(:published_edition, state: 'withdrawn')
+      @edition = FactoryGirl.create(:published_edition, state: "withdrawn")
       @user = FactoryGirl.create(:user, id: 406)
     end
 
@@ -55,7 +55,7 @@ module DataHygiene
     end
 
     test "unwithdraw handles legacy withdrawn editions" do
-      edition = FactoryGirl.create(:published_edition, state: 'withdrawn')
+      edition = FactoryGirl.create(:published_edition, state: "withdrawn")
       unwithdrawen_edition = EditionUnwithdrawer.new(edition.id).unwithdraw!
       assert unwithdrawen_edition.published?
       assert unwithdrawen_edition.minor_change

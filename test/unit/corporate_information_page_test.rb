@@ -1,7 +1,6 @@
 require "test_helper"
 
 class CorporateInformationPageTest < ActiveSupport::TestCase
-
   def self.should_be_invalid_without(type, attribute_name)
     test "#{type} should be invalid without #{attribute_name}" do
       document = build(type, attribute_name => nil)
@@ -12,15 +11,15 @@ class CorporateInformationPageTest < ActiveSupport::TestCase
   should_be_invalid_without(:corporate_information_page, :corporate_information_page_type)
   should_be_invalid_without(:corporate_information_page, :body)
 
-  test 'AboutUs pages do not require a body' do
+  test "AboutUs pages do not require a body" do
     corporate_information_page = build(:corporate_information_page,
-                                        body: '',
+                                        body: "",
                                         corporate_information_page_type_id: CorporateInformationPageType::AboutUs.id)
 
     assert corporate_information_page.valid?
   end
 
-  test 'should be invalid if has both organisation and worldwide org' do
+  test "should be invalid if has both organisation and worldwide org" do
     organisation = create(:organisation)
     worldwide_org = create(:worldwide_organisation)
     corporate_information_page = build(:corporate_information_page,
@@ -29,19 +28,19 @@ class CorporateInformationPageTest < ActiveSupport::TestCase
     refute corporate_information_page.valid?
   end
 
-  test 'should return search index data suitable for Rummageable' do
+  test "should return search index data suitable for Rummageable" do
     organisation = create(:organisation)
     corporate_information_page = create(:corporate_information_page,
       corporate_information_page_type: CorporateInformationPageType::TermsOfReference,
       organisation: organisation)
 
-    assert_equal "#{organisation.name} \u2013 #{corporate_information_page.title}", corporate_information_page.search_index['title']
-    assert_equal "/government/organisations/#{organisation.slug}/about/#{corporate_information_page.slug}", corporate_information_page.search_index['link']
+    assert_equal "#{organisation.name} \u2013 #{corporate_information_page.title}", corporate_information_page.search_index["title"]
+    assert_equal "/government/organisations/#{organisation.slug}/about/#{corporate_information_page.slug}", corporate_information_page.search_index["link"]
   end
 
-  test 'with_translations scope loads corporate information pages despite not have titles explicitly saved' do
+  test "with_translations scope loads corporate information pages despite not have titles explicitly saved" do
     cip_1 = create(:corporate_information_page, title: nil)
-    cip_2 = create(:corporate_information_page, title: 'Should not be saved')
+    cip_2 = create(:corporate_information_page, title: "Should not be saved")
 
     assert_equal [cip_1, cip_2], CorporateInformationPage.with_translations
   end
@@ -77,12 +76,12 @@ class CorporateInformationPageTest < ActiveSupport::TestCase
   end
 
   test "can find type by slug" do
-    assert_equal CorporateInformationPageType::TermsOfReference, CorporateInformationPageType.find('terms-of-reference')
+    assert_equal CorporateInformationPageType::TermsOfReference, CorporateInformationPageType.find("terms-of-reference")
   end
 
   test "when finding type by slug, raises if not found" do
     assert_raise ActiveRecord::RecordNotFound do
-      CorporateInformationPageType.find('does-not-exist')
+      CorporateInformationPageType.find("does-not-exist")
     end
   end
 
@@ -137,11 +136,11 @@ class CorporateInformationPageTest < ActiveSupport::TestCase
     end
   end
 
-  test 'will not be indexed if the org it belongs to is not live on gov.uk' do
-    joining_org = create(:organisation, govuk_status: 'joining')
-    exempt_org = create(:organisation, govuk_status: 'exempt')
-    transitioning_org = create(:organisation, govuk_status: 'transitioning')
-    live_org = create(:organisation, govuk_status: 'live')
+  test "will not be indexed if the org it belongs to is not live on gov.uk" do
+    joining_org = create(:organisation, govuk_status: "joining")
+    exempt_org = create(:organisation, govuk_status: "exempt")
+    transitioning_org = create(:organisation, govuk_status: "transitioning")
+    live_org = create(:organisation, govuk_status: "live")
 
     c1 = create(:corporate_information_page, :published, organisation: joining_org)
     c2 = create(:corporate_information_page, :published, organisation: exempt_org)
@@ -158,7 +157,7 @@ class CorporateInformationPageTest < ActiveSupport::TestCase
     c4.update_in_search_index
   end
 
-  test 'until we launch worldwide will not be indexed if the org it belongs to is a worldwide org' do
+  test "until we launch worldwide will not be indexed if the org it belongs to is a worldwide org" do
     world_org = create(:worldwide_organisation)
 
     corp_page = create(:corporate_information_page, organisation: nil, worldwide_organisation: world_org)

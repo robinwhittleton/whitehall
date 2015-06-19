@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 class Api::WorldLocationPresenterTest < PresenterTestCase
   setup do
@@ -20,8 +20,8 @@ class Api::WorldLocationPresenterTest < PresenterTestCase
     assert_equal @location, paginated.page.first.model
   end
 
-  test 'links has a self link, pointing to the request-relative api location url' do
-    self_link = @presenter.links.detect { |(url, attrs)| attrs['rel'] == 'self'}
+  test "links has a self link, pointing to the request-relative api location url" do
+    self_link = @presenter.links.detect { |(_url, attrs)| attrs["rel"] == "self"}
     assert self_link
     url, attrs = *self_link
     assert_equal api_world_location_url(@location), url
@@ -32,8 +32,8 @@ class Api::WorldLocationPresenterTest < PresenterTestCase
   end
 
   test "json includes location name as title" do
-    @location.stubs(:name).returns('location-name')
-    assert_equal 'location-name', @presenter.as_json[:title]
+    @location.stubs(:name).returns("location-name")
+    assert_equal "location-name", @presenter.as_json[:title]
   end
 
   test "json includes location updated_at as updated_at" do
@@ -43,18 +43,18 @@ class Api::WorldLocationPresenterTest < PresenterTestCase
   end
 
   test "json includes iso2 code in details hash" do
-    @location.stubs(:iso2).returns('zz')
-    assert_equal 'zz', @presenter.as_json[:details][:iso2]
+    @location.stubs(:iso2).returns("zz")
+    assert_equal "zz", @presenter.as_json[:details][:iso2]
   end
 
   test "json includes slug in details hash" do
-    @location.stubs(:slug).returns('location-slug')
-    assert_equal 'location-slug', @presenter.as_json[:details][:slug]
+    @location.stubs(:slug).returns("location-slug")
+    assert_equal "location-slug", @presenter.as_json[:details][:slug]
   end
 
   test "json includes display type as format" do
-    @location.stubs(:display_type).returns('location-display-type')
-    assert_equal 'location-display-type', @presenter.as_json[:format]
+    @location.stubs(:display_type).returns("location-display-type")
+    assert_equal "location-display-type", @presenter.as_json[:format]
   end
 
   test "json includes public location url as web_url" do
@@ -62,10 +62,10 @@ class Api::WorldLocationPresenterTest < PresenterTestCase
   end
 
   test "json includes request-relative api organisations url as organisations id" do
-    assert_equal api_world_location_worldwide_organisations_url(@location, host: 'test.host'), @presenter.as_json[:organisations][:id]
+    assert_equal api_world_location_worldwide_organisations_url(@location, host: "test.host"), @presenter.as_json[:organisations][:id]
   end
 
   test "json includes public location url (anchored on organisations) organisations web_url" do
-    assert_equal Whitehall.url_maker.world_location_url(@location, anchor: 'organisations'), @presenter.as_json[:organisations][:web_url]
+    assert_equal Whitehall.url_maker.world_location_url(@location, anchor: "organisations"), @presenter.as_json[:organisations][:web_url]
   end
 end

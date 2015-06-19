@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 class GovspeakHelperLinkRewritingTest < ActionView::TestCase
   include GovspeakHelper
@@ -60,12 +60,12 @@ class GovspeakHelperLinkRewritingTest < ActionView::TestCase
     end
   end
 
-  test 'should rewrite admin link to an superseded edition as a link to its published edition' do
+  test "should rewrite admin link to an superseded edition as a link to its published edition" do
     superseded_edition, published_edition = create_superseded_policy_with_published_edition
     assert_rewrites_link(from: admin_edition_path(superseded_edition), to: public_document_url(published_edition))
   end
 
-  test 'should rewrite admin link to a draft edition as a link to its published edition' do
+  test "should rewrite admin link to a draft edition as a link to its published edition" do
     published_edition, new_draft = create_draft_policy_with_published_edition
     assert_rewrites_link(from: admin_edition_path(new_draft), to: public_document_url(published_edition))
   end
@@ -106,7 +106,7 @@ class GovspeakHelperLinkRewritingTest < ActionView::TestCase
     edition = create(:published_policy)
     writer = create(:policy_writer)
     new_draft = edition.create_draft(writer)
-    new_draft.change_note = 'change-note'
+    new_draft.change_note = "change-note"
     new_draft.save_as(writer)
     new_draft.submit!
     publish(new_draft)
@@ -117,7 +117,7 @@ class GovspeakHelperLinkRewritingTest < ActionView::TestCase
     edition = create(:published_policy)
     writer = create(:policy_writer)
     new_draft = edition.create_draft(writer)
-    new_draft.change_note = 'change-note'
+    new_draft.change_note = "change-note"
     new_draft.save_as(writer)
     [edition, new_draft]
   end

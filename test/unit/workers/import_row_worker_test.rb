@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 class ImportRowWorkerTest < ActiveSupport::TestCase
   include CsvSampleHelpers
@@ -26,9 +26,9 @@ class ImportRowWorkerTest < ActiveSupport::TestCase
       stub_request(:get, "http://example.com/attachment.txt").to_return(status: 200, body: "Some text", headers: {})
 
       csv_data = publication_csv_sample(attachment_1_url: "http://example.com/attachment.txt",
-                                          attachment_1_title: 'File title',
-                                          html_title: 'HTML title',
-                                          html_body: 'body')
+                                          attachment_1_title: "File title",
+                                          html_title: "HTML title",
+                                          html_body: "body")
 
       import = create(:import, csv_data: csv_data, data_type: "publication")
       worker = ImportRowWorker.new(import.id, import.rows.first, 1)
@@ -39,11 +39,11 @@ class ImportRowWorkerTest < ActiveSupport::TestCase
       assert_equal 2, publication.attachments.size
 
       html_attachment = publication.attachments.last
-      assert_equal 'HTML title', html_attachment.title
-      assert_equal 'body', html_attachment.govspeak_content_body
+      assert_equal "HTML title", html_attachment.title
+      assert_equal "body", html_attachment.govspeak_content_body
 
       file_attachment = publication.attachments.first
-      assert_equal 'File title', file_attachment.title
+      assert_equal "File title", file_attachment.title
     end
   end
 
@@ -84,5 +84,4 @@ class ImportRowWorkerTest < ActiveSupport::TestCase
   ensure
     Import.destroy_all
   end
-
 end

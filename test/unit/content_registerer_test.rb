@@ -1,5 +1,5 @@
-require 'test_helper'
-require 'gds_api/test_helpers/content_register'
+require "test_helper"
+require "gds_api/test_helpers/content_register"
 
 class ContentRegistererTest < ActiveSupport::TestCase
   include GdsApi::TestHelpers::ContentRegister
@@ -7,8 +7,8 @@ class ContentRegistererTest < ActiveSupport::TestCase
   test "registers models with the content register" do
     organisation = create(:organisation)
     expected_entry = {
-      base_path: organisation.search_index['link'],
-      format: 'organisation',
+      base_path: organisation.search_index["link"],
+      format: "organisation",
       title: organisation.name
     }
 

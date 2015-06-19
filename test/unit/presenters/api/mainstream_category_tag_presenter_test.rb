@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 class Api::MainstreamCategoryTagPresenterTest < ActiveSupport::TestCase
   test "json includes list of results" do

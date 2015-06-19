@@ -3,7 +3,7 @@
 # in order to attempt to speed up the tests
 
 require File.expand_path("../../../fast_test_helper", __FILE__)
-require 'whitehall/extra_quote_remover'
+require "whitehall/extra_quote_remover"
 
 module Whitehall
   class ExtraQuoteRemoverTest < ActiveSupport::TestCase
@@ -86,7 +86,7 @@ module Whitehall
       assert_remover_transforms(
         %{> "line 1\n> \n> "line 2\n> \n> "line 3"} =>
         %{> line 1\n> \n> line 2\n> \n> line 3}
-        )
+      )
     end
 
     test "preserve newlines when there's a blockquote with additional text after" do

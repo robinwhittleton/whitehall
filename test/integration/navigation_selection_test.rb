@@ -46,9 +46,8 @@ class NavigationSelectionTest < ActiveSupport::TestCase
   end
 
   def assert_controller_select_main_navigation_path(controller_file)
-    controller = File.basename(controller_file).sub('_controller.rb', '')
+    controller = File.basename(controller_file).sub("_controller.rb", "")
     assert current_main_navigation_path(controller: controller),
         "could not find navigation path for controller: #{controller_file}"
   end
-
 end

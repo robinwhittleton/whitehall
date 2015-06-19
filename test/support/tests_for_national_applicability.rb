@@ -10,7 +10,7 @@ module TestsForNationalApplicability
       end
     end
 
-    test 'create should create a new edition with nation inapplicabilities' do
+    test "create should create a new edition with nation inapplicabilities" do
       attributes = attributes_for_edition
 
       post :create, edition: attributes.merge(nation_inapplicabilities_attributes_for(Nation.scotland => "http://www.scotland.com/"))
@@ -20,10 +20,10 @@ module TestsForNationalApplicability
       assert_equal "http://www.scotland.com/", scotland_inapplicability.alternative_url
     end
 
-    view_test 'creating with invalid edition data should not lose the nation inapplicability fields or values' do
+    view_test "creating with invalid edition data should not lose the nation inapplicability fields or values" do
       attributes = attributes_for_edition
       post :create, edition: attributes.merge(
-        title: ''
+        title: ""
       ).merge(nation_inapplicabilities_attributes_for(Nation.scotland => "http://www.scotland.com/"))
 
       assert_nation_inapplicability_fields_exist
@@ -32,7 +32,7 @@ module TestsForNationalApplicability
       assert_nation_inapplicability_fields_set_as(index: 2, checked: false)
     end
 
-    view_test 'creating with invalid nation inapplicability data should not lose the nation inapplicability fields or values' do
+    view_test "creating with invalid nation inapplicability data should not lose the nation inapplicability fields or values" do
       attributes = attributes_for_edition
       post :create, edition: attributes.merge(
         nation_inapplicabilities_attributes_for(Nation.scotland => "invalid-url")
@@ -44,7 +44,7 @@ module TestsForNationalApplicability
       assert_nation_inapplicability_fields_set_as(index: 2, checked: false)
     end
 
-    view_test 'edit displays edition form with nation inapplicability fields and values' do
+    view_test "edit displays edition form with nation inapplicability fields and values" do
       edition = create_edition
       northern_ireland_inapplicability = edition.nation_inapplicabilities.create!(nation: Nation.northern_ireland, alternative_url: "http://www.discovernorthernireland.com/")
 
@@ -58,7 +58,7 @@ module TestsForNationalApplicability
       end
     end
 
-    test 'updating should save modified edition with nation inapplicabilities' do
+    test "updating should save modified edition with nation inapplicabilities" do
       attributes = attributes_for_edition
       edition = create_edition(attributes)
       northern_ireland_inapplicability = edition.nation_inapplicabilities.create!(nation: Nation.northern_ireland, alternative_url: "http://www.discovernorthernireland.com/")
@@ -70,13 +70,13 @@ module TestsForNationalApplicability
       assert_equal "http://www.visitscotland.com/", edition.nation_inapplicabilities.for_nation(Nation.scotland).first.alternative_url
     end
 
-    view_test 'updating with invalid edition data should not lose the nation inapplicability fields or values' do
+    view_test "updating with invalid edition data should not lose the nation inapplicability fields or values" do
       attributes = attributes_for_edition
       edition = create_edition(attributes)
       scotland_inapplicability = edition.nation_inapplicabilities.create!(nation: Nation.scotland, alternative_url: "http://www.scotland.com/")
       wales_inapplicability = edition.nation_inapplicabilities.create!(nation: Nation.wales, alternative_url: "http://www.wales.com/")
 
-      attributes = nation_inapplicabilities_attributes_for({Nation.northern_ireland => "http://www.northernireland.com/"}, scotland_inapplicability, wales_inapplicability).merge(title: '')
+      attributes = nation_inapplicabilities_attributes_for({Nation.northern_ireland => "http://www.northernireland.com/"}, scotland_inapplicability, wales_inapplicability).merge(title: "")
 
       put :update, id: edition, edition: attributes
 
@@ -86,7 +86,7 @@ module TestsForNationalApplicability
       assert_nation_inapplicability_fields_set_as(index: 2, checked: true, alternative_url: "http://www.northernireland.com/")
     end
 
-    view_test 'updating with invalid nation inapplicability data should not lose the nation inapplicability fields or values' do
+    view_test "updating with invalid nation inapplicability data should not lose the nation inapplicability fields or values" do
       attributes = attributes_for_edition
       edition = create_edition(attributes)
       scotland_inapplicability = edition.nation_inapplicabilities.create!(nation: Nation.scotland, alternative_url: "http://www.scotland.com/")
@@ -104,7 +104,7 @@ module TestsForNationalApplicability
       assert_nation_inapplicability_fields_set_as(index: 2, checked: true, alternative_url: "invalid-url")
     end
 
-    view_test 'updating a stale edition should not lose the nation inapplicability fields or values' do
+    view_test "updating a stale edition should not lose the nation inapplicability fields or values" do
       edition = create_edition
       scotland_inapplicability = edition.nation_inapplicabilities.create!(nation: Nation.scotland, alternative_url: "http://www.scotland.com/")
       wales_inapplicability = edition.nation_inapplicabilities.create!(nation: Nation.wales, alternative_url: "http://www.wales.com/")
@@ -120,7 +120,6 @@ module TestsForNationalApplicability
       assert_nation_inapplicability_fields_set_as(index: 1, checked: false, alternative_url: "http://www.wales.com/")
       assert_nation_inapplicability_fields_set_as(index: 2, checked: true, alternative_url: "http://www.northernireland.com/")
     end
-
   end
   private
 

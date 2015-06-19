@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 class RoleTypePresenterTest < PresenterTestCase
   test "should generate grouped options for select" do
@@ -22,18 +22,18 @@ class RoleTypePresenterTest < PresenterTestCase
         ["Chief professional officer", "chief_professional_officer"],
       ]],
       ["Worldwide orgs only", [
-        ["Ambassador", "ambassador"],
+        %w(Ambassador ambassador),
         ["High commissioner", "high_commissioner"],
-        ["Governor", "governor"],
+        %w(Governor governor),
         ["Deputy head of mission", "deputy_head_of_mission"],
         ["Worldwide office staff", "worldwide_office_staff"]
       ]],
       ["MOJ only", [
-        ["Judge", "judge"],
+        %w(Judge judge),
       ]],
       ["Ministerial", [
         ["Cabinet minister", "cabinet_minister"],
-        ["Minister", "minister"]
+        %w(Minister minister)
       ]]
     ]
     assert_equal expected, RoleTypePresenter.options

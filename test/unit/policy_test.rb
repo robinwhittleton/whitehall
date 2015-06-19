@@ -16,7 +16,7 @@ class PolicyTest < ActiveSupport::TestCase
     published_policy = create(:published_policy, nation_inapplicabilities: [
       create(:nation_inapplicability, nation_id: Nation.wales.id, alternative_url: "http://wales.gov.uk"),
       create(:nation_inapplicability, nation_id: Nation.scotland.id, alternative_url: "http://scot.gov.uk")]
-    )
+                             )
 
     draft_policy = published_policy.create_draft(create(:policy_writer))
 
@@ -31,7 +31,7 @@ class PolicyTest < ActiveSupport::TestCase
     speech = create(:published_speech, related_editions: [published_policy])
 
     draft_policy = published_policy.create_draft(create(:policy_writer))
-    draft_policy.change_note = 'change-note'
+    draft_policy.change_note = "change-note"
     assert draft_policy.valid?
 
     assert draft_policy.related_editions.include?(speech)
@@ -46,11 +46,11 @@ class PolicyTest < ActiveSupport::TestCase
     force_publish(first_draft)
     first_draft.reload
     second_draft = first_draft.create_draft(editor)
-    second_draft.change_note = 'change-note'
+    second_draft.change_note = "change-note"
     assert second_draft.valid?
 
     draft_policy = published_policy.create_draft(editor)
-    draft_policy.change_note = 'change-note'
+    draft_policy.change_note = "change-note"
     assert draft_policy.valid?
 
     draft_policy.reload
@@ -96,15 +96,15 @@ class PolicyTest < ActiveSupport::TestCase
   test "search_index contains topics" do
     policy = create(:published_policy, :with_document, title: "my title", topics: [create(:topic)])
 
-    assert_equal policy.topics.map(&:slug), policy.search_index['topics']
+    assert_equal policy.topics.map(&:slug), policy.search_index["topics"]
   end
 
-  test 'search_format_types tags the policy as a policy' do
+  test "search_format_types tags the policy as a policy" do
     policy = build(:policy)
-    assert policy.search_format_types.include?('policy')
+    assert policy.search_format_types.include?("policy")
   end
 
-  test 'can be associated with worldwide priorities' do
+  test "can be associated with worldwide priorities" do
     assert Policy.new.can_be_associated_with_worldwide_priorities?
   end
 

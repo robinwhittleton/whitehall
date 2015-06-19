@@ -1,12 +1,12 @@
 # encoding: UTF-8
-require 'test_helper'
-require 'whitehall/uploader'
+require "test_helper"
+require "whitehall/uploader"
 
 module Whitehall::Uploader
   class CaseStudyRowTest < ActiveSupport::TestCase
     setup do
-      @attachment_cache = stub('attachment cache')
-      @default_organisation = stub('Organisation')
+      @attachment_cache = stub("attachment cache")
+      @default_organisation = stub("Organisation")
     end
 
     test "validates row headings" do

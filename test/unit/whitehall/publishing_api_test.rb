@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 class Whitehall::PublishingApiTest < ActiveSupport::TestCase
   setup do
@@ -74,7 +74,7 @@ class Whitehall::PublishingApiTest < ActiveSupport::TestCase
 
   test "#republish publishes to the Publishing API as a 'republish' update_type" do
     edition = create(:published_publication)
-    presenter = PublishingApiPresenters.presenter_for(edition, update_type: 'republish')
+    presenter = PublishingApiPresenters.presenter_for(edition, update_type: "republish")
     request = stub_publishing_api_put_item(presenter.base_path, presenter.as_json)
 
     Whitehall::PublishingApi.republish_async(edition)
@@ -103,7 +103,7 @@ class Whitehall::PublishingApiTest < ActiveSupport::TestCase
 
   test "#republish republishes all available translations of a translatable model" do
     organisation = create(:organisation)
-    presenter = PublishingApiPresenters.presenter_for(organisation, update_type: 'republish')
+    presenter = PublishingApiPresenters.presenter_for(organisation, update_type: "republish")
 
     I18n.with_locale :fr do
       organisation.name = "French name"
@@ -123,7 +123,7 @@ class Whitehall::PublishingApiTest < ActiveSupport::TestCase
   test "#republish raises error for editions that are not publicly visible" do
     draft     = create(:draft_edition)
     published = create(:published_edition)
-    withdrawn = create(:published_edition, state: 'withdrawn')
+    withdrawn = create(:published_edition, state: "withdrawn")
 
     draft_payload     = PublishingApiPresenters.presenter_for(draft, update_type: "republish").as_json
     published_payload = PublishingApiPresenters.presenter_for(published, update_type: "republish").as_json
@@ -170,7 +170,7 @@ class Whitehall::PublishingApiTest < ActiveSupport::TestCase
 
     german_payload, german_request = nil
     I18n.with_locale(:de) do
-      edition.title = 'German title'
+      edition.title = "German title"
       edition.save!
 
       german_payload = PublishingApiPresenters::Unpublishing.new(unpublishing).as_json
@@ -200,7 +200,7 @@ class Whitehall::PublishingApiTest < ActiveSupport::TestCase
     edition   = create(:draft_case_study, scheduled_publication: timestamp)
 
     I18n.with_locale(:fr) do
-      edition.title = 'French title'
+      edition.title = "French title"
       edition.save!
     end
 
@@ -210,11 +210,11 @@ class Whitehall::PublishingApiTest < ActiveSupport::TestCase
     Sidekiq::Testing.fake! do
       Whitehall::PublishingApi.schedule_async(edition)
 
-      assert_equal [english_path, timestamp], PublishingApiScheduleWorker.jobs[0]['args']
-      assert_equal [french_path, timestamp], PublishingApiScheduleWorker.jobs[1]['args']
+      assert_equal [english_path, timestamp], PublishingApiScheduleWorker.jobs[0]["args"]
+      assert_equal [french_path, timestamp], PublishingApiScheduleWorker.jobs[1]["args"]
 
-      assert_equal [edition.id, 'en'], PublishingApiComingSoonWorker.jobs[0]['args']
-      assert_equal [edition.id, 'fr'], PublishingApiComingSoonWorker.jobs[1]['args']
+      assert_equal [edition.id, "en"], PublishingApiComingSoonWorker.jobs[0]["args"]
+      assert_equal [edition.id, "fr"], PublishingApiComingSoonWorker.jobs[1]["args"]
     end
   end
 
@@ -224,7 +224,7 @@ class Whitehall::PublishingApiTest < ActiveSupport::TestCase
     updated_edition = create(:draft_case_study, scheduled_publication: timestamp, document: existing_edition.document)
 
     I18n.with_locale(:es) do
-      updated_edition.title = 'Spanish title'
+      updated_edition.title = "Spanish title"
       updated_edition.save!
     end
 
@@ -234,8 +234,8 @@ class Whitehall::PublishingApiTest < ActiveSupport::TestCase
     Sidekiq::Testing.fake! do
       Whitehall::PublishingApi.schedule_async(updated_edition)
 
-      assert_equal [english_path, timestamp], PublishingApiScheduleWorker.jobs[0]['args']
-      assert_equal [spanish_path, timestamp], PublishingApiScheduleWorker.jobs[1]['args']
+      assert_equal [english_path, timestamp], PublishingApiScheduleWorker.jobs[0]["args"]
+      assert_equal [spanish_path, timestamp], PublishingApiScheduleWorker.jobs[1]["args"]
 
       assert_equal [], PublishingApiComingSoonWorker.jobs
     end
@@ -256,7 +256,7 @@ class Whitehall::PublishingApiTest < ActiveSupport::TestCase
     edition = create(:scheduled_case_study)
 
     I18n.with_locale(:de) do
-      edition.title = 'German title'
+      edition.title = "German title"
       edition.save!(validate: false)
     end
 
@@ -266,11 +266,11 @@ class Whitehall::PublishingApiTest < ActiveSupport::TestCase
     Sidekiq::Testing.fake! do
       Whitehall::PublishingApi.unschedule_async(edition)
 
-      assert_equal [german_path], PublishingApiUnscheduleWorker.jobs[0]['args']
-      assert_equal [english_path], PublishingApiUnscheduleWorker.jobs[1]['args']
+      assert_equal [german_path], PublishingApiUnscheduleWorker.jobs[0]["args"]
+      assert_equal [english_path], PublishingApiUnscheduleWorker.jobs[1]["args"]
 
-      assert_equal [german_path], PublishingApiGoneWorker.jobs[0]['args']
-      assert_equal [english_path], PublishingApiGoneWorker.jobs[1]['args']
+      assert_equal [german_path], PublishingApiGoneWorker.jobs[0]["args"]
+      assert_equal [english_path], PublishingApiGoneWorker.jobs[1]["args"]
     end
   end
 
@@ -279,7 +279,7 @@ class Whitehall::PublishingApiTest < ActiveSupport::TestCase
     updated_edition = create(:scheduled_case_study, document: existing_edition.document)
 
     I18n.with_locale(:de) do
-      updated_edition.title = 'German title'
+      updated_edition.title = "German title"
       updated_edition.save!(validate: false)
     end
 
@@ -289,8 +289,8 @@ class Whitehall::PublishingApiTest < ActiveSupport::TestCase
     Sidekiq::Testing.fake! do
       Whitehall::PublishingApi.unschedule_async(updated_edition)
 
-      assert_equal [german_path], PublishingApiUnscheduleWorker.jobs[0]['args']
-      assert_equal [english_path], PublishingApiUnscheduleWorker.jobs[1]['args']
+      assert_equal [german_path], PublishingApiUnscheduleWorker.jobs[0]["args"]
+      assert_equal [english_path], PublishingApiUnscheduleWorker.jobs[1]["args"]
 
       assert_equal [], PublishingApiGoneWorker.jobs
     end

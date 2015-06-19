@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 class ImageValidatorTest < ActiveSupport::TestCase
   EXAMPLE_MODEL = ImageData
@@ -58,7 +58,7 @@ class ImageValidatorTest < ActiveSupport::TestCase
 
   def build_example(file_name)
     if file_name.present?
-      File.open(File.join(Rails.root, 'test/fixtures/images', file_name)) do |file|
+      File.open(File.join(Rails.root, "test/fixtures/images", file_name)) do |file|
         EXAMPLE_MODEL.new(file: file)
       end
     else

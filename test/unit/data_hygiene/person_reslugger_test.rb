@@ -1,5 +1,5 @@
-require 'test_helper'
-require 'gds_api/test_helpers/rummager'
+require "test_helper"
+require "gds_api/test_helpers/rummager"
 
 class PersonSlugChangerTest < ActiveSupport::TestCase
   include GdsApi::TestHelpers::Rummager
@@ -7,8 +7,8 @@ class PersonSlugChangerTest < ActiveSupport::TestCase
 
   setup do
     DatabaseCleaner.clean_with :truncation
-    @person = create(:person, forename: 'old', surname: 'slug', biography: 'Biog')
-    @reslugger = DataHygiene::PersonReslugger.new(@person, 'updated-slug')
+    @person = create(:person, forename: "old", surname: "slug", biography: "Biog")
+    @reslugger = DataHygiene::PersonReslugger.new(@person, "updated-slug")
   end
 
   teardown do
@@ -17,7 +17,7 @@ class PersonSlugChangerTest < ActiveSupport::TestCase
 
   test "re-slugs the person" do
     @reslugger.run!
-    assert_equal 'updated-slug', @person.slug
+    assert_equal "updated-slug", @person.slug
   end
 
   test "publishes to Publishing API with the new slug and redirects the old" do
@@ -41,13 +41,12 @@ class PersonSlugChangerTest < ActiveSupport::TestCase
   end
 
   test "deletes the old slug from the search index" do
-    Whitehall::SearchIndex.expects(:delete).with { |person| person.slug == 'old-slug' }
+    Whitehall::SearchIndex.expects(:delete).with { |person| person.slug == "old-slug" }
     @reslugger.run!
-
   end
 
   test "adds the new slug from the search index" do
-    Whitehall::SearchIndex.expects(:add).with { |person| person.slug == 'updated-slug' }
+    Whitehall::SearchIndex.expects(:add).with { |person| person.slug == "updated-slug" }
     @reslugger.run!
   end
 

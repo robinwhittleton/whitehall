@@ -1,5 +1,5 @@
-require 'test_helper'
-require 'support/importer_test_logger'
+require "test_helper"
+require "support/importer_test_logger"
 
 class Whitehall::Uploader::Finders::RoleAppointmentsFinderTest < ActiveSupport::TestCase
   def setup
@@ -16,11 +16,11 @@ class Whitehall::Uploader::Finders::RoleAppointmentsFinderTest < ActiveSupport::
   end
 
   test "ignores blank slugs" do
-    assert_equal [], Whitehall::Uploader::Finders::RoleAppointmentsFinder.find(1.day.ago, '', @log, @line_number)
+    assert_equal [], Whitehall::Uploader::Finders::RoleAppointmentsFinder.find(1.day.ago, "", @log, @line_number)
   end
 
   test "logs a warning if a person can't be found for the given slug" do
-    Whitehall::Uploader::Finders::RoleAppointmentsFinder.find(1.day.ago, 'made-up-person-slug', @log, @line_number)
+    Whitehall::Uploader::Finders::RoleAppointmentsFinder.find(1.day.ago, "made-up-person-slug", @log, @line_number)
     assert_match /Unable to find Person with slug 'made-up-person-slug'/, @log_buffer.string
   end
 

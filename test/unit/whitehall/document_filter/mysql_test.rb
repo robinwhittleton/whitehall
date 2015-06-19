@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 module Whitehall::DocumentFilter
   class MysqlTest < ActiveSupport::TestCase
@@ -19,7 +19,7 @@ module Whitehall::DocumentFilter
     test "topics param filters the documents by topic using slugs" do
       topic = stub_topic("car-tax")
 
-      filtered_scope = stub_document_scope('filtered_scope')
+      filtered_scope = stub_document_scope("filtered_scope")
       document_scope.expects(:published_in_topic).with([topic]).returns(filtered_scope)
 
       filter = create_filter(document_scope, topics: [topic.slug])
@@ -30,7 +30,7 @@ module Whitehall::DocumentFilter
     test "topics param sets #selected_topics" do
       topic = stub_topic("car-tax")
 
-      filtered_scope = stub_document_scope('filtered_scope')
+      filtered_scope = stub_document_scope("filtered_scope")
       document_scope.stubs(:published_in_topic).with([topic]).returns(filtered_scope)
 
       filter = create_filter(document_scope, topics: [topic.slug])
@@ -49,15 +49,15 @@ module Whitehall::DocumentFilter
     test "topics param does not filter if topic is 'all'" do
       document_scope.expects(:published_in_topic).never
 
-      filter = create_filter(document_scope, topics: ['all'])
+      filter = create_filter(document_scope, topics: ["all"])
 
       assert_equal document_scope, filter.documents
     end
 
     test "departments param filters the documents by organisation using slugs" do
-      organisation = stub_organisation('defra')
+      organisation = stub_organisation("defra")
 
-      filtered_scope = stub_document_scope('filtered_scope')
+      filtered_scope = stub_document_scope("filtered_scope")
       document_scope.stubs(:in_organisation).with([organisation]).returns(filtered_scope)
 
       filter = create_filter(document_scope, departments: [organisation.slug])
@@ -66,7 +66,7 @@ module Whitehall::DocumentFilter
     end
 
     test "departments param sets #selected_organisations" do
-      organisation = stub_organisation('defra')
+      organisation = stub_organisation("defra")
 
       filter = create_filter(document_scope, departments: [organisation.slug])
 
@@ -80,11 +80,11 @@ module Whitehall::DocumentFilter
 
     test "does not filter if departments is 'all'" do
       document_scope.expects(:in_organisation).never
-      create_filter(document_scope, departments: ['all'])
+      create_filter(document_scope, departments: ["all"])
     end
 
     test "keywords param filters by content containing each keyword" do
-      filtered_scope = stub_document_scope('filtered scope')
+      filtered_scope = stub_document_scope("filtered scope")
       document_scope.expects(:with_title_or_summary_containing).with("alpha", "beta").returns(filtered_scope)
 
       filter = create_filter(document_scope, keywords: "alpha beta")
@@ -94,11 +94,11 @@ module Whitehall::DocumentFilter
 
     test "keywords param does not filter if no keywords were given" do
       document_scope.expects(:with_title_or_summary_containing).never
-      create_filter(document_scope, keywords: '')
+      create_filter(document_scope, keywords: "")
     end
 
     test "locale param filters content by locale" do
-      filtered_scope = stub_document_scope('filtered scope')
+      filtered_scope = stub_document_scope("filtered scope")
       document_scope.expects(:with_translations).with("fr").returns(filtered_scope)
       filter = create_filter(document_scope, locale: "fr")
     end
@@ -119,9 +119,9 @@ module Whitehall::DocumentFilter
     end
 
     test "publication_type param filters by publication type" do
-      publication_filter_option = stub_publication_filter_option("testing filter - statistics", publication_types: [stub('type', id: 123)])
+      publication_filter_option = stub_publication_filter_option("testing filter - statistics", publication_types: [stub("type", id: 123)])
 
-      filtered_scope = stub_document_scope('filtered_scope')
+      filtered_scope = stub_document_scope("filtered_scope")
       document_scope.expects(:where).with(publication_type_id: [123]).returns(filtered_scope)
 
       filter = create_filter(document_scope, publication_filter_option: publication_filter_option.slug)
@@ -129,9 +129,9 @@ module Whitehall::DocumentFilter
     end
 
     test "publication_type param can also filter by publication edition type" do
-      publication_filter_option = stub_publication_filter_option("testing filter - statistics", publication_types: [stub('type', id: 123), stub('other type', id: 234)], edition_types: ["EditionType"])
+      publication_filter_option = stub_publication_filter_option("testing filter - statistics", publication_types: [stub("type", id: 123), stub("other type", id: 234)], edition_types: ["EditionType"])
 
-      filtered_scope = stub_document_scope('filtered_scope')
+      filtered_scope = stub_document_scope("filtered_scope")
       expected_query = "(`editions`.`publication_type_id` IN (123, 234) OR `editions`.`type` IN ('EditionType'))"
       document_scope.expects(:where).with(responds_with(:to_sql, expected_query)).returns(filtered_scope)
 
@@ -168,7 +168,7 @@ module Whitehall::DocumentFilter
     test "can filter consultations" do
       publication  = create(:published_publication)
       consultation = create(:published_consultation)
-      filter = Whitehall::DocumentFilter::Mysql.new(publication_filter_option: 'consultations')
+      filter = Whitehall::DocumentFilter::Mysql.new(publication_filter_option: "consultations")
       filter.publications_search
 
       assert_equal [consultation], filter.documents
@@ -216,7 +216,7 @@ module Whitehall::DocumentFilter
     end
 
     test "allows combination of filter options" do
-      organisation = stub_organisation('defra')
+      organisation = stub_organisation("defra")
       topic = stub_topic("car-tax")
 
       document_scope.expects(:in_organisation).with([organisation]).returns(document_scope)
@@ -266,7 +266,7 @@ module Whitehall::DocumentFilter
     test "will include WorldLocationNewsArticles when explicitly asked to" do
       world_news = create(:published_world_location_news_article)
       unfiltered_announcements = Announcement.published
-      filter = create_filter(unfiltered_announcements, include_world_location_news: '1')
+      filter = create_filter(unfiltered_announcements, include_world_location_news: "1")
 
       assert filter.documents.include?(world_news)
     end
@@ -281,7 +281,7 @@ module Whitehall::DocumentFilter
     end
 
     def document_scope
-      @document_scope ||= stub_document_scope('unfiltered document scope')
+      @document_scope ||= stub_document_scope("unfiltered document scope")
     end
 
     def stub_document_scope(name)
@@ -289,7 +289,7 @@ module Whitehall::DocumentFilter
         count: stub_everything,
         current_page: stub_everything,
         total_pages: stub_everything
-      )
+                           )
       document_scope.stubs(:arel_table).returns(Edition.arel_table)
       document_scope.stubs(:without_editions_of_type).returns(document_scope)
       document_scope.stubs(:in_reverse_chronological_order).returns(document_scope)

@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 class MinisterSorterTest < ActiveSupport::TestCase
   class MockRole < Struct.new(:name, :seniority, :cabinet_member, :current_people)
@@ -7,7 +7,7 @@ class MinisterSorterTest < ActiveSupport::TestCase
     end
 
     def inspect(*args)
-      "<role #{name}, seniority=#{seniority}, #{cabinet_member? ? "cabinet" : "other"}>"
+      "<role #{name}, seniority=#{seniority}, #{cabinet_member? ? 'cabinet' : 'other'}>"
     end
   end
 

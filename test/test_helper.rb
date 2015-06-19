@@ -1,28 +1,28 @@
 $:.unshift(File.dirname(__FILE__))
 ENV["RAILS_ENV"] = "test"
-require File.expand_path('../../config/environment', __FILE__)
+require File.expand_path("../../config/environment", __FILE__)
 
 if ENV["TEST_COVERAGE"]
   Bundler.require(:test_coverage)
-  SimpleCov.start 'rails'
+  SimpleCov.start "rails"
   SimpleCov.formatter = SimpleCov::Formatter::RcovFormatter
 end
 
-require 'rails/test_help'
-require 'mocha/setup'
-require 'slimmer/test'
-require 'factories'
-require 'webmock/minitest'
-require 'whitehall/not_quite_as_fake_search'
-require 'sidekiq/testing/inline'
-require 'govuk-content-schema-test-helpers/test_unit'
+require "rails/test_help"
+require "mocha/setup"
+require "slimmer/test"
+require "factories"
+require "webmock/minitest"
+require "whitehall/not_quite_as_fake_search"
+require "sidekiq/testing/inline"
+require "govuk-content-schema-test-helpers/test_unit"
 
-Dir[Rails.root.join('test/support/*.rb')].each { |f| require f }
+Dir[Rails.root.join("test/support/*.rb")].each { |f| require f }
 
 Mocha::Configuration.prevent(:stubbing_non_existent_method)
 
 GovukContentSchemaTestHelpers.configure do |config|
-  config.schema_type = 'publisher'
+  config.schema_type = "publisher"
   config.project_root = Rails.root
 end
 
@@ -65,7 +65,7 @@ class ActiveSupport::TestCase
 
   def count_queries
     count = 0
-    subscriber = ActiveSupport::Notifications.subscribe("sql.active_record") do |*args|
+    subscriber = ActiveSupport::Notifications.subscribe("sql.active_record") do |*_args|
       count = count + 1
     end
     yield
@@ -101,11 +101,11 @@ class ActiveSupport::TestCase
   end
 
   def self.class_from_test_name
-    name.sub(/Test$/, '').constantize
+    name.sub(/Test$/, "").constantize
   end
 
   def self.factory_name_from_test
-    name.sub(/Test$/, '').underscore.to_sym
+    name.sub(/Test$/, "").underscore.to_sym
   end
 
   def self.with_not_quite_as_fake_search
@@ -127,7 +127,7 @@ class ActiveSupport::TestCase
   end
 
   def file_fixture(filename)
-    File.new(Rails.root.join('test/fixtures', filename))
+    File.new(Rails.root.join("test/fixtures", filename))
   end
 
   def assert_file_content_identical(file1, file2)
@@ -169,13 +169,13 @@ class ActionController::TestCase
   attr_reader :current_user
 
   setup do
-    request.env['warden'] = stub(authenticate!: false, authenticated?: false, user: nil)
+    request.env["warden"] = stub(authenticate!: false, authenticated?: false, user: nil)
     stub_content_register_policies
   end
 
   def login_as(role_or_user)
     @current_user = role_or_user.is_a?(Symbol) ? create(role_or_user) : role_or_user
-    request.env['warden'] = stub(authenticate!: true, authenticated?: true, user: @current_user)
+    request.env["warden"] = stub(authenticate!: true, authenticated?: true, user: @current_user)
     @previous_papertrail_whodunnit ||= Edition::AuditTrail.whodunnit
     Edition::AuditTrail.whodunnit = @current_user
     @current_user

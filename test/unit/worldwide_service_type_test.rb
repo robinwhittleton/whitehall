@@ -10,5 +10,4 @@ class WorldwideServiceTypeTest < ActiveSupport::TestCase
     service_type = WorldwideServiceType.find_by_id(1)
     assert_equal service_type, WorldwideServiceType.find_by_slug(service_type.slug)
   end
-
 end

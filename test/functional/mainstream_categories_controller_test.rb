@@ -34,7 +34,7 @@ class MainstreamCategoriesControllerTest < ActionController::TestCase
   end
 
   test "show responds with 404 if category doesn't exist" do
-    get :show, parent_tag: 'fruit/apples', id: 'prince-edward'
+    get :show, parent_tag: "fruit/apples", id: "prince-edward"
 
     assert_equal 404, response.status
   end
@@ -42,7 +42,7 @@ class MainstreamCategoriesControllerTest < ActionController::TestCase
   test "show responds with 404 if parent tag is incorrect doesn't exist" do
     category = create(:mainstream_category)
 
-    get :show, parent_tag: 'wrong/tag', id: category
+    get :show, parent_tag: "wrong/tag", id: category
 
     assert_equal 404, response.status
   end
@@ -73,7 +73,6 @@ class MainstreamCategoriesControllerTest < ActionController::TestCase
 
     get :show, parent_tag: category.parent_tag, id: category
 
-    assert_select 'h1.page-title + p', text: category.description
+    assert_select "h1.page-title + p", text: category.description
   end
-
 end

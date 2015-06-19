@@ -1,25 +1,25 @@
-require 'test_helper'
+require "test_helper"
 
 class PublishingApiComingSoonWorkerTest < ActiveSupport::TestCase
   test 'publishes a "coming_soon" format to the Publishing API' do
-    base_path    = '/government/case-studies/case-study-title.fr'
+    base_path    = "/government/case-studies/case-study-title.fr"
     publish_time = 2.days.from_now
-    locale       = 'fr'
+    locale       = "fr"
     edition      = create(:scheduled_case_study,
-                           title: 'Case study title',
-                           summary: 'The summary',
-                           body: 'Some content',
+                           title: "Case study title",
+                           summary: "The summary",
+                           body: "Some content",
                            scheduled_publication: publish_time)
 
     expected_payload = {
-      publishing_app: 'whitehall',
-      rendering_app: 'government-frontend',
-      format: 'coming_soon',
-      title: 'Coming soon',
+      publishing_app: "whitehall",
+      rendering_app: "government-frontend",
+      format: "coming_soon",
+      title: "Coming soon",
       locale: locale,
-      update_type: 'major',
+      update_type: "major",
       details: { publish_time: publish_time },
-      routes: [ { path: base_path, type: 'exact' } ],
+      routes: [{ path: base_path, type: "exact" }],
       public_updated_at: edition.updated_at,
     }
 

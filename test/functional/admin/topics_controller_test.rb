@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 class Admin::TopicsControllerTest < ActionController::TestCase
   setup do
@@ -27,7 +27,7 @@ class Admin::TopicsControllerTest < ActionController::TestCase
     get :show, id: topic
 
     assert_response :success
-    assert_select 'h1', topic.name
+    assert_select "h1", topic.name
   end
 
   ### Describing :new ###
@@ -89,10 +89,10 @@ class Admin::TopicsControllerTest < ActionController::TestCase
   end
 
   view_test "PUT :update with bad data renders errors" do
-    topic = create(:topic, name: 'topic')
+    topic = create(:topic, name: "topic")
     put :update, id: topic.id, topic: {name: "Blah", description: ""}
 
-    assert_equal 'topic', topic.reload.name
+    assert_equal "topic", topic.reload.name
     assert_select ".form-errors"
   end
 

@@ -1,6 +1,6 @@
 # encoding: UTF-8
 
-require 'test_helper'
+require "test_helper"
 
 class FilterRoutesHelperTest < ActionView::TestCase
   [:announcements, :publications].each do |filter|
@@ -27,7 +27,7 @@ class FilterRoutesHelperTest < ActionView::TestCase
     end
 
     test "uses optional hash to route to #{filter} filter" do
-      assert_equal send("#{filter}_path", publication_type: 'transparency-data'), send("#{filter}_filter_path", publication_type: 'transparency-data')
+      assert_equal send("#{filter}_path", publication_type: "transparency-data"), send("#{filter}_filter_path", publication_type: "transparency-data")
     end
   end
 
@@ -45,5 +45,4 @@ class FilterRoutesHelperTest < ActionView::TestCase
     stubs(:params).returns(action: "index", controller: "publications", utf8: "✓", _: "jquerycache")
     assert_equal filter_json_url, "/government/publications.json"
   end
-
 end

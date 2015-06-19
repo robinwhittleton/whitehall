@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 module Whitehall
   class OrganisationSlugChangerTest < ActiveSupport::TestCase
@@ -6,24 +6,24 @@ module Whitehall
       @router = stub("router", add_redirect_route: nil, commit_routes: nil)
       @organisation = create(:organisation)
       @organisation.stubs(:remove_from_search_index)
-      @new_slug = 'new-slug'
+      @new_slug = "new-slug"
       @slug_changer = OrganisationSlugChanger.new(@organisation, @new_slug, router: @router)
       ServiceListeners::SearchIndexer.any_instance.stubs(:index!)
     end
 
-    test 'it removes the org from search index' do
+    test "it removes the org from search index" do
       @organisation.expects(:remove_from_search_index)
 
       @slug_changer.call
     end
 
-    test 'changes the org slug' do
+    test "changes the org slug" do
       @slug_changer.call
 
       assert_equal @new_slug, @organisation.reload.slug
     end
 
-    test 'changes org slugs of any users' do
+    test "changes org slugs of any users" do
       user = create(:user, organisation: @organisation)
 
       @slug_changer.call
@@ -31,14 +31,14 @@ module Whitehall
       assert_equal @new_slug, user.reload.organisation_slug
     end
 
-    test 'adds to search index' do
+    test "adds to search index" do
       @organisation.expects(:update_in_search_index)
 
       @slug_changer.call
     end
 
-    test 'adds redirect route' do
-      order = sequence('order')
+    test "adds redirect route" do
+      order = sequence("order")
 
       @router.expects(:add_redirect_route).with(
         "/government/organisations/#{@organisation.slug}",
@@ -50,7 +50,7 @@ module Whitehall
       @slug_changer.call
     end
 
-    test 'adds redirect route for all published CIPs' do
+    test "adds redirect route for all published CIPs" do
       @router.unstub(:add_redirect_route) # Necessary otherwise the .never assertion below would never fail.
       @router.stubs(:add_redirect_route).with("/government/organisations/#{@organisation.slug}", any_parameters)
 
@@ -81,7 +81,7 @@ module Whitehall
       @slug_changer.call
     end
 
-    test 're-registers in search any published editions associated with the organisation' do
+    test "re-registers in search any published editions associated with the organisation" do
       edition = create(:published_publication, organisations: [@organisation])
 
       indexer = mock("indexer")
@@ -91,7 +91,7 @@ module Whitehall
       @slug_changer.call
     end
 
-    test 're-registers in search any statistics announcements with published publications associated with the organisation' do
+    test "re-registers in search any statistics announcements with published publications associated with the organisation" do
       statistics_announcement = create(:statistics_announcement, organisations: [@organisation])
 
       indexer = mock("indexer")

@@ -1,17 +1,17 @@
-require 'test_helper'
+require "test_helper"
 
 class EditionPublisherTest < ActiveSupport::TestCase
-  test '#perform! with a valid submitted edition publishes the edition, setting the publishing timestamps and version' do
+  test "#perform! with a valid submitted edition publishes the edition, setting the publishing timestamps and version" do
     edition   = create(:submitted_edition)
 
     assert EditionPublisher.new(edition).perform!
     assert edition.published?
     assert_equal Time.zone.now.to_i, edition.first_published_at.to_i
     assert_equal Time.zone.now.to_i, edition.major_change_published_at.to_i
-    assert_equal '1.0', edition.published_version
+    assert_equal "1.0", edition.published_version
   end
 
-  test '#perform! with an access limited edition clears the flag' do
+  test "#perform! with an access limited edition clears the flag" do
     edition = create(:submitted_edition, :access_limited)
 
     assert EditionPublisher.new(edition).perform!
@@ -37,11 +37,11 @@ class EditionPublisherTest < ActiveSupport::TestCase
     refute publisher.perform!
     refute edition.published?
 
-    expected_reason = "Scheduled editions cannot be published. This edition is scheduled for publication on #{edition.scheduled_publication.to_s}"
+    expected_reason = "Scheduled editions cannot be published. This edition is scheduled for publication on #{edition.scheduled_publication}"
     assert_equal expected_reason, publisher.failure_reason
   end
 
-  test '#perform! with an invalid edition refuses to publish' do
+  test "#perform! with an invalid edition refuses to publish" do
     edition = create(:submitted_edition)
     edition.title = nil
     publisher = EditionPublisher.new(edition)
@@ -51,7 +51,7 @@ class EditionPublisherTest < ActiveSupport::TestCase
     assert_equal "This edition is invalid: Title can't be blank", publisher.failure_reason
   end
 
-  test '#perform! with a re-editioned document updates the version numbers' do
+  test "#perform! with a re-editioned document updates the version numbers" do
     published_edition = create(:published_edition, major_change_published_at: 1.week.ago)
     edition = published_edition.create_draft(create(:policy_writer))
     edition.minor_change = true
@@ -60,11 +60,11 @@ class EditionPublisherTest < ActiveSupport::TestCase
 
     assert publisher.perform!
     assert edition.published?
-    assert_equal '1.1', edition.reload.published_version
+    assert_equal "1.1", edition.reload.published_version
     assert_equal 1.week.ago, edition.major_change_published_at
   end
 
-  test '#perform! supersedes all previous editions' do
+  test "#perform! supersedes all previous editions" do
     published_edition = create(:published_edition)
     edition = published_edition.create_draft(create(:policy_writer))
     edition.minor_change = true
@@ -75,7 +75,7 @@ class EditionPublisherTest < ActiveSupport::TestCase
     assert published_edition.reload.superseded?, "expected previous edition to be superseded but it's #{published_edition.state}"
   end
 
-  test '#perform! does not choke if previous editions are invalid' do
+  test "#perform! does not choke if previous editions are invalid" do
     published_edition = create(:published_edition)
     edition = published_edition.create_draft(create(:policy_writer))
     edition.minor_change = true
@@ -87,17 +87,17 @@ class EditionPublisherTest < ActiveSupport::TestCase
     assert published_edition.reload.superseded?, "expected previous edition to be superseded but it's #{published_edition.state}"
   end
 
-  test '#perform! notifies on successful publishing' do
+  test "#perform! notifies on successful publishing" do
     edition  = create(:submitted_edition)
     options  = { one: 1, two: 2}
     notifier = mock
-    notifier.expects(:publish).with('publish', edition, options)
+    notifier.expects(:publish).with("publish", edition, options)
     publisher = EditionPublisher.new(edition, options.merge(notifier: notifier))
 
     assert publisher.perform!
   end
 
-  test '#perform! does not notify if publishing is unsuccessful' do
+  test "#perform! does not notify if publishing is unsuccessful" do
     edition  = build(:imported_edition)
     notifier = mock
     notifier.expects(:publish).never
@@ -106,13 +106,13 @@ class EditionPublisherTest < ActiveSupport::TestCase
     refute publisher.perform!
   end
 
-  test 'a submitted edition with a scheduled publication time cannot be published' do
+  test "a submitted edition with a scheduled publication time cannot be published" do
     edition = build(:submitted_edition, scheduled_publication: 1.day.from_now)
     publisher = EditionPublisher.new(edition)
     refute publisher.can_perform?
   end
 
-  test '#perform! sets political flag for political content on first publish' do
+  test "#perform! sets political flag for political content on first publish" do
     edition = create(:submitted_edition)
 
     refute edition.political?
@@ -126,7 +126,7 @@ class EditionPublisherTest < ActiveSupport::TestCase
     assert edition.political?
   end
 
-  test '#perform! does not set political flag for political content on subsequent publishes' do
+  test "#perform! does not set political flag for political content on subsequent publishes" do
     published_edition = create(:published_edition)
     edition = published_edition.create_draft(create(:policy_writer))
     edition.minor_change = true
@@ -143,7 +143,7 @@ class EditionPublisherTest < ActiveSupport::TestCase
     refute edition.political?
   end
 
-  test '#perform! does not set political flag for non-political content on first publish' do
+  test "#perform! does not set political flag for non-political content on first publish" do
     edition = create(:submitted_edition)
 
     refute edition.political?
@@ -157,7 +157,7 @@ class EditionPublisherTest < ActiveSupport::TestCase
     refute edition.political?
   end
 
-  test '#perform! sets a political flag on political content that has a first_published_at set' do
+  test "#perform! sets a political flag on political content that has a first_published_at set" do
     edition = create(:submitted_edition, first_published_at: 3.weeks.ago)
 
     refute edition.political?

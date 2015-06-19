@@ -1,5 +1,5 @@
 require "test_helper"
-require 'support/importer_test_logger'
+require "support/importer_test_logger"
 
 class Whitehall::Uploader::Builders::AttachmentBuilderTest < ActiveSupport::TestCase
   def setup

@@ -92,7 +92,7 @@ class DocumentTest < ActiveSupport::TestCase
   test "#destroy also destroys document collection group memberships" do
     published_edition = create(:published_edition)
     document_collection = create(:published_document_collection,
-      groups: [ build(:document_collection_group, documents: [published_edition.document]) ])
+      groups: [build(:document_collection_group, documents: [published_edition.document])])
 
     published_edition.document.destroy
     assert_empty DocumentCollectionGroupMembership.where(document_id: published_edition.document.id)
@@ -106,7 +106,7 @@ class DocumentTest < ActiveSupport::TestCase
     assert_equal "First published.", history.first.note
   end
 
-  test 'returns change history' do
+  test "returns change history" do
     document = create(:document)
     history = document.change_history
 
@@ -124,7 +124,7 @@ class DocumentTest < ActiveSupport::TestCase
   test "#ever_published_editions returns all editions that have ever been published or withdrawn" do
     document = create(:document)
     superseded = create(:superseded_edition, document: document)
-    withdrawn = create(:edition, state: 'withdrawn', document: document)
+    withdrawn = create(:edition, state: "withdrawn", document: document)
     current = create(:published_edition, document: document)
 
     assert_equal [superseded, withdrawn, current], document.ever_published_editions
@@ -153,5 +153,4 @@ class DocumentTest < ActiveSupport::TestCase
 
     refute draft.document.similar_slug_exists?
   end
-
 end

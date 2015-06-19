@@ -1,13 +1,13 @@
 # encoding: UTF-8
-require 'test_helper'
+require "test_helper"
 
 class TranslationHelperTest < ActionView::TestCase
   setup do
-    @document = stub('document', display_type_key: 'stub')
+    @document = stub("document", display_type_key: "stub")
   end
 
   test "#t_display_type translates document display type" do
-    I18n.backend.store_translations :en, {document: {type: {stub: {one: 'Stub'}}}}
+    I18n.backend.store_translations :en, {document: {type: {stub: {one: "Stub"}}}}
     assert_equal "Stub", t_display_type(@document)
   end
 
@@ -25,26 +25,26 @@ class TranslationHelperTest < ActionView::TestCase
 
   test "t_delivery_title returns translation of 'Minister' if document was delivered by minister" do
     I18n.with_locale(:fr) do
-      assert_equal "Ministre", t_delivery_title(stub('document', speech_type: stub('type', owner_key_group: 'delivery_title'), delivered_by_minister?: true))
+      assert_equal "Ministre", t_delivery_title(stub("document", speech_type: stub("type", owner_key_group: "delivery_title"), delivered_by_minister?: true))
     end
   end
 
   test "t_delivery_title returns translation of 'Speaker' if document was not delivered by minister" do
     I18n.with_locale(:fr) do
-      assert_equal "Orateur", t_delivery_title(stub('document', speech_type: stub('type', owner_key_group: 'delivery_title'), delivered_by_minister?: false))
+      assert_equal "Orateur", t_delivery_title(stub("document", speech_type: stub("type", owner_key_group: "delivery_title"), delivered_by_minister?: false))
     end
   end
 
   test "t_corporate_information_page_type tranlsates the type of corporate informaton page" do
     I18n.with_locale(:fr) do
-      assert_equal "Charte de données personnelles", t_corporate_information_page_type(stub('corp info page', display_type_key: "personal_information_charter"))
+      assert_equal "Charte de données personnelles", t_corporate_information_page_type(stub("corp info page", display_type_key: "personal_information_charter"))
     end
   end
 
   test "t_delivered_on returns appropriate translation depending on whether speech was written or delivered" do
     I18n.with_locale(:fr) do
-      assert_match /Prononcé le/, t_delivered_on(stub('speech_type', published_externally_key: 'delivered_on'))
-      assert_match /Ecrit le/, t_delivered_on(stub('speech_type', published_externally_key: 'written_on'))
+      assert_match /Prononcé le/, t_delivered_on(stub("speech_type", published_externally_key: "delivered_on"))
+      assert_match /Ecrit le/, t_delivered_on(stub("speech_type", published_externally_key: "written_on"))
     end
   end
 end

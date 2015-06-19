@@ -9,28 +9,28 @@ class SearchIndexTest < ActiveSupport::TestCase
   end
 
   test "Whitehall.government_search_index excludes DetailedGuide" do
-    DetailedGuide.stubs(search_index: ['a detailed guide'])
-    refute Whitehall.government_search_index.include?('a detailed guide')
+    DetailedGuide.stubs(search_index: ["a detailed guide"])
+    refute Whitehall.government_search_index.include?("a detailed guide")
   end
 
   test "Whitehall.government_search_index includes WorldwidePriorities" do
-    WorldwidePriority.stubs(search_index: ['worldwide_priorities_index'])
-    assert Whitehall.government_search_index.include?('worldwide_priorities_index')
+    WorldwidePriority.stubs(search_index: ["worldwide_priorities_index"])
+    assert Whitehall.government_search_index.include?("worldwide_priorities_index")
   end
 
   test "Whitehall.government_search_index includes WorldLocationNewsArticles" do
-    WorldLocationNewsArticle.stubs(search_index: ['world_location_news_articles_index'])
-    assert Whitehall.government_search_index.include?('world_location_news_articles_index')
+    WorldLocationNewsArticle.stubs(search_index: ["world_location_news_articles_index"])
+    assert Whitehall.government_search_index.include?("world_location_news_articles_index")
   end
 
   test "Whitehall.government_search_index includes WorldLocations" do
-    WorldLocation.stubs(search_index: ['world_locations_index'])
-    assert Whitehall.government_search_index.include?('world_locations_index')
+    WorldLocation.stubs(search_index: ["world_locations_index"])
+    assert Whitehall.government_search_index.include?("world_locations_index")
   end
 
   test "Whitehall.government_search_index includes WorldwideOrganisations" do
-    WorldwideOrganisation.stubs(search_index: ['worldwide_organisations_index'])
-    assert Whitehall.government_search_index.include?('worldwide_organisations_index')
+    WorldwideOrganisation.stubs(search_index: ["worldwide_organisations_index"])
+    assert Whitehall.government_search_index.include?("worldwide_organisations_index")
   end
 
   test "Whitehall.government_search_index includes organisations" do

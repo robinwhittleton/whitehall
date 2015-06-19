@@ -31,17 +31,17 @@ class Edition::TopicsTest < ActiveSupport::TestCase
   end
 
   test "imported editions are valid without any topics" do
-    edition = EditionWithTopics.new(attributes_for_edition.merge(state: 'imported'))
+    edition = EditionWithTopics.new(attributes_for_edition.merge(state: "imported"))
 
     assert edition.valid?
   end
 
   test "#title_with_topics returns the title and its topics's titles" do
-    edition = EditionWithTopics.new(title: 'Edition Title', topics: [build(:topic, name: 'Topic 1')])
+    edition = EditionWithTopics.new(title: "Edition Title", topics: [build(:topic, name: "Topic 1")])
 
     assert_equal "Edition Title (Topic 1)", edition.title_with_topics
 
-    edition.topics << build(:topic, name: 'Topic 2')
+    edition.topics << build(:topic, name: "Topic 2")
 
     assert_equal "Edition Title (Topic 1 and Topic 2)", edition.title_with_topics
   end

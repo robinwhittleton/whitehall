@@ -1,10 +1,10 @@
-require 'test_helper'
-require 'whitehall/uploader'
+require "test_helper"
+require "whitehall/uploader"
 
 module Whitehall::Uploader
   class StatisticalDataSetRowTest < ActiveSupport::TestCase
     setup do
-      @attachment_cache = stub('attachment cache')
+      @attachment_cache = stub("attachment cache")
       @default_organisation = stubbed_organisation
     end
 
@@ -21,12 +21,12 @@ module Whitehall::Uploader
     end
 
     test "validation reports missing row headings" do
-      keys = basic_headings - ['title']
+      keys = basic_headings - ["title"]
       assert_equal ["missing fields: 'title'"], StatisticalDataSetRow.heading_validation_errors(keys)
     end
 
     test "validation reports extra row headings" do
-      keys = basic_headings + ['extra_stuff']
+      keys = basic_headings + ["extra_stuff"]
       assert_equal ["unexpected fields: 'extra_stuff'"], StatisticalDataSetRow.heading_validation_errors(keys)
     end
 
@@ -42,8 +42,8 @@ module Whitehall::Uploader
         ], StatisticalDataSetRow.heading_validation_errors(keys)
     end
 
-    test 'validation accepts a change_note heading' do
-      assert_equal [], StatisticalDataSetRow.heading_validation_errors(basic_headings + ['change_note'])
+    test "validation accepts a change_note heading" do
+      assert_equal [], StatisticalDataSetRow.heading_validation_errors(basic_headings + ["change_note"])
     end
 
     test "takes title from the title column" do
@@ -56,10 +56,10 @@ module Whitehall::Uploader
       assert_equal "a-summary", row.summary
     end
 
-    test 'if summary column is blank, generates summary from body' do
-      row = statistical_data_set_row("summary" => '', "body" => 'woo')
-      Parsers::SummariseBody.stubs(:parse).with('woo').returns('w')
-      assert_equal 'w', row.summary
+    test "if summary column is blank, generates summary from body" do
+      row = statistical_data_set_row("summary" => "", "body" => "woo")
+      Parsers::SummariseBody.stubs(:parse).with("woo").returns("w")
+      assert_equal "w", row.summary
     end
 
     test "takes body from the body column" do
@@ -78,9 +78,9 @@ module Whitehall::Uploader
       assert_equal "a-change-note", row.change_note
     end
 
-    test 'if change_note column is blank, uses default change_note for imported statistical data sets' do
-      row = statistical_data_set_row("change_note" => '')
-      Parsers::SummariseBody.stubs(:parse).with('woo').returns('w')
+    test "if change_note column is blank, uses default change_note for imported statistical data sets" do
+      row = statistical_data_set_row("change_note" => "")
+      Parsers::SummariseBody.stubs(:parse).with("woo").returns("w")
       assert_equal StatisticalDataSetRow::DEFAULT_CHANGE_NOTE, row.change_note
     end
 

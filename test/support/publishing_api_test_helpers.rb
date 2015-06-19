@@ -17,8 +17,8 @@ module PublishingApiTestHelpers
     editions.each do |edition|
       Whitehall.publishing_api_client.expects(:put_content_item)
         .with(Whitehall.url_maker.public_document_path(edition),
-          has_entries(content_id: edition.content_id, update_type: 'major',
-            publishing_app: 'whitehall', rendering_app: 'whitehall-frontend'))
+          has_entries(content_id: edition.content_id, update_type: "major",
+            publishing_app: "whitehall", rendering_app: "whitehall-frontend"))
     end
   end
 
@@ -26,8 +26,8 @@ module PublishingApiTestHelpers
     editions.each do |edition|
       Whitehall.publishing_api_client.expects(:put_content_item)
         .with(Whitehall.url_maker.public_document_path(edition),
-          has_entries(content_id: edition.content_id, update_type: 'republish',
-            publishing_app: 'whitehall', rendering_app: 'whitehall-frontend'))
+          has_entries(content_id: edition.content_id, update_type: "republish",
+            publishing_app: "whitehall", rendering_app: "whitehall-frontend"))
     end
   end
 

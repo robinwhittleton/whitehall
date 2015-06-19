@@ -42,7 +42,7 @@ class ForcePublicationAttemptTest < ActiveSupport::TestCase
 
   test "exceptions raised during publication are caught and logged" do
     exceptional_edition = publishable_edition
-    exception = ArgumentError.new('eek!')
+    exception = ArgumentError.new("eek!")
     exceptional_edition.stubs(:force_publish!).raises(exception)
 
     stubbed_import = stub_import([exceptional_edition])

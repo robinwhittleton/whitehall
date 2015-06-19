@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 class Whitehall::Uploader::Finders::SluggedModelFinderTest < ActiveSupport::TestCase
   def setup
@@ -20,20 +20,20 @@ class Whitehall::Uploader::Finders::SluggedModelFinderTest < ActiveSupport::Test
   end
 
   test "ignores blank slugs" do
-    assert_equal [], @finder.find(['', ''])
+    assert_equal [], @finder.find(["", ""])
   end
 
   test "returns an empty array if a topic can't be found for the given slug" do
-    assert_equal [], @finder.find(['made-up-policy-slug'])
+    assert_equal [], @finder.find(["made-up-policy-slug"])
   end
 
   test "logs an error if a topic can't be found for the given slug" do
-    @log.expects(:error).with(%q{Unable to find Model Class with slug 'made-up-slug'}, @line_number)
-    @finder.find(['made-up-slug'])
+    @log.expects(:error).with("Unable to find Model Class with slug 'made-up-slug'", @line_number)
+    @finder.find(["made-up-slug"])
   end
 
   test "returns an empty array if the topic for the given slug that cannot be found" do
-    assert_equal [], @finder.find(['made-up-policy-slug'])
+    assert_equal [], @finder.find(["made-up-policy-slug"])
   end
 
   test "ignores duplicate slugs" do

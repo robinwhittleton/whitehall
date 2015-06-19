@@ -90,7 +90,7 @@ class Edition::WorkflowTest < ActiveSupport::TestCase
     consultation_participation = create(:consultation_participation, link_url: "http://link.com")
     published_consultation = create(:published_consultation, consultation_participation: consultation_participation)
     draft_consultation = published_consultation.create_draft(create(:policy_writer))
-    draft_consultation.change_note = 'change-note'
+    draft_consultation.change_note = "change-note"
 
     assert draft_consultation.valid?
 
@@ -105,7 +105,7 @@ class Edition::WorkflowTest < ActiveSupport::TestCase
     publication = create(:published_publication, related_editions: [policy_1, policy_2])
 
     draft = publication.create_draft(create(:policy_writer))
-    draft.change_note = 'change-note'
+    draft.change_note = "change-note"
     assert draft.valid?
 
     assert draft.related_policies.include?(policy_1)
@@ -135,9 +135,9 @@ class Edition::WorkflowTest < ActiveSupport::TestCase
   test "should build a draft copy with copies of translations" do
     editor = create(:gds_editor)
     spanish_translation_attributes = {
-      title: 'spanish-title',
-      summary: 'spanish-summary',
-      body: 'spanish-body'
+      title: "spanish-title",
+      summary: "spanish-summary",
+      body: "spanish-body"
     }
     priority = create(:draft_worldwide_priority)
     with_locale(:es) { priority.update_attributes!(spanish_translation_attributes) }
@@ -149,17 +149,16 @@ class Edition::WorkflowTest < ActiveSupport::TestCase
 
     assert_equal 2, draft_priority.translations.length
     with_locale(:es) do
-      assert_equal 'spanish-title', draft_priority.title
-      assert_equal 'spanish-summary', draft_priority.summary
-      assert_equal 'spanish-body', draft_priority.body
+      assert_equal "spanish-title", draft_priority.title
+      assert_equal "spanish-summary", draft_priority.summary
+      assert_equal "spanish-body", draft_priority.body
     end
   end
 
   test "should copy logo url when creating draft " do
-    published_edition = create(:published_edition, logo_url: 'logos/flag.jpeg')
+    published_edition = create(:published_edition, logo_url: "logos/flag.jpeg")
     draft_edition = published_edition.create_draft(create(:policy_writer))
 
-    assert_equal 'logos/flag.jpeg', draft_edition.logo_url
+    assert_equal "logos/flag.jpeg", draft_edition.logo_url
   end
-
 end

@@ -1,10 +1,9 @@
 # encoding: utf-8
-require 'test_helper'
+require "test_helper"
 
 module Whitehall
   module GovUkDelivery
     class WorkerTest < ActiveSupport::TestCase
-
       test ".notify! performs the job asynchronously with the given arguments" do
         edition = create(:published_policy)
         notification_date = Time.zone.now
@@ -15,23 +14,23 @@ module Whitehall
         Worker.notify!(edition, notification_date, title, summary)
       end
 
-      test '#perform swallows API 400 errors (i.e. no subscribers)' do
+      test "#perform swallows API 400 errors (i.e. no subscribers)" do
         Whitehall.govuk_delivery_client.expects(:notify).raises(GdsApi::HTTPErrorResponse, 400)
         assert_nothing_raised { perform }
       end
 
-      test '#perform does not rescue non-400 API errors' do
+      test "#perform does not rescue non-400 API errors" do
         Whitehall.govuk_delivery_client.expects(:notify).raises(GdsApi::HTTPErrorResponse, 500)
         exception = assert_raise(GdsApi::HTTPErrorResponse) { perform }
         assert_equal 500, exception.code
       end
 
-      test '#perform does not rescue any other non-API errors' do
+      test "#perform does not rescue any other non-API errors" do
         Whitehall.govuk_delivery_client.expects(:notify).raises(RuntimeError)
         exception = assert_raise(RuntimeError) { perform }
       end
 
-      test '#perform will not notify if an edition is not published' do
+      test "#perform will not notify if an edition is not published" do
         publication = create(:draft_publication)
 
         Whitehall.govuk_delivery_client.expects(:notify).never
@@ -45,7 +44,6 @@ module Whitehall
         edition = create(:published_edition)
         Worker.new.perform(edition.id, Date.today.iso8601, {})
       end
-
     end
   end
 end

@@ -1,5 +1,5 @@
-require 'test_helper'
-require 'sidekiq/testing'
+require "test_helper"
+require "sidekiq/testing"
 
 class PublishesToPublishingApiTest < ActiveSupport::TestCase
   # publish_to_publishing_api runs on after_commit hook, so we need to disable
@@ -31,7 +31,7 @@ class PublishesToPublishingApiTest < ActiveSupport::TestCase
   test "update publishes to Publishing API if not disallowed" do
     organisation = create(:organisation)
     Whitehall::PublishingApi.expects(:publish_async).with(organisation)
-    organisation.update_attribute(:name, 'Edited org')
+    organisation.update_attribute(:name, "Edited org")
   end
 
   test "create does not publish to Publishing API if disallowed" do
@@ -45,7 +45,7 @@ class PublishesToPublishingApiTest < ActiveSupport::TestCase
     organisation = create(:organisation)
     organisation.stubs(:can_publish_to_publishing_api?).returns(false)
     Whitehall::PublishingApi.expects(:publish_async).never
-    organisation.update_attribute(:name, 'Edited org')
+    organisation.update_attribute(:name, "Edited org")
   end
 
   test "update publishes to Publishing API using :en locale when no translated fields are set" do

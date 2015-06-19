@@ -56,7 +56,8 @@ class StatisticsControllerTest < ActionController::TestCase
   end
 
   def given_two_statistics_publications_in_two_topics
-    @topic_1, @topic_2 = create(:topic), create(:topic)
+    @topic_1 = create(:topic)
+    @topic_2 = create(:topic)
     policy_1 = create(:published_policy, topics: [@topic_1])
     create(:published_statistics, related_editions: [policy_1])
     policy_2 = create(:published_policy, topics: [@topic_2])
@@ -87,8 +88,8 @@ class StatisticsControllerTest < ActionController::TestCase
 
     get :index
 
-    assert_equal "publication_#{statistics.last.id}", css_select(".filter-results .document-row").first['id']
-    assert_equal "publication_#{statistics.first.id}", css_select(".filter-results .document-row").last['id']
+    assert_equal "publication_#{statistics.last.id}", css_select(".filter-results .document-row").first["id"]
+    assert_equal "publication_#{statistics.first.id}", css_select(".filter-results .document-row").last["id"]
   end
 
   view_test "#index should show a helpful message if there are no matching statistics" do
@@ -101,21 +102,21 @@ class StatisticsControllerTest < ActionController::TestCase
     english_publication = create(:published_statistics)
     french_publication = create(:published_statistics, translated_into: [:fr])
 
-    get :index, locale: 'fr'
+    get :index, locale: "fr"
 
     assert_select_object french_publication
     refute_select_object english_publication
   end
 
-  view_test '#index for non-english locales does not allow any filtering' do
-    get :index, locale: 'fr'
+  view_test "#index for non-english locales does not allow any filtering" do
+    get :index, locale: "fr"
 
-    refute_select '.filter'
+    refute_select ".filter"
   end
 
-  view_test '#index for non-english locales skips results summary' do
-    get :index, locale: 'fr'
-    refute_select '.filter-results-summary'
+  view_test "#index for non-english locales skips results summary" do
+    get :index, locale: "fr"
+    refute_select ".filter-results-summary"
   end
 
   view_test "#index requested as JSON includes data for statistics" do
@@ -138,7 +139,7 @@ class StatisticsControllerTest < ActionController::TestCase
     assert_equal "Statistics", json["display_type"]
   end
 
-  view_test '#index should show relevant document collection information' do
+  view_test "#index should show relevant document collection information" do
     editor = create(:departmental_editor)
     statistics = create(:draft_statistics)
     collection = create(:document_collection, :with_group)
@@ -156,7 +157,7 @@ class StatisticsControllerTest < ActionController::TestCase
     end
   end
 
-  view_test '#index requested as JSON includes document collection information' do
+  view_test "#index requested as JSON includes document collection information" do
     editor = create(:departmental_editor)
     statistics = create(:draft_statistics)
     collection = create(:document_collection, :with_group)
@@ -170,11 +171,11 @@ class StatisticsControllerTest < ActionController::TestCase
     get :index, format: :json
 
     json = ActiveSupport::JSON.decode(response.body)
-    result = json['results'].first
+    result = json["results"].first
 
     path = public_document_path(collection)
-    link = %Q{<a href="#{path}">#{collection.title}</a>}
-    assert_equal %Q{Part of a collection: #{link}}, result['publication_collections']
+    link = %{<a href="#{path}">#{collection.title}</a>}
+    assert_equal %{Part of a collection: #{link}}, result["publication_collections"]
   end
 
   view_test "index generates an atom feed with entries for statistics matching the current filter" do

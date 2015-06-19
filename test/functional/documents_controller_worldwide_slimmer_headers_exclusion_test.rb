@@ -22,5 +22,4 @@ class DocumentsControllerWorldwideSlimmerHeadersExclusionTest < ActionController
     assert_response :success
     assert_no_match /^<WO\d+>$/, response.headers["X-Slimmer-Organisations"]
   end
-
 end

@@ -193,14 +193,13 @@ class SupportingPagesControllerTest < ActionController::TestCase
   end
 
   view_test "show displays the group responsible for this policy" do
-    policy_group = create(:policy_group, email: 'policy-group@example.com')
+    policy_group = create(:policy_group, email: "policy-group@example.com")
     policy = create(:published_policy, policy_groups: [policy_group])
     supporting_page = create(:published_supporting_page, related_policies: [policy])
 
     get :show, policy_id: policy.document, id: supporting_page.document
 
-    assert_select "a[href='#{policy_group_path(policy_group)}']", text: 'policy-group-name'
-
+    assert_select "a[href='#{policy_group_path(policy_group)}']", text: "policy-group-name"
   end
 
   view_test "shows correct sub navigation when viewing supporting details" do
@@ -209,7 +208,7 @@ class SupportingPagesControllerTest < ActionController::TestCase
 
     get :show, policy_id: policy.document, id: supporting_page.document
 
-    assert_select '.activity-navigation' do
+    assert_select ".activity-navigation" do
       assert_select "a[href='#{policy_path(policy.document)}']"
       assert_select "a[href='#{policy_supporting_pages_path(policy.document)}']"
     end
@@ -222,7 +221,7 @@ class SupportingPagesControllerTest < ActionController::TestCase
 
     get :show, policy_id: policy.document, id: supporting_page.document
 
-    assert_select '.activity-navigation' do
+    assert_select ".activity-navigation" do
       assert_select "a[href='#{policy_path(policy.document)}']"
       assert_select "a[href='#{policy_supporting_pages_path(policy.document)}']"
       assert_select "a[href='#{activity_policy_path(policy.document)}']"

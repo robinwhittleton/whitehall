@@ -5,12 +5,12 @@ class SpecialistTagFinderTest < ActiveSupport::TestCase
     @document = stub
     @tag_finder = SpecialistTagFinder.new(@document)
 
-    @parent_tag = stub(details: {'type' => 'specialist_sector'}, slug: 'super')
-    @primary_tag = stub(details: {'type' => 'specialist_sector'},
-                        slug: 'super/primary', parent: @parent_tag)
-    @secondary_tag = stub(details: {'type' => 'specialist_sector'},
-                          slug: 'super/secondary', parent: @parent_tag)
-    @irrelevant_tag = stub(details: {'type' => 'something_else'})
+    @parent_tag = stub(details: {"type" => "specialist_sector"}, slug: "super")
+    @primary_tag = stub(details: {"type" => "specialist_sector"},
+                        slug: "super/primary", parent: @parent_tag)
+    @secondary_tag = stub(details: {"type" => "specialist_sector"},
+                          slug: "super/secondary", parent: @parent_tag)
+    @irrelevant_tag = stub(details: {"type" => "something_else"})
 
     @artefact = stub(tags: [
       @primary_tag,
@@ -22,10 +22,10 @@ class SpecialistTagFinderTest < ActiveSupport::TestCase
   end
 
   test "#primary_sector_tag returns the primary subsector tag's parent" do
-    subsector_tag = mock(parent: 'parent_tag')
+    subsector_tag = mock(parent: "parent_tag")
     @tag_finder.stubs(primary_subsector_tag: subsector_tag)
 
-    assert_equal 'parent_tag', @tag_finder.primary_sector_tag
+    assert_equal "parent_tag", @tag_finder.primary_sector_tag
   end
 
   test "#primary_sector_tag returns nil if no primary subsector tag" do
@@ -35,7 +35,7 @@ class SpecialistTagFinderTest < ActiveSupport::TestCase
   end
 
   test "#primary_subsector_tag returns the specialist sector tag whose slug matches the primary" do
-    @document.stubs(primary_specialist_sector_tag: 'super/primary')
+    @document.stubs(primary_specialist_sector_tag: "super/primary")
 
     assert_equal @primary_tag, @tag_finder.primary_subsector_tag
   end

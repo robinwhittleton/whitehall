@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 class PublishingApiPresenters::CaseStudyTest < ActiveSupport::TestCase
   include ContentRegisterHelpers
@@ -9,33 +9,33 @@ class PublishingApiPresenters::CaseStudyTest < ActiveSupport::TestCase
 
   test "case study presentation includes the correct values" do
     case_study = create(:published_case_study,
-                    title: 'Case study title',
-                    summary: 'The summary',
-                    body: 'Some content')
+                    title: "Case study title",
+                    summary: "The summary",
+                    body: "Some content")
 
     public_path = Whitehall.url_maker.public_document_path(case_study)
     expected_hash = {
       content_id: case_study.document.content_id,
-      title: 'Case study title',
-      description: 'The summary',
-      format: 'case_study',
-      locale: 'en',
+      title: "Case study title",
+      description: "The summary",
+      format: "case_study",
+      locale: "en",
       need_ids: [],
       public_updated_at: case_study.public_timestamp,
-      update_type: 'major',
-      publishing_app: 'whitehall',
-      rendering_app: 'government-frontend',
+      update_type: "major",
+      publishing_app: "whitehall",
+      rendering_app: "government-frontend",
       routes: [
-        { path: public_path, type: 'exact' }
+        { path: public_path, type: "exact" }
       ],
       redirects: [],
       details: {
         body: "<div class=\"govspeak\"><p>Some content</p></div>",
-        format_display_type: 'case_study',
+        format_display_type: "case_study",
         first_public_at: case_study.first_public_at,
         change_note: nil,
         change_history: [
-          { public_timestamp: case_study.public_timestamp, note: 'change-note' }.as_json
+          { public_timestamp: case_study.public_timestamp, note: "change-note" }.as_json
         ],
         tags: {
           browse_pages: [],
@@ -55,7 +55,7 @@ class PublishingApiPresenters::CaseStudyTest < ActiveSupport::TestCase
     }
     presented_hash = present(case_study)
 
-    assert_valid_against_schema(presented_hash, 'case_study')
+    assert_valid_against_schema(presented_hash, "case_study")
 
     assert_equal expected_hash.except(:details),
       presented_hash.except(:details)
@@ -70,7 +70,7 @@ class PublishingApiPresenters::CaseStudyTest < ActiveSupport::TestCase
 
 
   test "includes details of the case study image if present" do
-    image = build(:image, alt_text: 'Image alt text', caption: 'A caption')
+    image = build(:image, alt_text: "Image alt text", caption: "A caption")
     case_study = create(:published_case_study, images: [image])
 
     expected_hash = {
@@ -80,12 +80,12 @@ class PublishingApiPresenters::CaseStudyTest < ActiveSupport::TestCase
     }
     presented_hash = present(case_study)
 
-    assert_valid_against_schema(presented_hash, 'case_study')
+    assert_valid_against_schema(presented_hash, "case_study")
     assert_equal expected_hash, presented_hash[:details][:image]
   end
 
   test "returns case study image caption as nil (not false) when it is blank" do
-    image = build(:image, alt_text: 'Image alt text', caption: '')
+    image = build(:image, alt_text: "Image alt text", caption: "")
     case_study = create(:published_case_study, images: [image])
 
     expected_hash = {
@@ -95,7 +95,7 @@ class PublishingApiPresenters::CaseStudyTest < ActiveSupport::TestCase
     }
     presented_hash = present(case_study)
 
-    assert_valid_against_schema(presented_hash, 'case_study')
+    assert_valid_against_schema(presented_hash, "case_study")
     assert_equal expected_hash, presented_hash[:details][:image]
   end
 
@@ -107,12 +107,12 @@ class PublishingApiPresenters::CaseStudyTest < ActiveSupport::TestCase
 
     expected_hash = {
       url: (Whitehall.asset_root + organisation_image.file.url(:s300)),
-      alt_text: 'placeholder',
+      alt_text: "placeholder",
       caption: nil
     }
     presented_hash = present(case_study)
 
-    assert_valid_against_schema(presented_hash, 'case_study')
+    assert_valid_against_schema(presented_hash, "case_study")
     assert_equal expected_hash, presented_hash[:details][:image]
   end
 
@@ -134,7 +134,7 @@ class PublishingApiPresenters::CaseStudyTest < ActiveSupport::TestCase
       worldwide_priorities: [],
     }
 
-    assert_valid_against_schema(presented_hash, 'case_study')
+    assert_valid_against_schema(presented_hash, "case_study")
     assert_equal expected_links_hash, presented_hash[:links]
   end
 
@@ -144,7 +144,7 @@ class PublishingApiPresenters::CaseStudyTest < ActiveSupport::TestCase
     new_timestamp = Time.zone.now
     new_edition = create(:published_case_study, document: original.document, published_major_version: 2, change_note: "More changes", major_change_published_at: new_timestamp)
     presented_hash = present(new_edition)
-    assert_valid_against_schema(presented_hash, 'case_study')
+    assert_valid_against_schema(presented_hash, "case_study")
     presented_history = presented_hash[:details][:change_history]
     expected_history = [
       { public_timestamp: new_timestamp, note: "More changes" },
@@ -158,7 +158,7 @@ class PublishingApiPresenters::CaseStudyTest < ActiveSupport::TestCase
     case_study = create(:published_case_study,
                         world_locations: [location])
     presented_hash = present(case_study)
-    assert_valid_against_schema(presented_hash, 'case_study')
+    assert_valid_against_schema(presented_hash, "case_study")
     assert_equal [location.content_id], presented_hash[:links][:world_locations]
   end
 
@@ -167,17 +167,17 @@ class PublishingApiPresenters::CaseStudyTest < ActiveSupport::TestCase
     case_study = create(:published_case_study,
                         worldwide_organisations: [wworg])
     presented_hash = present(case_study)
-    assert_valid_against_schema(presented_hash, 'case_study')
+    assert_valid_against_schema(presented_hash, "case_study")
     assert_equal [wworg.content_id], presented_hash[:links][:worldwide_organisations]
   end
 
-  test 'links hash includes related policies' do
+  test "links hash includes related policies" do
     stub_content_register_policies
 
     case_study = create(:published_case_study, policy_content_ids: [policy_1["content_id"]])
     presented_hash = present(case_study)
 
-    assert_valid_against_schema(presented_hash, 'case_study')
+    assert_valid_against_schema(presented_hash, "case_study")
     assert_equal [policy_1["content_id"]], presented_hash[:links][:related_policies]
   end
 
@@ -187,21 +187,21 @@ class PublishingApiPresenters::CaseStudyTest < ActiveSupport::TestCase
     priority.document.edition_relations.create!(edition: case_study)
     presented_hash = present(case_study)
 
-    assert_valid_against_schema(presented_hash, 'case_study')
+    assert_valid_against_schema(presented_hash, "case_study")
     assert_equal [priority.content_id], presented_hash[:links][:worldwide_priorities]
   end
 
   test "links hash includes document collections that the case study is part of" do
     case_study = create(:published_case_study)
     document_collections = [
-      create(:published_document_collection, groups: [ build(:document_collection_group, documents: [case_study.document]) ]),
-      create(:published_document_collection, groups: [ build(:document_collection_group, documents: [case_study.document]) ])
+      create(:published_document_collection, groups: [build(:document_collection_group, documents: [case_study.document])]),
+      create(:published_document_collection, groups: [build(:document_collection_group, documents: [case_study.document])])
     ]
 
     case_study.document_collections.reload
     presented_hash = present(case_study)
 
-    assert_valid_against_schema(presented_hash, 'case_study')
+    assert_valid_against_schema(presented_hash, "case_study")
     assert_same_elements document_collections.map(&:content_id), presented_hash[:links][:document_collections]
   end
 
@@ -209,7 +209,7 @@ class PublishingApiPresenters::CaseStudyTest < ActiveSupport::TestCase
     case_study = create(:published_case_study, :withdrawn)
     case_study.build_unpublishing(
       unpublishing_reason_id: UnpublishingReason::Withdrawn.id,
-      explanation: 'No longer relevant')
+      explanation: "No longer relevant")
 
     case_study.unpublishing.save!
 
@@ -218,7 +218,7 @@ class PublishingApiPresenters::CaseStudyTest < ActiveSupport::TestCase
       archived_at: case_study.updated_at
     }
 
-    assert_valid_against_schema(present(case_study), 'case_study')
+    assert_valid_against_schema(present(case_study), "case_study")
     assert_equal archive_notice[:archived_at], present(case_study)[:details][:withdrawn_notice][:withdrawn_at]
     assert_equivalent_html archive_notice[:explanation],
       present(case_study)[:details][:withdrawn_notice][:explanation]

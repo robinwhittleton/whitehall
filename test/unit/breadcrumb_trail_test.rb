@@ -19,7 +19,7 @@ class BreadcrumbTrailTest < ActiveSupport::TestCase
       assert_equal mainstream_category.title, actual_tag[:title]
       assert_equal mainstream_category.path, actual_tag[:id]
       assert_equal nil, actual_tag[:web_url]
-      assert_equal({type: 'section'}, actual_tag[:details])
+      assert_equal({type: "section"}, actual_tag[:details])
       assert_equal({
         id: mainstream_category.path,
         web_url: routes_helper.mainstream_category_path(mainstream_category)

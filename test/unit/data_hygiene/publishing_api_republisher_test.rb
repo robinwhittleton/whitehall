@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 class DataHygiene::PublishingApiRepublisherTest < ActiveSupport::TestCase
   test "republishes a model to the Publishing API" do
@@ -13,5 +13,4 @@ class DataHygiene::PublishingApiRepublisherTest < ActiveSupport::TestCase
 
     assert_requested expected_request
   end
-
 end

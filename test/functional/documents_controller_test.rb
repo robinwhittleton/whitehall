@@ -89,10 +89,10 @@ class DocumentsControllerTest < ActionController::TestCase
   end
 
   test "requests for documents in a locale it is translated into should respond successfully" do
-    edition = create(:draft_publication, translated_into: 'fr')
+    edition = create(:draft_publication, translated_into: "fr")
     force_publish(edition)
 
-    get :show, id: edition.document, locale: 'fr'
+    get :show, id: edition.document, locale: "fr"
 
     assert_response :success
   end
@@ -101,7 +101,7 @@ class DocumentsControllerTest < ActionController::TestCase
     edition = create(:draft_publication)
     force_publish(edition)
 
-    get :show, id: edition.document, locale: 'fr'
+    get :show, id: edition.document, locale: "fr"
 
     assert_response :not_found
   end

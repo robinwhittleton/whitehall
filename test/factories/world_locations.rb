@@ -1,10 +1,10 @@
 FactoryGirl.define do
   factory :world_location, traits: [:translated] do
-    name 'British Antarctic Territory'
+    name "British Antarctic Territory"
     world_location_type WorldLocationType::WorldLocation
 
     trait(:with_worldwide_organisations) {
-      after :create do |world_location, evaluator|
+      after :create do |world_location, _evaluator|
         world_location.worldwide_organisations << FactoryGirl.create(:worldwide_organisation, :with_sponsorships)
       end
     }

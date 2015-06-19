@@ -27,7 +27,7 @@ module AdminControllerTestHelpers
       end
 
       test "creating with invalid data should build another social media account" do
-        post :create, type => attributes_for(type).merge(name: '')
+        post :create, type => attributes_for(type).merge(name: "")
         assert_kind_of SocialMediaAccount, assigns(type).social_media_accounts.first
       end
 
@@ -47,7 +47,7 @@ module AdminControllerTestHelpers
 
         get :edit, id: object
 
-        assert assigns(type).social_media_accounts.all? { |o| o.kind_of? SocialMediaAccount }
+        assert assigns(type).social_media_accounts.all? { |o| o.is_a? SocialMediaAccount }
         assert assigns(type).social_media_accounts.last.new_record?
       end
 

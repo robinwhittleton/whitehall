@@ -1,12 +1,12 @@
-require 'test_helper'
+require "test_helper"
 
 module Whitehall::Uploader
   class FatalityNoticeRowTest < ActiveSupport::TestCase
     setup do
-      @attachment_cache = stub('attachment cache')
-      @image_cache = stub('image cache')
+      @attachment_cache = stub("attachment cache")
+      @image_cache = stub("image cache")
       @iraq = create(:operational_field, name: "Iraq")
-      @ministry_of_defence = stub('ministry_of_defence', url: 'url')
+      @ministry_of_defence = stub("ministry_of_defence", url: "url")
       Organisation.stubs(:find_by).with(slug: "ministry-of-defence").returns(@ministry_of_defence)
     end
 
@@ -26,7 +26,7 @@ module Whitehall::Uploader
       assert_equal "An introduction to the roll call of casualties.", row.attributes[:roll_call_introduction]
     end
 
-   test "returns the mod as its organisation" do
+    test "returns the mod as its organisation" do
       row = fatality_notice_row
       assert_equal @ministry_of_defence, row.organisation
     end
@@ -44,16 +44,16 @@ module Whitehall::Uploader
     test "creates image fetched from fatality notice image cache" do
       logger = stub("logger")
       logger.expects(:error).never
-      filehandle = File.open(Rails.root.join("test/fixtures/example_fatality_notice_image.jpg"), 'r:binary')
+      filehandle = File.open(Rails.root.join("test/fixtures/example_fatality_notice_image.jpg"), "r:binary")
       @image_cache.stubs(:fetch).with("http://www.mod.uk/NR/rdonlyres/B4F6766E-8A5B-469B-878F-4D22F14963BD/0/MODBADGE600x800.jpg").returns(filehandle)
       row = Whitehall::Uploader::FatalityNoticeRow.new(sample_row, 1, @attachment_cache, logger, @image_cache)
-      filehandle = File.open(Rails.root.join("test/fixtures/example_fatality_notice_image.jpg"), 'r:binary')
+      filehandle = File.open(Rails.root.join("test/fixtures/example_fatality_notice_image.jpg"), "r:binary")
       expected_image = Image.new(image_data: ImageData.new(file: filehandle),
         alt_text: "MOD Announcement",
         caption: "Acting Chief Petty Officer Joseph Bloggs
       [Picture: via MOD]")
 
-      assert_equal [expected_image.attributes], row.attributes[:images].map {|i| i.attributes}
+      assert_equal [expected_image.attributes], row.attributes[:images].map(&:attributes)
       assert_equal [expected_image.image_data.attributes], row.attributes[:images].map {|i| i.image_data.attributes}
     end
 

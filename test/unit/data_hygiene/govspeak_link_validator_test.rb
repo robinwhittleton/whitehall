@@ -1,7 +1,6 @@
 require "fast_test_helper"
 
 class Edition::GovspeakLinkValidatorTest < ActiveSupport::TestCase
-
   test "should be valid if the input is nil" do
     validator = DataHygiene::GovspeakLinkValidator.new(nil)
     assert_equal [], validator.errors
@@ -51,7 +50,7 @@ class Edition::GovspeakLinkValidatorTest < ActiveSupport::TestCase
 
   test "should identify internal admin links" do
     assert DataHygiene::GovspeakLinkValidator.is_internal_admin_link?([Whitehall.router_prefix, "admin", "test"].join("/"))
-    refute DataHygiene::GovspeakLinkValidator.is_internal_admin_link?('http://www.google.com/')
+    refute DataHygiene::GovspeakLinkValidator.is_internal_admin_link?("http://www.google.com/")
     refute DataHygiene::GovspeakLinkValidator.is_internal_admin_link?(nil)
   end
 
@@ -64,5 +63,4 @@ class Edition::GovspeakLinkValidatorTest < ActiveSupport::TestCase
     validator = DataHygiene::GovspeakLinkValidator.new("[example text](#example-section)")
     assert_equal [], validator.errors
   end
-
 end

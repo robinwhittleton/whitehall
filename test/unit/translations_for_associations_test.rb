@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 class TranslationsForAssociationsTest < ActiveSupport::TestCase
   test 'with_translations_for should eager load the association and it\'s translations' do

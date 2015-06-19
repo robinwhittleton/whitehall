@@ -1,7 +1,6 @@
 require "test_helper"
 
 class Edition::WorldwideOrganisationsTest < ActiveSupport::TestCase
-
   test "can be associated with worldwide organisations" do
     assert WorldwidePriority.new.can_be_associated_with_worldwide_organisations?
   end
@@ -18,7 +17,7 @@ class Edition::WorldwideOrganisationsTest < ActiveSupport::TestCase
     organisation = create(:worldwide_organisation)
     priority = create(:published_worldwide_priority, worldwide_organisations: [organisation])
     new_edition = priority.create_draft(create(:policy_writer))
-    new_edition.change_note = 'change-note'
+    new_edition.change_note = "change-note"
     force_publish(new_edition)
 
     assert_equal [organisation], new_edition.worldwide_organisations

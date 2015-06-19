@@ -1,5 +1,5 @@
-require 'test_helper'
-require 'support/importer_test_logger'
+require "test_helper"
+require "support/importer_test_logger"
 
 class Whitehall::Uploader::Finders::EditionFinderTest < ActiveSupport::TestCase
   def setup
@@ -34,20 +34,20 @@ class Whitehall::Uploader::Finders::EditionFinderTest < ActiveSupport::TestCase
   end
 
   test "ignores blank slugs" do
-    assert_equal [], @policy_finder.find('', '')
+    assert_equal [], @policy_finder.find("", "")
   end
 
   test "returns an empty array if a policy can't be found for the given slug" do
-    assert_equal [], @policy_finder.find('made-up-policy-slug')
+    assert_equal [], @policy_finder.find("made-up-policy-slug")
   end
 
   test "logs a warning if a policy can't be found for the given slug" do
-    @policy_finder.find('made-up-policy-slug')
+    @policy_finder.find("made-up-policy-slug")
     assert_match /Unable to find Policy with slug 'made-up-policy-slug'/, @log_buffer.string
   end
 
   test "returns an empty array if the policy for the given slug that cannot be found" do
-    assert_equal [], @policy_finder.find('made-up-policy-slug')
+    assert_equal [], @policy_finder.find("made-up-policy-slug")
   end
 
   test "ignores duplicate related policies" do

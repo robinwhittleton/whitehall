@@ -11,11 +11,11 @@ class WorldwideOrganisationsControllerTest < ActionController::TestCase
 
   test "sets meta description" do
     organisation = create(:worldwide_organisation)
-    create(:about_corporate_information_page, organisation: nil, worldwide_organisation: organisation, summary: 'my summary')
+    create(:about_corporate_information_page, organisation: nil, worldwide_organisation: organisation, summary: "my summary")
 
     get :show, id: organisation.id
 
-    assert_equal 'my summary', assigns(:meta_description)
+    assert_equal "my summary", assigns(:meta_description)
   end
 
   test "should populate slimmer organisations header with worldwide organisation and its sponsored organisations" do
@@ -63,5 +63,4 @@ class WorldwideOrganisationsControllerTest < ActionController::TestCase
     worldwide_organisation.reload
     refute worldwide_organisation.has_home_page_offices_list?
   end
-
 end

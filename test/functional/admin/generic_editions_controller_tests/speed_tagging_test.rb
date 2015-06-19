@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 class Admin::GenericEditionsController::SpeedTaggingTest < ActionController::TestCase
   setup do
@@ -20,11 +20,11 @@ class Admin::GenericEditionsController::SpeedTaggingTest < ActionController::Tes
   end
 
   test "re-renders the show page when there are errors during speed tagging update" do
-    imported_edition = create(:edition, :imported, title: 'News article')
-    put :update, id: imported_edition, speed_save: 'Save', edition: { title: '' }
+    imported_edition = create(:edition, :imported, title: "News article")
+    put :update, id: imported_edition, speed_save: "Save", edition: { title: "" }
 
     assert_response :success
     assert_template :show
-    assert_equal 'News article', imported_edition.reload.title
+    assert_equal "News article", imported_edition.reload.title
   end
 end

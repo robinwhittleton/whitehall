@@ -1,7 +1,7 @@
-require 'test_helper'
+require "test_helper"
 
 class DocumentSeriesGroupTest < ActiveSupport::TestCase
-  test 'new groups should set #ordering when assigned to a series' do
+  test "new groups should set #ordering when assigned to a series" do
     series = create(:document_collection)
     series.groups << build(:document_collection_group)
 
@@ -14,7 +14,7 @@ class DocumentSeriesGroupTest < ActiveSupport::TestCase
 
     group.documents << doc_1 = create(:document)
     group.documents << doc_2 = create(:document)
-                       doc_3 = create(:document)
+    doc_3 = create(:document)
 
     group.set_document_ids_in_order! [doc_3.id, doc_1.id]
 
@@ -26,7 +26,7 @@ class DocumentSeriesGroupTest < ActiveSupport::TestCase
     assert_equal 1, group.memberships.find_by(document_id: doc_1.id).ordering
   end
 
-  test '::published_editions should list published editions ordered by membership ordering' do
+  test "::published_editions should list published editions ordered by membership ordering" do
     group = create(:document_collection_group)
     published_1 = create(:published_publication)
     published_2 = create(:published_publication)
@@ -37,7 +37,7 @@ class DocumentSeriesGroupTest < ActiveSupport::TestCase
     assert_equal [published_2, published_1], group.published_editions
   end
 
-  test '::latest_editions should list latest editions for each document ordered by membership ordering' do
+  test "::latest_editions should list latest editions for each document ordered by membership ordering" do
     group = create(:document_collection_group)
     draft = create(:draft_publication)
     published_1 = create(:published_publication)
@@ -48,7 +48,7 @@ class DocumentSeriesGroupTest < ActiveSupport::TestCase
     assert_equal [published_1, draft, published_2], group.latest_editions
   end
 
-  test '#dup should also clone document memberships' do
+  test "#dup should also clone document memberships" do
     group = create(:document_collection_group, documents: [
       doc_1 = build(:document),
       doc_2 = build(:document),
@@ -67,8 +67,8 @@ class DocumentSeriesGroupTest < ActiveSupport::TestCase
     assert_equal     3,                             new_group.memberships[2].ordering
   end
 
-  test '#slug generates slugs of the heading' do
-    group = create(:document_collection_group, heading: 'Foo bar')
-    assert_equal group.slug, 'foo-bar'
+  test "#slug generates slugs of the heading" do
+    group = create(:document_collection_group, heading: "Foo bar")
+    assert_equal group.slug, "foo-bar"
   end
 end

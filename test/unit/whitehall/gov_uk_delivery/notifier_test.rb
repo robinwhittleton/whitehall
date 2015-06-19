@@ -1,7 +1,6 @@
-require 'test_helper'
+require "test_helper"
 
 class Whitehall::GovUkDelivery::NotifierTest < ActiveSupport::TestCase
-
   def notifier_for(edition)
     Whitehall::GovUkDelivery::Notifier.new(edition)
   end
@@ -46,7 +45,7 @@ class Whitehall::GovUkDelivery::NotifierTest < ActiveSupport::TestCase
     end
   end
 
-  test '#edition_published! routes editions to govuk delivery when they are not relevant to local government' do
+  test "#edition_published! routes editions to govuk delivery when they are not relevant to local government" do
     edition = build(:published_policy, relevant_to_local_government: false, public_timestamp: Time.zone.now)
     edition.stubs(:available_in_locale?).returns(true)
 
@@ -56,7 +55,7 @@ class Whitehall::GovUkDelivery::NotifierTest < ActiveSupport::TestCase
     notifier.edition_published!
   end
 
-  test '#edition_published! does nothing if the change is minor' do
+  test "#edition_published! does nothing if the change is minor" do
     policy = create(:published_policy, topics: [create(:topic)], minor_change: true, public_timestamp: Time.zone.now)
 
     expect_govdelivery_worker_to_not_be_notified
@@ -65,7 +64,7 @@ class Whitehall::GovUkDelivery::NotifierTest < ActiveSupport::TestCase
     notifier.edition_published!
   end
 
-  test '#edition_published! does nothing if the edition is not available in english' do
+  test "#edition_published! does nothing if the edition is not available in english" do
     speech = I18n.with_locale(:es) { create(:published_speech, minor_change: false, major_change_published_at: Time.zone.now) }
     speech.stubs(:topics).returns [create(:topic)]
 
@@ -75,7 +74,7 @@ class Whitehall::GovUkDelivery::NotifierTest < ActiveSupport::TestCase
     notifier.edition_published!
   end
 
-  test '#edition_published! does nothing if the edition was published in the past' do
+  test "#edition_published! does nothing if the edition was published in the past" do
     policy = create(:published_policy, topics: [create(:topic)], minor_change: false, public_timestamp: 2.days.ago)
 
     expect_govdelivery_worker_to_not_be_notified
@@ -84,7 +83,7 @@ class Whitehall::GovUkDelivery::NotifierTest < ActiveSupport::TestCase
     notifier.edition_published!
   end
 
-  test '#edition_published! still notifies first-published speeches that were delivered less than 72 hours ago' do
+  test "#edition_published! still notifies first-published speeches that were delivered less than 72 hours ago" do
     speech = create(:draft_speech, delivered_on: 2.days.ago)
     force_publish(speech)
 
@@ -94,7 +93,7 @@ class Whitehall::GovUkDelivery::NotifierTest < ActiveSupport::TestCase
     notifier.edition_published!
   end
 
-  test '#edition_published! does not notify a first-published speech that was delivered more than 72 hours ago' do
+  test "#edition_published! does not notify a first-published speech that was delivered more than 72 hours ago" do
     speech = create(:draft_speech, delivered_on: 73.hours.ago)
     force_publish(speech)
 
@@ -104,12 +103,12 @@ class Whitehall::GovUkDelivery::NotifierTest < ActiveSupport::TestCase
     notifier.edition_published!
   end
 
-  test 'major changes to old speeches still generate a notification' do
+  test "major changes to old speeches still generate a notification" do
     speech = create(:draft_speech, delivered_on: 30.days.ago)
     Timecop.travel(10.days.ago) { force_publish(speech) }
 
     new_edition = speech.create_draft(create(:policy_writer))
-    new_edition.change_note = 'Some major changes'
+    new_edition.change_note = "Some major changes"
     force_publish(new_edition)
 
     expect_govdelivery_worker_to_be_notified(new_edition)
@@ -118,7 +117,7 @@ class Whitehall::GovUkDelivery::NotifierTest < ActiveSupport::TestCase
     notifier.edition_published!
   end
 
-  test 'minor changes to old speeches do not generate a notification' do
+  test "minor changes to old speeches do not generate a notification" do
     speech = create(:draft_speech, delivered_on: 30.days.ago)
     Timecop.travel(10.days.ago) { force_publish(speech) }
 

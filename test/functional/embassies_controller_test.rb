@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 class EmbassiesControllerTest < ActionController::TestCase
   view_test "embassies index" do
@@ -34,6 +34,4 @@ class EmbassiesControllerTest < ActionController::TestCase
     assert_select "ol[class='locations'] li p", /Aruba doesn't have consular services, you need to go to the British Consulate General Amsterdam/
     assert_select "ol[class='locations'] li p", /Sealand doesn't have consular services, you can get consular assistance from/
   end
-
-
 end

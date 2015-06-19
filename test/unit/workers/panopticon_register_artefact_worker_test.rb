@@ -1,6 +1,6 @@
-require 'test_helper'
-require 'gds_api/panopticon'
-require 'gds_api/test_helpers/panopticon'
+require "test_helper"
+require "gds_api/panopticon"
+require "gds_api/test_helpers/panopticon"
 
 class PanopticonRegisterArtefactWorkerTest < ActiveSupport::TestCase
   include GdsApi::TestHelpers::Panopticon

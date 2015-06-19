@@ -29,7 +29,7 @@ module AdminEditionControllerScheduledPublishingTestHelpers
 
         assert_select force_schedule_button_selector(edition), count: 1
         refute_select force_publish_button_selector(edition)
-        assert_select '.scheduled-publication', "Scheduled publication proposed for #{I18n.localize edition.scheduled_publication, format: :long}."
+        assert_select ".scheduled-publication", "Scheduled publication proposed for #{I18n.localize edition.scheduled_publication, format: :long}."
       end
 
       view_test "should display the 'Schedule' button for a submitted scheduled edition when viewing as an editor" do
@@ -38,7 +38,7 @@ module AdminEditionControllerScheduledPublishingTestHelpers
         get :show, id: edition
 
         assert_select schedule_button_selector(edition), count: 1
-        assert_select '.scheduled-publication', /Scheduled publication proposed for/
+        assert_select ".scheduled-publication", /Scheduled publication proposed for/
       end
 
       view_test "should not display the 'Schedule' button if not schedulable" do
@@ -58,20 +58,20 @@ module AdminEditionControllerScheduledPublishingTestHelpers
       view_test "should indicate publishing schedule if scheduled" do
         edition = create(edition_type, :scheduled)
         get :show, id: edition
-        assert_select '.scheduled-publication', "Scheduled for publication on #{I18n.localize edition.scheduled_publication, format: :long}."
+        assert_select ".scheduled-publication", "Scheduled for publication on #{I18n.localize edition.scheduled_publication, format: :long}."
       end
 
       view_test "should not indicate publishing schedule if published" do
         edition = create(edition_type, :published, scheduled_publication: 1.day.ago)
         get :show, id: edition
-        assert_select '.scheduled-publication', count: 0
+        assert_select ".scheduled-publication", count: 0
       end
 
       test "create should not set scheduled_publication if scheduled_publication_active is not checked" do
         edition_attributes = controller_attributes_for(edition_type,
           first_published_at: Date.parse("2010-10-21"),
           publication_type_id: PublicationType::ResearchAndAnalysis.id
-        ).merge(scheduled_publication_attributes(Time.zone.now))
+                                                      ).merge(scheduled_publication_attributes(Time.zone.now))
 
         post :create, {scheduled_publication_active: "0", edition: edition_attributes}
 
@@ -84,7 +84,7 @@ module AdminEditionControllerScheduledPublishingTestHelpers
         edition_attributes = controller_attributes_for(edition_type,
           first_published_at: Date.parse("2010-10-21"),
           publication_type_id: PublicationType::ResearchAndAnalysis.id
-        ).merge(scheduled_publication_attributes(selected_time))
+                                                      ).merge(scheduled_publication_attributes(selected_time))
 
         post :create, {scheduled_publication_active: "1", edition: edition_attributes}
 
@@ -93,7 +93,7 @@ module AdminEditionControllerScheduledPublishingTestHelpers
       end
 
       view_test "edit displays scheduled_publication date and time fields" do
-        edition = create(edition_type, scheduled_publication: Time.zone.parse('2060-06-03 10:30'))
+        edition = create(edition_type, scheduled_publication: Time.zone.parse("2060-06-03 10:30"))
 
         get :edit, id: edition
 
@@ -110,7 +110,7 @@ module AdminEditionControllerScheduledPublishingTestHelpers
       view_test "edit displays scheduled_publication date and time fields when scheduled_publication is nil, defaulting to 09:30 today" do
         edition = create(edition_type, scheduled_publication: nil)
 
-        Timecop.freeze(Time.zone.parse('2012-03-01 11:00')) do
+        Timecop.freeze(Time.zone.parse("2012-03-01 11:00")) do
           get :edit, id: edition
         end
 

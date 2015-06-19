@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 module Future
   class PolicyTest < ActiveSupport::TestCase
@@ -30,7 +30,7 @@ module Future
       future_policy_2 = Future::Policy.find(policy_2["content_id"])
 
       assert_equal policy_area_1["title"], future_policy_1.policy_areas.first.title
-      assert_equal [policy_area_1["title"], policy_area_2["title"]] , future_policy_2.policy_areas.map(&:title)
+      assert_equal [policy_area_1["title"], policy_area_2["title"]], future_policy_2.policy_areas.map(&:title)
     end
   end
 end

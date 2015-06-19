@@ -8,7 +8,6 @@ FactoryGirl.define do
       news.world_locations = [FactoryGirl.build(:world_location)] unless evaluator.world_locations.any?
       news.worldwide_organisations = [FactoryGirl.build(:worldwide_organisation)] unless evaluator.worldwide_organisations.any?
     end
-
   end
 
   factory :imported_world_location_news_article, parent: :world_location_news_article, traits: [:imported]

@@ -54,7 +54,9 @@ class FeatureListTest < ActiveSupport::TestCase
   end
 
   test "reordering fails if features which are not part of the feature list are referenced when re-ordering" do
-    f1, f2, f3 = [create(:feature), create(:feature), create(:feature)]
+    f1 = create(:feature)
+    f2 = create(:feature)
+    f3 = create(:feature)
 
     feature_list_1 = create(:feature_list, locale: :en, features: [f1, f2])
     feature_list_2 = create(:feature_list, locale: :fr, features: [f3])
@@ -68,7 +70,7 @@ class FeatureListTest < ActiveSupport::TestCase
     assert_equal [f1, f2], feature_list_1.reload.features
   end
 
-  test '#features should still return featured documents after republication' do
+  test "#features should still return featured documents after republication" do
     world_location = create(:world_location)
 
     item_a = create(:published_news_article, world_locations: [world_location])
@@ -87,7 +89,7 @@ class FeatureListTest < ActiveSupport::TestCase
     assert_equal [new_draft.document], feature_list.features.map(&:document)
   end
 
-  test '#published_features only returns features where there is a published edition' do
+  test "#published_features only returns features where there is a published edition" do
     published = create(:published_news_article)
     draft = create(:draft_news_article)
 
@@ -99,7 +101,7 @@ class FeatureListTest < ActiveSupport::TestCase
     assert_equal [[published]], feature_list.published_features.map {|f| f.document.editions }
   end
 
-  test '#published_features only excludes features which have ended' do
+  test "#published_features only excludes features which have ended" do
     published = create(:published_news_article)
 
     feature_list = create(:feature_list, locale: :en)
@@ -107,5 +109,4 @@ class FeatureListTest < ActiveSupport::TestCase
 
     assert_equal [], feature_list.published_features.map {|f| f.document.editions }
   end
-
 end

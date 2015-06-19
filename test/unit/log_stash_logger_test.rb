@@ -1,7 +1,7 @@
-require 'fast_test_helper'
-require 'log_stash_logger'
-require 'timecop'
-require 'active_support/all'
+require "fast_test_helper"
+require "log_stash_logger"
+require "timecop"
+require "active_support/all"
 
 class LogStashLoggerTest < ActiveSupport::TestCase
   attr_reader :stream_writer, :stream_reader
@@ -16,7 +16,7 @@ class LogStashLoggerTest < ActiveSupport::TestCase
   end
 
   def teardown
-    [stream_reader, stream_writer].each { | io | io.close unless io.closed? }
+    [stream_reader, stream_writer].each { |io| io.close unless io.closed? }
   end
 
   def log_entries
@@ -62,8 +62,8 @@ class LogStashLoggerTest < ActiveSupport::TestCase
   end
 
   test "When logged thing is a message string, @tags are the default tags for that logger instance" do
-    subject(default_tags: ['dogtag', 'labeltag']).error("Some error")
-    assert_equal ['dogtag', 'labeltag'], log_entries.last["@tags"]
+    subject(default_tags: %w(dogtag labeltag)).error("Some error")
+    assert_equal %w(dogtag labeltag), log_entries.last["@tags"]
   end
 
 ### When logged thing is a hash
@@ -77,7 +77,7 @@ class LogStashLoggerTest < ActiveSupport::TestCase
   test "When logged thing is a hash, given tags are merged with default tags and logged" do
     subject(default_tags: ["dogtag"]).warn(tags: ["labeltag"])
 
-    assert_equal ["dogtag", "labeltag"], log_entries.last["@tags"]
+    assert_equal %w(dogtag labeltag), log_entries.last["@tags"]
   end
 
   test "When logged thing is a hash, given source is logged" do

@@ -1,7 +1,7 @@
 FactoryGirl.define do
   factory :worldwide_office do
     transient do
-      title { 'Contact title' }
+      title { "Contact title" }
     end
     contact { create :contact_with_country, title: title }
     worldwide_organisation

@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 class Api::DetailedGuidePresenterTest < PresenterTestCase
   setup do
@@ -24,16 +24,16 @@ class Api::DetailedGuidePresenterTest < PresenterTestCase
     assert_equal @guide, paginated.page.first.model
   end
 
-  test 'links has a self link, pointing to the public API url' do
-    self_link = @presenter.links.detect { |(url, attrs)| attrs['rel'] == 'self'}
+  test "links has a self link, pointing to the public API url" do
+    self_link = @presenter.links.detect { |(_url, attrs)| attrs["rel"] == "self"}
     assert self_link
     url, attrs = *self_link
     assert_equal api_detailed_guide_url(@guide.document), url
   end
 
   test "json includes document title" do
-    @guide.stubs(:title).returns('guide-title')
-    assert_equal 'guide-title', @presenter.as_json[:title]
+    @guide.stubs(:title).returns("guide-title")
+    assert_equal "guide-title", @presenter.as_json[:title]
   end
 
   test "json includes the public API url as id" do
@@ -46,7 +46,7 @@ class Api::DetailedGuidePresenterTest < PresenterTestCase
 
   test "json includes the document body (without govspeak wrapper div) as html" do
     @guide.stubs(:body).returns("govspeak-body")
-    assert_equivalent_html '<p>govspeak-body</p>', @presenter.as_json[:details][:body]
+    assert_equivalent_html "<p>govspeak-body</p>", @presenter.as_json[:details][:body]
   end
 
   test "json includes related detailed guides as related" do
@@ -66,7 +66,7 @@ class Api::DetailedGuidePresenterTest < PresenterTestCase
       id: organisation_url(@organisation, format: :json),
       web_url: Whitehall.url_maker.organisation_url(@organisation),
       details: {
-        type: 'organisation',
+        type: "organisation",
         short_description: @organisation.acronym
       }
     }

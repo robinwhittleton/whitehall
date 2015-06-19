@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 class ConsultationResponseFormUploaderTest < ActiveSupport::TestCase
   test "should only allow RTF, CSV, Word, Excel, ODT, ODS, or PDF images" do

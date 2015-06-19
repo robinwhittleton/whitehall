@@ -1,7 +1,6 @@
-require 'test_helper'
+require "test_helper"
 
 class RegisterableEditionTest < ActiveSupport::TestCase
-
   test "prepares a detailed guide for registration with Panopticon" do
     edition = create(:published_detailed_guide,
                      title: "Edition title",

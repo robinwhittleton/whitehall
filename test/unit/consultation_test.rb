@@ -54,7 +54,7 @@ class ConsultationTest < ActiveSupport::TestCase
     refute edition.valid?
     assert_equal "can't be blank", edition.errors[:external_url].first
 
-    edition.external_url = 'bad.url'
+    edition.external_url = "bad.url"
     refute edition.valid?
     assert_match /not valid/, edition.errors[:external_url].first
   end
@@ -68,7 +68,7 @@ class ConsultationTest < ActiveSupport::TestCase
     published_consultation = create(:published_consultation, nation_inapplicabilities: [
       create(:nation_inapplicability, nation_id: Nation.wales.id, alternative_url: "http://wales.gov.uk"),
       create(:nation_inapplicability, nation_id: Nation.scotland.id, alternative_url: "http://scot.gov.uk")]
-    )
+                                   )
 
     draft_consultation = published_consultation.create_draft(create(:policy_writer))
 
@@ -167,7 +167,7 @@ class ConsultationTest < ActiveSupport::TestCase
   test "should copy the outcome summary and link to the original attachments when creating a new draft" do
     consultation = create(:published_consultation)
     outcome = create(:consultation_outcome, consultation: consultation, attachments: [
-      attachment = build(:file_attachment, title: 'attachment-title')
+      attachment = build(:file_attachment, title: "attachment-title")
     ])
 
     new_draft = consultation.create_draft(build(:user))
@@ -176,15 +176,15 @@ class ConsultationTest < ActiveSupport::TestCase
     assert_equal outcome.summary, new_draft.outcome.summary
     assert_not_equal outcome, new_draft.outcome
     assert_equal 1, new_draft.outcome.attachments.length
-    assert_equal 'attachment-title', new_draft.outcome.attachments.first.title
+    assert_equal "attachment-title", new_draft.outcome.attachments.first.title
     assert_not_equal attachment, new_draft.outcome.attachments.first
     assert_equal attachment.attachment_data, new_draft.outcome.attachments.first.attachment_data
   end
 
   test "should copy the outcome without falling over if the outcome has attachments but no summary" do
     consultation = create(:published_consultation)
-    outcome = create(:consultation_outcome, consultation: consultation, summary: '', attachments: [
-      attachment = build(:file_attachment, title: 'attachment-title', attachment_data_attributes: { file: fixture_file_upload('greenpaper.pdf') })
+    outcome = create(:consultation_outcome, consultation: consultation, summary: "", attachments: [
+      attachment = build(:file_attachment, title: "attachment-title", attachment_data_attributes: { file: fixture_file_upload("greenpaper.pdf") })
     ])
 
     assert_nothing_raised {
@@ -196,7 +196,7 @@ class ConsultationTest < ActiveSupport::TestCase
   test "copies public feedback and its attachments when creating a new draft" do
     consultation = create(:published_consultation)
     feedback = create(:consultation_public_feedback, consultation: consultation, attachments: [
-      attachment = build(:file_attachment, title: 'attachment-title', attachment_data_attributes: { file: fixture_file_upload('greenpaper.pdf') })
+      attachment = build(:file_attachment, title: "attachment-title", attachment_data_attributes: { file: fixture_file_upload("greenpaper.pdf") })
     ])
 
     new_draft = consultation.create_draft(build(:user))
@@ -207,15 +207,15 @@ class ConsultationTest < ActiveSupport::TestCase
     assert_not_equal feedback, new_feedback
 
     assert_equal 1, new_feedback.attachments.length
-    assert_equal 'attachment-title', new_feedback.attachments.first.title
+    assert_equal "attachment-title", new_feedback.attachments.first.title
     assert_not_equal attachment, new_feedback.attachments.first
     assert_equal attachment.attachment_data, new_feedback.attachments.first.attachment_data
   end
 
   test "should copy public feedback without falling over if the feedback has attachments but no summary" do
     consultation = create(:published_consultation)
-    public_feedback = create(:consultation_public_feedback, consultation: consultation, summary: '', attachments: [
-      build(:file_attachment, title: 'attachment-title', attachment_data_attributes: { file: fixture_file_upload('greenpaper.pdf') })
+    public_feedback = create(:consultation_public_feedback, consultation: consultation, summary: "", attachments: [
+      build(:file_attachment, title: "attachment-title", attachment_data_attributes: { file: fixture_file_upload("greenpaper.pdf") })
     ])
 
     assert_nothing_raised {
@@ -280,27 +280,27 @@ class ConsultationTest < ActiveSupport::TestCase
     assert_equal "Consultation outcome", consultation.display_type
   end
 
-  test 'search_format_types tags the consultation as a consultation and publicationesque-consultation' do
+  test "search_format_types tags the consultation as a consultation and publicationesque-consultation" do
     consultation = build(:consultation)
-    assert consultation.search_format_types.include?('consultation')
-    assert consultation.search_format_types.include?('publicationesque-consultation')
+    assert consultation.search_format_types.include?("consultation")
+    assert consultation.search_format_types.include?("publicationesque-consultation")
   end
 
   test "when the consultation is still open search_format_types tags the consultation as consultation-open" do
     consultation = build(:consultation, opening_at: 10.minutes.ago, closing_at: 10.minutes.from_now)
-    assert consultation.search_format_types.include?('consultation-open')
+    assert consultation.search_format_types.include?("consultation-open")
   end
 
   test "when the consultation is closed search_format_types tags the consultation as consultation-closed" do
     consultation = build(:consultation, opening_at: 10.days.ago, closing_at: 10.minutes.ago)
-    assert consultation.search_format_types.include?('consultation-closed')
+    assert consultation.search_format_types.include?("consultation-closed")
   end
 
   test "when the consultation has published the outcome search_format_types tags the consultation as consultation-outcome" do
     consultation = build(:consultation, opening_at: 10.days.ago, closing_at: 10.minutes.ago)
     outcome = create(:consultation_outcome, consultation: consultation)
     outcome.attachments << build(:file_attachment)
-    assert consultation.search_format_types.include?('consultation-outcome')
+    assert consultation.search_format_types.include?("consultation-outcome")
   end
 
   test "can be associated with worldwide priorities" do

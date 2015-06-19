@@ -1,5 +1,5 @@
-require 'test_helper'
-require 'support/importer_test_logger'
+require "test_helper"
+require "support/importer_test_logger"
 
 class Whitehall::Uploader::Finders::WorldLocationsFinderTest < ActiveSupport::TestCase
   def setup
@@ -21,20 +21,20 @@ class Whitehall::Uploader::Finders::WorldLocationsFinderTest < ActiveSupport::Te
   end
 
   test "returns an empty array if the slugs are blank" do
-    assert_equal [], Whitehall::Uploader::Finders::WorldLocationsFinder.find('', @log, @line_number)
+    assert_equal [], Whitehall::Uploader::Finders::WorldLocationsFinder.find("", @log, @line_number)
   end
 
   test "doesn't log a warning if slug is blank" do
-    Whitehall::Uploader::Finders::WorldLocationsFinder.find('', @log, @line_number)
-    assert_equal '', @log_buffer.string
+    Whitehall::Uploader::Finders::WorldLocationsFinder.find("", @log, @line_number)
+    assert_equal "", @log_buffer.string
   end
 
   test "returns an empty array if the world location can't be found" do
-    assert_equal [], Whitehall::Uploader::Finders::WorldLocationsFinder.find('made-up-world-location-name', @log, @line_number)
+    assert_equal [], Whitehall::Uploader::Finders::WorldLocationsFinder.find("made-up-world-location-name", @log, @line_number)
   end
 
   test "logs a warning if the world location can't be found" do
-    Whitehall::Uploader::Finders::WorldLocationsFinder.find('made-up-world-location-name', @log, @line_number)
+    Whitehall::Uploader::Finders::WorldLocationsFinder.find("made-up-world-location-name", @log, @line_number)
     assert_match /Unable to find WorldLocation with slug 'made-up-world-location-name'/, @log_buffer.string
   end
 end

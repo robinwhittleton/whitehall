@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 class Edition::AuditTrailTest < ActiveSupport::TestCase
   def setup
@@ -13,16 +13,16 @@ class Edition::AuditTrailTest < ActiveSupport::TestCase
     Timecop.return
   end
 
-  test '#acting_as switches to the supplied user for the duration of the block, returning to the original user afterwards' do
+  test "#acting_as switches to the supplied user for the duration of the block, returning to the original user afterwards" do
     Edition::AuditTrail.acting_as(@user2) do
       assert_equal @user2, Edition::AuditTrail.whodunnit
     end
     assert_equal @user, Edition::AuditTrail.whodunnit
   end
 
-  test '#acting_as will return to the previous whodunnit, even when an exception is thrown' do
+  test "#acting_as will return to the previous whodunnit, even when an exception is thrown" do
     begin
-      Edition::AuditTrail.acting_as(@user2) { raise 'Boom!' }
+      Edition::AuditTrail.acting_as(@user2) { raise "Boom!" }
     rescue
     end
 
@@ -143,14 +143,14 @@ class Edition::AuditTrailTest < ActiveSupport::TestCase
 
   test "latest_version_audit_entry_for returns most recent entry in a state" do
     edition = create(:submitted_edition, creator: @user2)
-    edition.body = 'updated-body'
+    edition.body = "updated-body"
     edition.save!
-    assert_equal @user, edition.latest_version_audit_entry_for('submitted').actor
+    assert_equal @user, edition.latest_version_audit_entry_for("submitted").actor
   end
 
   test "most_recent_submission_audit_entry returns entry for submission action" do
     edition = create(:submitted_edition, creator: @user2)
-    edition.body = 'updated-body'
+    edition.body = "updated-body"
     edition.save!
     assert_equal @user2, edition.most_recent_submission_audit_entry.actor
   end
@@ -164,12 +164,11 @@ class Edition::AuditTrailTest < ActiveSupport::TestCase
     publication_date = edition.updated_at
     Timecop.freeze(Time.zone.now + 1.day)
     new_edition = edition.create_draft(edition.creator)
-    new_edition.change_note = 'updated'
+    new_edition.change_note = "updated"
     new_edition.submit!
     new_edition.publish!
 
     published_audit = new_edition.publication_audit_entry
     assert_equal publication_date, published_audit.created_at
   end
-
 end

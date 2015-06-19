@@ -1,4 +1,4 @@
-require 'csv'
+require "csv"
 
 module CsvSampleHelpers
   def consultation_csv_sample(first_row_overrides = {}, extra_row_overrides = [])

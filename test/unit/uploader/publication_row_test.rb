@@ -1,10 +1,10 @@
-require 'test_helper'
+require "test_helper"
 
 module Whitehall::Uploader
   class PublicationRowTest < ActiveSupport::TestCase
     setup do
-      @attachment_cache = stub('attachment cache')
-      @default_organisation = stub('Organisation', url: 'url')
+      @attachment_cache = stub("attachment cache")
+      @default_organisation = stub("Organisation", url: "url")
       @line_number = 1
     end
 
@@ -14,14 +14,14 @@ module Whitehall::Uploader
 
     def basic_headings
       %w{old_url  title summary body  publication_type
-        policy_1   policy_2   policy_3   policy_4   policy_5
-        policy_6   policy_7   policy_8   policy_9   policy_10
-        policy_11  policy_12  policy_13  policy_14  policy_15
-        policy_16  policy_17  policy_18  policy_19  policy_20
-        organisation  document_collection_1 document_collection_2
-        document_collection_3 document_collection_4 publication_date
-        order_url price ISBN  URN command_paper_number
-        country_1 country_2 country_3 country_4}
+         policy_1   policy_2   policy_3   policy_4   policy_5
+         policy_6   policy_7   policy_8   policy_9   policy_10
+         policy_11  policy_12  policy_13  policy_14  policy_15
+         policy_16  policy_17  policy_18  policy_19  policy_20
+         organisation  document_collection_1 document_collection_2
+         document_collection_3 document_collection_4 publication_date
+         order_url price ISBN  URN command_paper_number
+         country_1 country_2 country_3 country_4}
     end
 
     test "validates row headings" do
@@ -76,21 +76,21 @@ module Whitehall::Uploader
     test "combines HTML body parts if present" do
       assert_nil new_publication_row.html_body
 
-      row = new_publication_row({'html_body' => 'body', 'html_body_1' => ' part 1', 'html_body_2' => ' part 2'})
-      assert_equal 'body part 1 part 2', row.attributes[:html_attachment_attributes][:govspeak_content_attributes][:body]
+      row = new_publication_row({"html_body" => "body", "html_body_1" => " part 1", "html_body_2" => " part 2"})
+      assert_equal "body part 1 part 2", row.attributes[:html_attachment_attributes][:govspeak_content_attributes][:body]
     end
 
     test "returns the HTML title if present" do
       assert_nil new_publication_row.html_title
 
-      row = new_publication_row({'html_title' => 'HTML title'})
-      assert_equal 'HTML title', row.attributes[:html_attachment_attributes][:title]
+      row = new_publication_row({"html_title" => "HTML title"})
+      assert_equal "HTML title", row.attributes[:html_attachment_attributes][:title]
     end
 
     test "sets title and body for an HTML attachment if present" do
-      row_with_html_attachment = new_publication_row({'html_title' => 'HTML title', 'html_body' => 'HTML body'})
-      assert_equal 'HTML title', row_with_html_attachment.attributes[:html_attachment_attributes][:title]
-      assert_equal 'HTML body', row_with_html_attachment.attributes[:html_attachment_attributes][:govspeak_content_attributes][:body]
+      row_with_html_attachment = new_publication_row({"html_title" => "HTML title", "html_body" => "HTML body"})
+      assert_equal "HTML title", row_with_html_attachment.attributes[:html_attachment_attributes][:title]
+      assert_equal "HTML body", row_with_html_attachment.attributes[:html_attachment_attributes][:govspeak_content_attributes][:body]
     end
 
     test "finds policies specified by slug in columns policy_1, policy_2, policy_3, etc" do
@@ -153,20 +153,20 @@ module Whitehall::Uploader
       @attachment_cache.stubs(:fetch).with("http://example.com/attachment.pdf", @line_number).returns(File.open(Rails.root.join("test", "fixtures", "two-pages.pdf")))
 
       row = new_publication_row({
-        'attachment_1_title' => 'title',
-        'attachment_1_url' => 'http://example.com/attachment.pdf',
-        'command_paper_number' => 'Cm 5861',
-        'hoc_paper_number' => '123456',
-        'parliamentary_session' => '2010-11',
-        'unnumbered_hoc_paper' => 'true',
-        'unnumbered_command_paper' => '',
+        "attachment_1_title" => "title",
+        "attachment_1_url" => "http://example.com/attachment.pdf",
+        "command_paper_number" => "Cm 5861",
+        "hoc_paper_number" => "123456",
+        "parliamentary_session" => "2010-11",
+        "unnumbered_hoc_paper" => "true",
+        "unnumbered_command_paper" => "",
       }, Logger.new(StringIO.new))
 
       attachment = FileAttachment.new(
         title: "title",
-        command_paper_number: 'Cm 5861',
-        hoc_paper_number: '123456',
-        parliamentary_session: '2010-11',
+        command_paper_number: "Cm 5861",
+        hoc_paper_number: "123456",
+        parliamentary_session: "2010-11",
         unnumbered_hoc_paper: true,
         unnumbered_command_paper: nil
       )
@@ -186,7 +186,7 @@ module Whitehall::Uploader
     end
 
     test "finds related world locations using the world location finder" do
-      world_locations = 5.times.map { stub('world_location') }
+      world_locations = 5.times.map { stub("world_location") }
       Whitehall::Uploader::Finders::WorldLocationsFinder.stubs(:find).with("first", "second", "third", "fourth", anything, anything).returns(world_locations)
       row = new_publication_row({
           "country_1" => "first",

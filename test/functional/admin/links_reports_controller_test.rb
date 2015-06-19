@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 class Admin::LinksReportsControllerTest < ActionController::TestCase
   setup do
@@ -18,7 +18,7 @@ class Admin::LinksReportsControllerTest < ActionController::TestCase
 
       assert links_report = @policy.links_reports.last
       job = LinksReportWorker.jobs.last
-      assert_equal [links_report.id], job['args']
+      assert_equal [links_report.id], job["args"]
     end
   end
 
@@ -30,7 +30,7 @@ class Admin::LinksReportsControllerTest < ActionController::TestCase
 
       assert links_report = @policy.links_reports.last
       job = LinksReportWorker.jobs.last
-      assert_equal [links_report.id], job['args']
+      assert_equal [links_report.id], job["args"]
     end
   end
 

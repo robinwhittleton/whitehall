@@ -1,4 +1,4 @@
-require 'whitehall/publishing_api'
+require "whitehall/publishing_api"
 
 module Whitehall
   class PublishingApi
@@ -14,7 +14,7 @@ module Whitehall
 
       test ".send_to_publishing_api calls publish_async with the item" do
         item = stub("item")
-        PublishingApi.expects(:publish_async).with(item, 'bulk_update', 'bulk_republishing')
+        PublishingApi.expects(:publish_async).with(item, "bulk_update", "bulk_republishing")
         LiveEnvironmentPopulator.send_to_publishing_api(item)
       end
 

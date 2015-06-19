@@ -18,12 +18,12 @@ class DetailedGuidesControllerTest < ActionController::TestCase
   end
 
   view_test "shows related organisations" do
-    organisation = create(:organisation, name: 'The Organisation')
+    organisation = create(:organisation, name: "The Organisation")
     guide = create(:published_detailed_guide, organisations: [organisation])
 
     get :show, id: guide.document
 
-    assert_select "a[href=?]", organisation_path(organisation), text: 'The Organisation'
+    assert_select "a[href=?]", organisation_path(organisation), text: "The Organisation"
   end
 
   view_test "shows link to each section in the document navigation" do
@@ -44,9 +44,9 @@ That's all
     get :show, id: guide.document
 
     assert_select "ol#document_sections" do
-      assert_select "li a[href='#first-section']", 'First Section'
-      assert_select "li a[href='#another-bit']", 'Another Bit'
-      assert_select "li a[href='#final-part']", 'Final Part'
+      assert_select "li a[href='#first-section']", "First Section"
+      assert_select "li a[href='#another-bit']", "Another Bit"
+      assert_select "li a[href='#final-part']", "Final Part"
     end
   end
 
@@ -56,7 +56,7 @@ That's all
       related_mainstream_content_title: "Some related mainstream content",
       additional_related_mainstream_content_url: "http://mainstream/additional-content",
       additional_related_mainstream_content_title: "Some additional related mainstream content"
-    )
+                  )
 
     get :show, id: guide.document
 
@@ -80,7 +80,7 @@ That's all
 
     artefact_headers = ActiveSupport::JSON.decode(response.headers[Slimmer::Headers::ARTEFACT_HEADER])
 
-    assert_equal category.title, artefact_headers['tags'].first['title']
+    assert_equal category.title, artefact_headers["tags"].first["title"]
   end
 
   view_test "show includes link to API representation" do
@@ -125,13 +125,15 @@ That's all
   private
 
   def given_two_detailed_guides_in_two_organisations
-    @organisation_1, @organisation_2 = create(:organisation), create(:organisation)
+    @organisation_1 = create(:organisation)
+    @organisation_2 = create(:organisation)
     @detailed_guide_in_organisation_1 = create(:published_detailed_guide, organisations: [@organisation_1])
     @detailed_guide_in_organisation_2 = create(:published_detailed_guide, organisations: [@organisation_2])
   end
 
   def given_two_detailed_guides_in_two_topics
-    @topic_1, @topic_2 = create(:topic), create(:topic)
+    @topic_1 = create(:topic)
+    @topic_2 = create(:topic)
     @published_detailed_guide, @published_in_second_topic = create_detailed_guides_in(@topic_1, @topic_2)
   end
 

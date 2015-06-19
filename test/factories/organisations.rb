@@ -7,12 +7,12 @@ FactoryGirl.define do
     organisation_logo_type_id { OrganisationLogoType::SingleIdentity.id }
 
     trait(:closed) do
-      govuk_status 'closed'
-      govuk_closed_status 'no_longer_exists'
+      govuk_status "closed"
+      govuk_closed_status "no_longer_exists"
     end
 
     trait(:with_published_edition) {
-      after :create do |organisation, evaluator|
+      after :create do |organisation, _evaluator|
         FactoryGirl.create(:published_publication, lead_organisations: [organisation])
       end
     }
@@ -55,22 +55,26 @@ FactoryGirl.define do
 
   factory :devolved_administration, parent: :organisation do
     organisation_type_key :devolved_administration
-    govuk_status 'exempt'
+    govuk_status "exempt"
   end
 
   factory :court, parent: :organisation do
     organisation_type_key :court
     organisation_logo_type_id { OrganisationLogoType::NoIdentity.id }
     logo_formatted_name { name }
-    parent_organisations { [Organisation.find_by(slug: "hm-courts-and-tribunals-service") ||
-      build(:organisation, slug: "hm-courts-and-tribunals-service", name: "HMCTS")] }
+    parent_organisations {
+      [Organisation.find_by(slug: "hm-courts-and-tribunals-service") ||
+        build(:organisation, slug: "hm-courts-and-tribunals-service", name: "HMCTS")]
+    }
   end
 
   factory :hmcts_tribunal, parent: :organisation do
     organisation_type_key :tribunal_ndpb
     organisation_logo_type_id { OrganisationLogoType::NoIdentity.id }
     logo_formatted_name { name }
-    parent_organisations { [Organisation.find_by(slug: "hm-courts-and-tribunals-service") ||
-      build(:organisation, slug: "hm-courts-and-tribunals-service", name: "HMCTS")] }
+    parent_organisations {
+      [Organisation.find_by(slug: "hm-courts-and-tribunals-service") ||
+        build(:organisation, slug: "hm-courts-and-tribunals-service", name: "HMCTS")]
+    }
   end
 end

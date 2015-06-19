@@ -36,7 +36,7 @@ class Admin::WorldwideOrganisationsControllerTest < ActionController::TestCase
       name: "",
     }
 
-    assert_select 'form#new_worldwide_organisation .errors'
+    assert_select "form#new_worldwide_organisation .errors"
   end
 
   test "shows an edit page for an existing worldwide organisation" do

@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 require "gds_api/test_helpers/rummager"
 
 class PeopleControllerTest < ActionController::TestCase
@@ -14,7 +14,7 @@ class PeopleControllerTest < ActionController::TestCase
         role: stub_translatable_record(role_type, organisations: [organisation]),
         person: stub_translatable_record(:person, organisations: [organisation])
       }.merge(options)
-    )
+               )
   end
 
   setup do
@@ -55,7 +55,7 @@ class PeopleControllerTest < ActionController::TestCase
     end
   end
 
-  view_test 'show has atom feed autodiscovery link' do
+  view_test "show has atom feed autodiscovery link" do
     get :show, id: @person
     assert_select_autodiscovery_link atom_feed_url_for(@person)
   end
@@ -68,7 +68,7 @@ class PeopleControllerTest < ActionController::TestCase
     assert_equal "<#{organisation.analytics_identifier}>", response.headers["X-Slimmer-Organisations"]
   end
 
-  test 'GET :show does not set the organisations slimmer header if the person is not associated with one' do
+  test "GET :show does not set the organisations slimmer header if the person is not associated with one" do
     get :show, id: @person
 
     assert_nil response.headers["X-Slimmer-Organisations"]

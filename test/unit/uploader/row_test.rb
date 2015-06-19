@@ -1,12 +1,12 @@
 # encoding: utf-8
-require 'fast_test_helper'
-require 'whitehall/uploader'
+require "fast_test_helper"
+require "whitehall/uploader"
 
 module Whitehall::Uploader
   class RowTest < ActiveSupport::TestCase
     setup do
-      @attachment_cache = stub('attachment cache')
-      @default_organisation = stub('organisation', url: 'url')
+      @attachment_cache = stub("attachment cache")
+      @default_organisation = stub("organisation", url: "url")
     end
 
     test "validates row headings" do
@@ -14,12 +14,12 @@ module Whitehall::Uploader
     end
 
     test "validation reports missing row headings" do
-      keys = basic_headings - ['title']
+      keys = basic_headings - ["title"]
       assert_equal ["missing fields: 'title'"], Row.heading_validation_errors(keys)
     end
 
     test "validation reports extra row headings" do
-      keys = basic_headings + ['extra_stuff']
+      keys = basic_headings + ["extra_stuff"]
       assert_equal ["unexpected fields: 'extra_stuff'"], Row.heading_validation_errors(keys)
     end
 
@@ -35,11 +35,11 @@ module Whitehall::Uploader
       assert_equal "absolute links", row.summary
     end
 
-    test 'if summary column is blank, generates summary from body' do
-      row = build_row("summary" => '', "body" => 'woo')
+    test "if summary column is blank, generates summary from body" do
+      row = build_row("summary" => "", "body" => "woo")
       row.stubs(:organisation).returns(stubbed_organisation)
-      Parsers::SummariseBody.stubs(:parse).with('woo').returns('w')
-      assert_equal 'w', row.summary
+      Parsers::SummariseBody.stubs(:parse).with("woo").returns("w")
+      assert_equal "w", row.summary
     end
 
     test "takes legacys url from the old_url column" do
@@ -69,7 +69,7 @@ module Whitehall::Uploader
       }
       row = build_row(csv_data)
       row.stubs(:organisation).returns(stubbed_organisation)
-      assert_equal csv_data.values.join(''), row.body
+      assert_equal csv_data.values.join(""), row.body
     end
 
     test "finds an organisation using the organisation finder" do
@@ -94,18 +94,18 @@ module Whitehall::Uploader
 
     test "recognises the presence of a translation" do
       refute build_row({}).translation_present?
-      refute build_row({'title' => 'Title'}).translation_present?
-      assert build_row({'locale' => 'es'}).translation_present?
-      assert build_row({'title_translation' => 'Título'}).translation_present?
-      assert build_row({'locale' => 'es', 'title_translation' => 'Título'}).translation_present?
+      refute build_row({"title" => "Title"}).translation_present?
+      assert build_row({"locale" => "es"}).translation_present?
+      assert build_row({"title_translation" => "Título"}).translation_present?
+      assert build_row({"locale" => "es", "title_translation" => "Título"}).translation_present?
     end
 
     test "returns the locale" do
-      assert_equal 'es', build_row('locale' => 'es').translation_locale
+      assert_equal "es", build_row("locale" => "es").translation_locale
     end
 
     test "returns the tranlsation url" do
-      assert_equal 'http://web.com/article.es', build_row('translation_url' => 'http://web.com/article.es').translation_url
+      assert_equal "http://web.com/article.es", build_row("translation_url" => "http://web.com/article.es").translation_url
     end
 
     test "returns the translated title from the title_translation" do
@@ -120,11 +120,11 @@ module Whitehall::Uploader
       assert_equal "translated summary with absolute links", row.translated_summary
     end
 
-    test 'generates the translated summary from the translated body if the translated summary column is blank' do
-      row = build_row("summary_translation" => '', "body_translation" => 'translated body')
+    test "generates the translated summary from the translated body if the translated summary column is blank" do
+      row = build_row("summary_translation" => "", "body_translation" => "translated body")
       row.stubs(:organisation).returns(stubbed_organisation)
-      Parsers::SummariseBody.stubs(:parse).with('translated body').returns('translated summary')
-      assert_equal 'translated summary', row.translated_summary
+      Parsers::SummariseBody.stubs(:parse).with("translated body").returns("translated summary")
+      assert_equal "translated summary", row.translated_summary
     end
 
     test "returns the translated body from the 'body_tranlsation' column, converting relative links to absolute" do

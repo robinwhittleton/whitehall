@@ -1,11 +1,11 @@
 # encoding: UTF-8
-require 'test_helper'
+require "test_helper"
 
 module Whitehall::Uploader
   class DetailedGuideRowTest < ActiveSupport::TestCase
     setup do
-      @attachment_cache = stub('attachment cache')
-      @default_organisation = stub('Organisation', url: 'url')
+      @attachment_cache = stub("attachment cache")
+      @default_organisation = stub("Organisation", url: "url")
       @line_number = 1
     end
 
@@ -93,7 +93,7 @@ module Whitehall::Uploader
         "related_mainstream_content_title_1" => "Example 1",
         "related_mainstream_content_url_2" => "http://example.com/2",
         "related_mainstream_content_title_2" => "Example 2"
-        )
+      )
 
       assert_equal "http://example.com/1", row.attributes[:related_mainstream_content_url]
       assert_equal "Example 1", row.attributes[:related_mainstream_content_title]

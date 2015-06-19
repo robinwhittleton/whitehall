@@ -9,7 +9,7 @@ class GroupsControllerTest < ActionController::TestCase
       name: "Defence Council",
       description: "description-in-govspeak",
       organisation: organisation
-    )
+                  )
 
     govspeak_transformation_fixture "description-in-govspeak" => "description-in-html" do
       get :show, organisation_id: organisation, id: group
@@ -20,7 +20,8 @@ class GroupsControllerTest < ActionController::TestCase
   end
 
   view_test "should display a list of group members" do
-    person_one, person_two = create(:person), create(:person)
+    person_one = create(:person)
+    person_two = create(:person)
     organisation = create(:organisation)
     group = create(:group, organisation: organisation, members: [person_one, person_two])
 

@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 class MinisterialRoleResluggerTest < ActiveSupport::TestCase
   self.use_transactional_fixtures = false
@@ -6,7 +6,7 @@ class MinisterialRoleResluggerTest < ActiveSupport::TestCase
   setup do
     DatabaseCleaner.clean_with :truncation
     @ministerial_role = create(:ministerial_role, name: "Misspelt role")
-    @reslugger = DataHygiene::RoleReslugger.new(@ministerial_role, 'corrected-slug')
+    @reslugger = DataHygiene::RoleReslugger.new(@ministerial_role, "corrected-slug")
   end
 
   teardown do
@@ -15,7 +15,7 @@ class MinisterialRoleResluggerTest < ActiveSupport::TestCase
 
   test "re-slugs the role" do
     @reslugger.run!
-    assert_equal 'corrected-slug', @ministerial_role.slug
+    assert_equal "corrected-slug", @ministerial_role.slug
   end
 
   test "publishes to Publishing API with the new slug and redirects the old" do
@@ -39,12 +39,12 @@ class MinisterialRoleResluggerTest < ActiveSupport::TestCase
   end
 
   test "deletes the old slug from the search index" do
-    Whitehall::SearchIndex.expects(:delete).with { |minister| minister.slug == 'misspelt-role' }
+    Whitehall::SearchIndex.expects(:delete).with { |minister| minister.slug == "misspelt-role" }
     @reslugger.run!
   end
 
   test "adds the new slug from the search index" do
-    Whitehall::SearchIndex.expects(:add).with { |minister| minister.slug == 'corrected-slug' }
+    Whitehall::SearchIndex.expects(:add).with { |minister| minister.slug == "corrected-slug" }
     @reslugger.run!
   end
 end

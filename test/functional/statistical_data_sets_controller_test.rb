@@ -9,14 +9,14 @@ class StatisticalDataSetsControllerTest < ActionController::TestCase
   should_set_the_article_id_for_the_edition_for :statistical_data_set
   should_not_show_share_links_for :statistical_data_set
 
-  view_test 'show displays published statistical data set' do
+  view_test "show displays published statistical data set" do
     published_statistical_data_set = create(:published_statistical_data_set)
     get :show, id: published_statistical_data_set.document
-    assert_select 'h1', text: published_statistical_data_set.title
+    assert_select "h1", text: published_statistical_data_set.title
   end
 
   view_test "renders the summary of the statistical data set" do
-    statistical_data_set = create(:published_statistical_data_set, summary: 'statistical-data-set-summary')
+    statistical_data_set = create(:published_statistical_data_set, summary: "statistical-data-set-summary")
     get :show, id: statistical_data_set.document
 
     assert_select ".summary", text: "statistical-data-set-summary"
@@ -40,10 +40,10 @@ class StatisticalDataSetsControllerTest < ActionController::TestCase
     assert_select "a[href=?]", public_document_path(document_collection)
   end
 
-  view_test 'index should display a list of all published statistical data sets' do
+  view_test "index should display a list of all published statistical data sets" do
     create(:published_statistical_data_set)
     create(:draft_statistical_data_set)
     get :index
-    assert_select '.statistical_data_set', count: 1
+    assert_select ".statistical_data_set", count: 1
   end
 end

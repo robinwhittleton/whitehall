@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 class ClassificationFeaturingTest < ActiveSupport::TestCase
   include ActionDispatch::TestProcess
@@ -6,7 +6,7 @@ class ClassificationFeaturingTest < ActiveSupport::TestCase
   test "should build an image using nested attributes" do
     classification_featuring = build(:classification_featuring)
     classification_featuring.image_attributes = {
-      file: fixture_file_upload('minister-of-funk.960x640.jpg')
+      file: fixture_file_upload("minister-of-funk.960x640.jpg")
     }
     classification_featuring.save!
 
@@ -14,5 +14,4 @@ class ClassificationFeaturingTest < ActiveSupport::TestCase
 
     assert_match /minister-of-funk/, classification_featuring.image.file.url
   end
-
 end

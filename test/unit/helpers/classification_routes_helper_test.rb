@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 class ClassificationRoutesHelperTest < ActionView::TestCase
   [:topic, :topical_event].each do |type|
