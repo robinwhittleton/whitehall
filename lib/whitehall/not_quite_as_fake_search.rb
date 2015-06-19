@@ -111,13 +111,14 @@ module Whitehall
         end
 
         def compare(left, right)
-          @ordering.map do |field_name, direction|
+          cmp = @ordering.map do |field_name, direction|
             if direction == "asc"
               left.fetch(field_name) <=> right.fetch(field_name)
             else
               right.fetch(field_name) <=> left.fetch(field_name)
             end
-          end.detect { |res| res != 0 } || 0
+          end
+          cmp.detect { |res| res != 0 } || 0
         end
 
         def sort(documents)

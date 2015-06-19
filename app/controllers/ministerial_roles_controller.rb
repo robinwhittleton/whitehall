@@ -47,10 +47,14 @@ private
   end
 
   def whips_by_organisation
-    Role.with_translations.includes(:current_people).whip.group_by(&:whip_organisation_id).map do |whip_organisation_id, roles|
-      roles_presenter = RolesPresenter.new(roles.sort_by(&:whip_ordering), view_context)
-      roles_presenter.remove_unfilled_roles!
-      [Whitehall::WhipOrganisation.find_by_id(whip_organisation_id), roles_presenter]
-    end.sort_by { |org, _whips| org.sort_order }
+    role_array = Role.with_translations.
+                 includes(:current_people).
+                 whip.
+                 group_by(&:whip_organisation_id).map do |whip_organisation_id, roles|
+                   roles_presenter = RolesPresenter.new(roles.sort_by(&:whip_ordering), view_context)
+                   roles_presenter.remove_unfilled_roles!
+                   [Whitehall::WhipOrganisation.find_by_id(whip_organisation_id), roles_presenter]
+                 end
+    role_array.sort_by { |org, _whips| org.sort_order }
   end
 end
