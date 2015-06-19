@@ -27,7 +27,7 @@ private
 
   def find_policy
     if preview?
-      @policy = Document.at_slug('Policy', params[:policy_id]).try(:latest_edition)
+      @policy = Document.at_slug("Policy", params[:policy_id]).try(:latest_edition)
       # Fall back to the non-preview behaviour if user isn't allowed to preview
       @policy = nil unless can_preview?(@policy)
     end

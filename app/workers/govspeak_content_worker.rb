@@ -1,5 +1,4 @@
 class GovspeakContentWorker < WorkerBase
-
   def perform(id)
     return unless govspeak_content = GovspeakContent.find_by(id: id)
 
@@ -28,7 +27,7 @@ private
 
   def govspeak_options(govspeak_content)
     method = govspeak_content.manually_numbered_headings? ? :manual : :auto
-    { heading_numbering: method, contact_heading_tag: 'h4' }
+    { heading_numbering: method, contact_heading_tag: "h4" }
   end
 
   # Because the govspeak helpers in whitehall rely on rendering partials, we

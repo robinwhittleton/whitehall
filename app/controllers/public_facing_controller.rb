@@ -49,7 +49,7 @@ class PublicFacingController < ApplicationController
 
   def log_error_and_render_500(exception)
     logger.error "\n#{exception.class} (#{exception.message}):\n#{exception.backtrace.join("\n")}\n\n"
-    render text: 'API Timed Out', status: :internal_server_error
+    render text: "API Timed Out", status: :internal_server_error
   end
 
   def set_locale(&block)
@@ -72,9 +72,7 @@ class PublicFacingController < ApplicationController
   end
 
   def set_expiry(duration = 30.minutes)
-    unless Rails.env.development?
-      expires_in(duration, public: true)
-    end
+    expires_in(duration, public: true) unless Rails.env.development?
   end
 
   def set_analytics_format
@@ -107,6 +105,6 @@ class PublicFacingController < ApplicationController
   end
 
   def set_x_frame_options
-    response.headers['X-Frame-Options'] = 'ALLOWALL'
+    response.headers["X-Frame-Options"] = "ALLOWALL"
   end
 end

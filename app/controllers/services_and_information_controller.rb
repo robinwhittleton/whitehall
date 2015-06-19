@@ -5,9 +5,7 @@ class ServicesAndInformationController < PublicFacingController
   def show
     @collection_groups = build_services_and_information_collection_group
 
-    if @collection_groups.blank?
-      render status: 404
-    end
+    render status: 404 if @collection_groups.blank?
   end
 
 private

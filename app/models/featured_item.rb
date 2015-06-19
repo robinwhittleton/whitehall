@@ -11,19 +11,11 @@ class FeaturedItem < ActiveRecord::Base
   end
 
   def topic_id
-    if item.is_a?(Topic)
-      item.id
-    else
-      nil
-    end
+    item.id if item.is_a?(Topic)
   end
 
   def document_id
-    if item.is_a?(Document)
-      item.id
-    else
-      nil
-    end
+    item.id if item.is_a?(Document)
   end
 
   def linkable_item

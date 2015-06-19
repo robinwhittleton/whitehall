@@ -14,7 +14,7 @@ class PublicUploadsController < ApplicationController
 
   def fail
     if image? upload_path
-      redirect_to view_context.path_to_image('thumbnail-placeholder.png')
+      redirect_to view_context.path_to_image("thumbnail-placeholder.png")
     else
       if incoming_upload_exists? upload_path
         redirect_to_placeholder
@@ -33,14 +33,14 @@ class PublicUploadsController < ApplicationController
 
   def send_file_for_mime_type
     if mime_type = mime_type_for(upload_path)
-      send_file real_path_for_x_accel_mapping(upload_path), type: mime_type, disposition: 'inline'
+      send_file real_path_for_x_accel_mapping(upload_path), type: mime_type, disposition: "inline"
     else
-      send_file real_path_for_x_accel_mapping(upload_path), disposition: 'inline'
+      send_file real_path_for_x_accel_mapping(upload_path), disposition: "inline"
     end
   end
 
   def image?(path)
-    ['.jpg', '.jpeg', '.png', '.gif'].include?(File.extname(path))
+    [".jpg", ".jpeg", ".png", ".gif"].include?(File.extname(path))
   end
 
   def mime_type_for(path)
@@ -52,7 +52,7 @@ class PublicUploadsController < ApplicationController
   end
 
   def upload_path
-    basename = [params[:path], params[:extension], params[:format]].compact.join('.')
+    basename = [params[:path], params[:extension], params[:format]].compact.join(".")
     File.join(Whitehall.clean_uploads_root, basename)
   end
 

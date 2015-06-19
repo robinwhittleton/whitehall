@@ -9,7 +9,7 @@ class Attachment < ActiveRecord::Base
   before_save :nilify_locale_if_blank
   before_save :prevent_saving_of_abstract_base_class
 
-  VALID_COMMAND_PAPER_NUMBER_PREFIXES = ['C.', 'Cd.', 'Cmd.', 'Cmnd.', 'Cm.']
+  VALID_COMMAND_PAPER_NUMBER_PREFIXES = ["C.", "Cd.", "Cmd.", "Cmnd.", "Cm."]
 
   validates_with AttachmentValidator
   validates :attachable, presence: true
@@ -30,7 +30,7 @@ class Attachment < ActiveRecord::Base
   }
 
   scope :with_filename, ->(basename) {
-    joins(:attachment_data).where('attachment_data.carrierwave_file = ?', basename)
+    joins(:attachment_data).where("attachment_data.carrierwave_file = ?", basename)
   }
 
   scope :files, -> { where(type: FileAttachment) }
@@ -39,8 +39,8 @@ class Attachment < ActiveRecord::Base
 
   def self.parliamentary_sessions
     (1951..Time.zone.now.year).to_a.reverse.map do |year|
-      starts = Date.new(year).strftime('%Y')
-      ends = Date.new(year + 1).strftime('%y')  # %y gives last two digits of year
+      starts = Date.new(year).strftime("%Y")
+      ends = Date.new(year + 1).strftime("%y")  # %y gives last two digits of year
       "#{starts}-#{ends}"
     end
   end
@@ -103,16 +103,16 @@ class Attachment < ActiveRecord::Base
   end
 
   def readable_type
-    ''
+    ""
   end
 
   private
 
   def store_price_in_pence
     self.price_in_pence = if price && price.to_s.empty?
-      nil
-    elsif price
-      price.to_f * 100
+                            nil
+                          elsif price
+                            price.to_f * 100
     end
   end
 

@@ -1,6 +1,6 @@
-require 'active_record_like_interface'
-require 'active_support/core_ext/object/blank.rb'
-require 'active_support/core_ext/string/inflections.rb'
+require "active_record_like_interface"
+require "active_support/core_ext/object/blank.rb"
+require "active_support/core_ext/string/inflections.rb"
 
 class NewsArticleType
   include ActiveRecordLikeInterface
@@ -28,7 +28,7 @@ class NewsArticleType
   end
 
   def self.by_prevalence
-    all.group_by { |type| type.prevalence }
+    all.group_by(&:prevalence)
   end
 
   def self.ordered_by_prevalence
@@ -44,11 +44,11 @@ class NewsArticleType
   end
 
   def search_format_types
-    ['news-article-' + self.key.gsub('_', ' ').parameterize]
+    ["news-article-" + self.key.gsub("_", " ").parameterize]
   end
 
   def genus_key
-    'news_article'
+    "news_article"
   end
 
   NewsStory = create(id: 1, key: "news_story", singular_name: "News story", plural_name: "News stories", prevalence: :primary)
@@ -59,5 +59,4 @@ class NewsArticleType
   Unknown                = create(id: 999, key: "announcement", singular_name: "Announcement", plural_name: "Announcements", prevalence: :migration)
   # For imported news with a blank news_article_type field
   ImportedAwaitingType   = create(id: 1000, key: "imported", singular_name: "Imported - awaiting type", plural_name: "Imported - awaiting type", prevalence: :migration)
-
 end

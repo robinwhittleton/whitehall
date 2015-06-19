@@ -9,13 +9,13 @@ class AttachmentsController < PublicUploadsController
       @edition = attachment_visibility.visible_edition
       @attachment = attachment_visibility.visible_attachment
       @csv_preview = CsvPreview.new(upload_path)
-      render layout: 'html_attachments'
+      render layout: "html_attachments"
     else
       fail
     end
 
   rescue CsvPreview::FileEncodingError, CSV::MalformedCSVError
-    render layout: 'html_attachments'
+    render layout: "html_attachments"
   end
 
   def show
@@ -42,7 +42,7 @@ private
 
   def link_rel_headers
     if edition = attachment_visibility.visible_edition
-      response.headers['Link'] = "<#{public_document_url(edition)}>; rel=\"up\""
+      response.headers["Link"] = "<#{public_document_url(edition)}>; rel=\"up\""
     end
   end
 
@@ -51,7 +51,7 @@ private
   end
 
   def set_slimmer_template
-    slimmer_template('chromeless')
+    slimmer_template("chromeless")
   end
 
   def attachment_data
@@ -71,7 +71,7 @@ private
   end
 
   def file_with_extensions
-    [params[:file], params[:extension], params[:format]].compact.join('.')
+    [params[:file], params[:extension], params[:format]].compact.join(".")
   end
 
   def path_to_attachment_or_thumbnail

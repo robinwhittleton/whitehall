@@ -30,8 +30,8 @@ class Edition < ActiveRecord::Base
   has_many :links_reports, as: :link_reportable
 
   has_many :edition_dependencies, dependent: :destroy
-  has_many :depended_upon_contacts, through: :edition_dependencies, source: :dependable, source_type: 'Contact'
-  has_many :depended_upon_editions, through: :edition_dependencies, source: :dependable, source_type: 'Edition'
+  has_many :depended_upon_contacts, through: :edition_dependencies, source: :dependable, source_type: "Contact"
+  has_many :depended_upon_editions, through: :edition_dependencies, source: :dependable, source_type: "Edition"
 
   validates_with SafeHtmlValidator
   validates_with NoFootnotesInGovspeakValidator, attribute: :body
@@ -55,7 +55,7 @@ class Edition < ActiveRecord::Base
   }
 
   scope :with_title_containing, ->(keywords) {
-    escaped_like_expression = keywords.gsub(/([%_])/, '%' => '\\%', '_' => '\\_')
+    escaped_like_expression = keywords.gsub(/([%_])/, "%" => '\\%', "_" => '\\_')
     like_clause = "%#{escaped_like_expression}%"
 
     in_default_locale
@@ -96,7 +96,7 @@ class Edition < ActiveRecord::Base
 
     def modifiable_attributes(previous_state, current_state)
       modifiable = %w{state updated_at force_published}
-      if previous_state == 'scheduled'
+      if previous_state == "scheduled"
         modifiable += %w{major_change_published_at first_published_at access_limited}
       end
       if PRE_PUBLICATION_STATES.include?(previous_state) || being_unpublished?(previous_state, current_state)
@@ -106,7 +106,7 @@ class Edition < ActiveRecord::Base
     end
 
     def being_unpublished?(previous_state, current_state)
-      previous_state == 'published' && %w(draft withdrawn).include?(current_state)
+      previous_state == "published" && %w(draft withdrawn).include?(current_state)
     end
   end
 
@@ -194,7 +194,7 @@ class Edition < ActiveRecord::Base
 
   # used by Admin::EditionFilter
   def self.in_world_location(world_location)
-    joins(:world_locations).where('world_locations.id' => world_location)
+    joins(:world_locations).where("world_locations.id" => world_location)
   end
 
   def self.from_date(date)
@@ -207,9 +207,9 @@ class Edition < ActiveRecord::Base
 
   def self.related_to(edition)
     related = if edition.is_a?(Policy)
-      edition.related_editions
-    else
-      edition.related_policies
+                edition.related_editions
+              else
+                edition.related_policies
     end
 
     where(id: related.pluck(:id))
@@ -234,21 +234,21 @@ class Edition < ActiveRecord::Base
   end
 
   def self.search_format_type
-    self.name.underscore.gsub('_', '-')
+    self.name.underscore.gsub("_", "-")
   end
 
   def self.concrete_descendants
-    descendants.reject { |model| model.descendants.any? }.sort_by { |model| model.name }
+    descendants.reject { |model| model.descendants.any? }.sort_by(&:name)
   end
 
   def self.concrete_descendant_search_format_types
-    concrete_descendants.map { |model| model.search_format_type }
+    concrete_descendants.map(&:search_format_type)
   end
 
   # NOTE: this scope becomes redundant once Admin::EditionFilterer is backed by an admin-only rummager index
   def self.with_classification(classification)
-    joins('INNER JOIN classification_memberships ON classification_memberships.edition_id = editions.id').
-    where("classification_memberships.classification_id" => classification.id)
+    joins("INNER JOIN classification_memberships ON classification_memberships.edition_id = editions.id").
+      where("classification_memberships.classification_id" => classification.id)
   end
 
   def self.due_for_publication(within_time = 0)
@@ -453,8 +453,8 @@ class Edition < ActiveRecord::Base
       raise "Cannot create new edition based on edition in the #{state} state"
     end
     draft_attributes = attributes.except(*%w{id type state created_at updated_at change_note
-      minor_change force_published scheduled_publication})
-    self.class.new(draft_attributes.merge('state' => 'draft', 'creator' => user)).tap do |draft|
+                                             minor_change force_published scheduled_publication})
+    self.class.new(draft_attributes.merge("state" => "draft", "creator" => user)).tap do |draft|
       traits.each { |t| t.process_associations_before_save(draft) }
       if draft.valid? || !draft.errors.keys.include?(:base)
         if draft.save(validate: false)
@@ -469,17 +469,17 @@ class Edition < ActiveRecord::Base
   end
 
   def rejected_by
-    rejected_event = latest_version_audit_entry_for('rejected')
+    rejected_event = latest_version_audit_entry_for("rejected")
     rejected_event && rejected_event.actor
   end
 
   def published_by
-    published_event = latest_version_audit_entry_for('published')
+    published_event = latest_version_audit_entry_for("published")
     published_event && published_event.actor
   end
 
   def scheduled_by
-    scheduled_event = latest_version_audit_entry_for('scheduled')
+    scheduled_event = latest_version_audit_entry_for("scheduled")
     scheduled_event && scheduled_event.actor
   end
 
@@ -546,7 +546,7 @@ class Edition < ActiveRecord::Base
 
   def most_recent_change_note
     if minor_change?
-      previous_major_version = Edition.unscoped.where('document_id=? and published_major_version=? and published_minor_version=0', document_id, published_major_version)
+      previous_major_version = Edition.unscoped.where("document_id=? and published_major_version=? and published_minor_version=0", document_id, published_major_version)
       previous_major_version.first.change_note if previous_major_version.any?
     else
       change_note unless first_published_version?
@@ -566,7 +566,7 @@ class Edition < ActiveRecord::Base
   end
 
   def display_type_key
-    format_name.tr(' ', '_')
+    format_name.tr(" ", "_")
   end
 
   def first_public_at
@@ -640,7 +640,7 @@ class Edition < ActiveRecord::Base
   def need_ids_are_six_digit_integers?
     invalid_need_ids = need_ids.reject { |need_id| need_id =~ /\A\d{6}\z/ }
     unless invalid_need_ids.empty?
-      errors.add(:need_ids, "are invalid: #{invalid_need_ids.join(", ")}")
+      errors.add(:need_ids, "are invalid: #{invalid_need_ids.join(', ')}")
     end
   end
 
@@ -666,9 +666,9 @@ class Edition < ActiveRecord::Base
   def previously_published_documents_have_date
     return unless @validate_previously_published
     if @previously_published.nil?
-      errors[:base] << 'You must specify whether the document has been published before'
+      errors[:base] << "You must specify whether the document has been published before"
       @has_first_published_error = true
-    elsif previously_published == 'true'  # not a real field, so isn't converted to bool
+    elsif previously_published == "true"  # not a real field, so isn't converted to bool
       errors.add(:first_published_at, "can't be blank") if first_published_at.blank?
       @has_first_published_error = true
     end

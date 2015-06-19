@@ -1,6 +1,5 @@
 class DetailedGuidePresenter < Whitehall::Decorators::Decorator
- include EditionPresenterHelper
+  include EditionPresenterHelper
 
- delegate_instance_methods_of DetailedGuide
-
+  delegate_instance_methods_of DetailedGuide
 end

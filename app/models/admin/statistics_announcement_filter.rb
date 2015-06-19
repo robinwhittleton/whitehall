@@ -13,8 +13,8 @@ module Admin
       scope = unfiltered_scope
       scope = scope.with_title_containing(options[:title]) if options[:title].present?
       scope = scope.in_organisations([options[:organisation_id]]) if options[:organisation_id].present?
-      scope = scope.merge( unlinked_scope ) if unlinked_only?
-      scope = scope.merge( date_and_order_scope )
+      scope = scope.merge(unlinked_scope) if unlinked_only?
+      scope = scope.merge(date_and_order_scope)
       scope
     end
 
@@ -23,7 +23,7 @@ module Admin
     end
 
     def description
-      [date_based_description, additonal_filters_description].compact.join(' ')
+      [date_based_description, additonal_filters_description].compact.join(" ")
     end
 
     def total_count
@@ -72,9 +72,7 @@ module Admin
     end
 
     def additonal_filters_description
-      if unlinked_only?
-        "(without a publication)"
-      end
+      "(without a publication)" if unlinked_only?
     end
 
     def unfiltered_scope
@@ -84,13 +82,13 @@ module Admin
       # GROUP combine to ensure the correct things are loaded and in the correct
       # order.
       StatisticsAnnouncement.includes(:current_release_date, statistics_announcement_topics: :topic, publication: :translations, organisations: :translations)
-                            .joins("INNER JOIN statistics_announcement_dates
+        .joins("INNER JOIN statistics_announcement_dates
                               ON (statistics_announcement_dates.statistics_announcement_id = statistics_announcements.id)")
-                            .joins("LEFT OUTER JOIN statistics_announcement_dates sd2
+        .joins("LEFT OUTER JOIN statistics_announcement_dates sd2
                               ON (sd2.statistics_announcement_id = statistics_announcements.id
                               AND statistics_announcement_dates.created_at > sd2.created_at)")
-                            .group('statistics_announcement_dates.statistics_announcement_id')
-                            .page(options[:page])
+        .group("statistics_announcement_dates.statistics_announcement_id")
+        .page(options[:page])
     end
 
     def unlinked_scope
@@ -99,15 +97,15 @@ module Admin
 
     def date_and_order_scope
       case options[:dates]
-      when 'past'
+      when "past"
         StatisticsAnnouncement.where("statistics_announcement_dates.release_date < ?", Time.zone.now)
-                              .order("statistics_announcement_dates.release_date DESC")
-      when 'future'
+          .order("statistics_announcement_dates.release_date DESC")
+      when "future"
         StatisticsAnnouncement.where("statistics_announcement_dates.release_date > ?", Time.zone.now)
-                              .order("statistics_announcement_dates.release_date ASC")
-      when 'imminent'
+          .order("statistics_announcement_dates.release_date ASC")
+      when "imminent"
         StatisticsAnnouncement.where("statistics_announcement_dates.release_date > ? AND statistics_announcement_dates.release_date < ?", Time.zone.now, 2.weeks.from_now)
-                              .order("statistics_announcement_dates.release_date ASC")
+          .order("statistics_announcement_dates.release_date ASC")
       else
         StatisticsAnnouncement.order("statistics_announcement_dates.release_date DESC")
       end

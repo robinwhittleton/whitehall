@@ -20,5 +20,4 @@ private
   def enforce_permissions!
     enforce_permission!(:unpublish, @unpublishing.edition)
   end
-
 end

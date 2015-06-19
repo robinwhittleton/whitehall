@@ -23,7 +23,7 @@ class FileAttachment < Attachment
   end
 
   def readable_type
-    'file'
+    "file"
   end
 
 private

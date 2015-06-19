@@ -1,5 +1,5 @@
-require 'plek'
-require 'gds_api/panopticon'
+require "plek"
+require "gds_api/panopticon"
 
 class PanopticonRegisterArtefactWorker < WorkerBase
   sidekiq_options queue: :panopticon

@@ -82,9 +82,9 @@ module OrganisationHelper
 
   def govuk_status_meta_data_for(organisation)
     if organisation.exempt?
-      content_tag :span, "separate website", class: 'metadata'
+      content_tag :span, "separate website", class: "metadata"
     elsif organisation.joining? || organisation.transitioning?
-      content_tag :span, "moving to GOV.UK", class: 'metadata'
+      content_tag :span, "moving to GOV.UK", class: "metadata"
     end
   end
 
@@ -95,20 +95,20 @@ module OrganisationHelper
     parents = organisation.parent_organisations.map { |parent| organisation_relationship_html(parent) }
 
     description = if parents.any?
-      case type_name
-      when 'other'
-        "#{name} works with #{parents.to_sentence}."
-      when 'non-ministerial department'
-        "#{name} is #{relationship}."
-      when 'sub-organisation'
-        "#{name} is part of #{parents.to_sentence}."
-      when 'executive non-departmental public body', 'advisory non-departmental public body', 'tribunal non-departmental public body', 'executive agency'
-        "#{name} is #{relationship}, sponsored by #{parents.to_sentence}."
-      else
-        "#{name} is #{relationship} of #{parents.to_sentence}."
-      end
-    else
-      (type_name != 'other') ? "#{name} is #{relationship}." : "#{name}"
+                    case type_name
+                    when "other"
+                      "#{name} works with #{parents.to_sentence}."
+                    when "non-ministerial department"
+                      "#{name} is #{relationship}."
+                    when "sub-organisation"
+                      "#{name} is part of #{parents.to_sentence}."
+                    when "executive non-departmental public body", "advisory non-departmental public body", "tribunal non-departmental public body", "executive agency"
+                      "#{name} is #{relationship}, sponsored by #{parents.to_sentence}."
+                    else
+                      "#{name} is #{relationship} of #{parents.to_sentence}."
+                    end
+                  else
+                    (type_name != "other") ? "#{name} is #{relationship}." : "#{name}"
     end
 
     description.html_safe
@@ -119,8 +119,8 @@ module OrganisationHelper
     child_organisations = organisation.supporting_bodies
 
     if child_organisations.any?
-      organisation_name.chomp!('.')
-      organisation_name += (organisation_type_name(organisation) != 'other') ? ", supported by " : " is supported by "
+      organisation_name.chomp!(".")
+      organisation_name += (organisation_type_name(organisation) != "other") ? ", supported by " : " is supported by "
 
       child_relationships_link_text = "#{child_organisations.size}"
       child_relationships_link_text += (child_organisations.size == 1) ? " public body" : " agencies and public bodies"
@@ -143,16 +143,16 @@ module OrganisationHelper
   end
 
   def has_definite_article?(phrase)
-    phrase.downcase.strip[0..2] == 'the'
+    phrase.downcase.strip[0..2] == "the"
   end
 
   def add_indefinite_article(noun)
-    indefinite_article = starts_with_vowel?(noun) ? 'an' : 'a'
+    indefinite_article = starts_with_vowel?(noun) ? "an" : "a"
     "#{indefinite_article} #{noun}"
   end
 
   def starts_with_vowel?(word_or_phrase)
-    'aeiou'.include?(word_or_phrase.downcase[0])
+    "aeiou".include?(word_or_phrase.downcase[0])
   end
 
   def organisation_wrapper(organisation, options = {}, &block)
@@ -178,7 +178,7 @@ module OrganisationHelper
   end
 
   def filter_terms(organisation)
-    [organisation.slug, organisation.name, organisation.acronym].join(' ')
+    [organisation.slug, organisation.name, organisation.acronym].join(" ")
   end
 
   def people_to_show?
@@ -193,22 +193,20 @@ module OrganisationHelper
   end
 
   def organisations_grouped_by_type(organisations)
-    organisations.group_by(&:organisation_type).sort_by { |type, department| type.listing_position }
+    organisations.group_by(&:organisation_type).sort_by { |type, _department| type.listing_position }
   end
 
   def extra_board_member_class(organisation, i)
     clear_number = 3
-    if organisation.important_board_members > 1
-      clear_number = 4
-    end
-    (i % clear_number == 0) ? 'clear-person' : ''
+    clear_number = 4 if organisation.important_board_members > 1
+    (i % clear_number == 0) ? "clear-person" : ""
   end
 
   def render_featured_topics_and_policies_list(featured_topics_and_policies_list)
     if featured_topics_and_policies_list.present?
       items = featured_topics_and_policies_list.current_and_linkable_featured_items
       if items.any?
-        content_tag(:ul, class: 'featured-items') do
+        content_tag(:ul, class: "featured-items") do
           items.map do |featured_item|
             linkable_item = featured_item.linkable_item
             url =
@@ -232,17 +230,17 @@ module OrganisationHelper
       else
         policies_path
       end
-    link_to 'See all our policies', url
+    link_to "See all our policies", url
   end
 
   def array_of_links_to_organisations(organisations)
     organisations.map do |organisation|
-      link_to organisation.name, organisation, class: 'organisation-link'
+      link_to organisation.name, organisation, class: "organisation-link"
     end
   end
 
   def organisation_count_paragraph(org_array)
-    contents = content_tag(:span, org_array.length, class: 'count js-filter-count')
+    contents = content_tag(:span, org_array.length, class: "count js-filter-count")
     content_tag(:p, contents.html_safe)
   end
 

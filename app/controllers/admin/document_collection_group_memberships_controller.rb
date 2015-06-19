@@ -10,7 +10,7 @@ class Admin::DocumentCollectionGroupMembershipsController < Admin::BaseControlle
         notice: "'#{params[:title]}' added to '#{@group.heading}'"
     else
       redirect_to admin_document_collection_groups_path(@collection),
-        alert: membership.errors.full_messages.join(". ") + '.'
+        alert: membership.errors.full_messages.join(". ") + "."
     end
   end
 
@@ -23,14 +23,14 @@ class Admin::DocumentCollectionGroupMembershipsController < Admin::BaseControlle
                   notice: success_message(document_ids)
     else
       redirect_to admin_document_collection_groups_path(@collection),
-                  alert: 'Select one or more documents and try again'
+                  alert: "Select one or more documents and try again"
     end
   end
 
 private
 
   def moving?
-    params[:commit] == 'Move'
+    params[:commit] == "Move"
   end
 
   def delete_from_old_group(document_ids)
@@ -38,7 +38,7 @@ private
   end
 
   def move_to_new_group(document_ids)
-    new_group.documents << Document.where('id in (?)', document_ids)
+    new_group.documents << Document.where("id in (?)", document_ids)
   end
 
   def success_message(document_ids)

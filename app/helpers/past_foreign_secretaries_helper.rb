@@ -20,6 +20,6 @@ module PastForeignSecretariesHelper
           link_to name.html_safe, past_foreign_secretary_path(id: slug)
         end
       end
-    end.join('').html_safe
+    end.join("").html_safe
   end
 end

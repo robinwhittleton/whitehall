@@ -1,5 +1,5 @@
 class HomeController < PublicFacingController
-  layout 'frontend'
+  layout "frontend"
 
   enable_request_formats feed: [:atom]
 

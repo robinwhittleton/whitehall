@@ -13,19 +13,19 @@ class Policy < Edition
   has_many :edition_relations, through: :document
   has_many :related_editions, through: :edition_relations, source: :edition
   has_many :published_related_editions,
-           -> { where(editions: {state: 'published'}) },
+           -> { where(editions: {state: "published"}) },
            through: :edition_relations,
            source: :edition
   has_many :published_related_publications,
-           -> { where(editions: {type: Publicationesque.sti_names, state: 'published'}) },
+           -> { where(editions: {type: Publicationesque.sti_names, state: "published"}) },
            through: :edition_relations,
            source: :edition
   has_many :published_related_announcements,
-           -> { where(document: {editions: {type: Announcement.sti_names, state: 'published'}}) },
+           -> { where(document: {editions: {type: Announcement.sti_names, state: "published"}}) },
            through: :edition_relations,
            source: :edition
   has_many :case_studies,
-           -> { where(editions: {type: 'CaseStudy', state: 'published'}) },
+           -> { where(editions: {type: "CaseStudy", state: "published"}) },
            through: :edition_relations,
            source: :edition
 
@@ -65,7 +65,7 @@ class Policy < Edition
   end
 
   def search_format_types
-    super + ['policy']
+    super + ["policy"]
   end
 
   def presenter

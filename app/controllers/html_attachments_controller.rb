@@ -2,7 +2,7 @@ class HtmlAttachmentsController < PublicFacingController
   include PublicDocumentRoutesHelper
   include PermissionsChecker
 
-  layout 'html_attachments'
+  layout "html_attachments"
 
   before_filter :find_edition, :redirect_if_unpublished, :find_html_attachment
   around_filter :set_locale_from_attachment

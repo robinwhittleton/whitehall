@@ -50,7 +50,7 @@ protected
   end
 
   def add_local_government(feed)
-    param_character = feed.include?('?') ? '&' : '?'
+    param_character = feed.include?("?") ? "&" : "?"
     "#{feed}#{param_character}relevant_to_local_government=1"
   end
 end

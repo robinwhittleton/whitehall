@@ -1,10 +1,10 @@
 module Admin::EditionActionsHelper
   def edit_edition_button(edition)
-    link_to 'Edit draft', edit_admin_edition_path(edition), title: "Edit #{edition.title}", class: "btn btn-large"
+    link_to "Edit draft", edit_admin_edition_path(edition), title: "Edit #{edition.title}", class: "btn btn-large"
   end
 
   def redraft_edition_button(edition)
-    button_to 'Create new edition to edit', revise_admin_edition_path(edition), title: "Create new edition to edit", class: "btn btn-large"
+    button_to "Create new edition to edit", revise_admin_edition_path(edition), title: "Create new edition to edit", class: "btn btn-large"
   end
 
   def approve_retrospectively_edition_button(edition)
@@ -30,9 +30,9 @@ module Admin::EditionActionsHelper
 
   def convert_to_draft_edition_form(edition)
     url = convert_to_draft_admin_edition_path(edition, lock_version: edition.lock_version)
-    options = { title: "Convert to draft #{edition.title}", class: 'btn btn-success'}
-    options.merge!(disabled: 'disabled') unless edition.valid_as_draft?
-    button_to 'Convert to draft', url, options
+    options = { title: "Convert to draft #{edition.title}", class: "btn btn-success"}
+    options.merge!(disabled: "disabled") unless edition.valid_as_draft?
+    button_to "Convert to draft", url, options
   end
 
   def publish_edition_form(edition, options = {})
@@ -81,27 +81,27 @@ module Admin::EditionActionsHelper
   end
 
   def delete_edition_button(edition)
-    button_to 'Discard draft', admin_edition_path(edition), method: :delete, title: "Delete", data: { confirm: "Are you sure you want to discard this draft?" }, class: "btn btn-danger"
+    button_to "Discard draft", admin_edition_path(edition), method: :delete, title: "Delete", data: { confirm: "Are you sure you want to discard this draft?" }, class: "btn btn-danger"
   end
 
   # If adding new models also update filter_options_for_edition
   def document_creation_dropdown
     content_tag(:ul,
       class: "masthead-menu unstyled js-hidden",
-      id: 'new-document-menu',
-      role: 'menu',
-      'aria-labelledby' => 'new-document-label'
-    ) do
+      id: "new-document-menu",
+      role: "menu",
+      "aria-labelledby" => "new-document-label"
+               ) do
       [Consultation, Publication, NewsArticle,
-        Speech, DetailedGuide, DocumentCollection, FatalityNotice,
-        CaseStudy, StatisticalDataSet,
-        WorldLocationNewsArticle].map do |edition_type|
-        content_tag(:li, class: 'masthead-menu-item') do
+       Speech, DetailedGuide, DocumentCollection, FatalityNotice,
+       CaseStudy, StatisticalDataSet,
+       WorldLocationNewsArticle].map do |edition_type|
+        content_tag(:li, class: "masthead-menu-item") do
           link_to(edition_type.model_name.human,
             polymorphic_path([:new, :admin, edition_type.name.underscore]),
             title: "Create #{edition_type.model_name.human.titleize}",
-            role: 'menuitem'
-          )
+            role: "menuitem"
+                 )
         end if can?(:create, edition_type)
       end.compact.join.html_safe
     end
@@ -119,15 +119,15 @@ module Admin::EditionActionsHelper
         [edition_type.model_name.human.pluralize, edition_type.model_name.singular]
       end
     end
-ActiveModel::Name
+    ActiveModel::Name
     options_for_select(type_options_container, selected)
   end
 
   def edition_sub_type_options_for_select(selected)
     subtype_options_hash = {
-      'Publication sub-types' => PublicationType.ordered_by_prevalence.map { |sub_type| [sub_type.plural_name, "publication_#{sub_type.id}"] },
-      'News article sub-types' => NewsArticleType.ordered_by_prevalence.map { |sub_type| [sub_type.plural_name, "news_article_#{sub_type.id}"] },
-      'Speech sub-types' => SpeechType.all.map { |sub_type| [sub_type.plural_name, "speech_#{sub_type.id}"] }
+      "Publication sub-types" => PublicationType.ordered_by_prevalence.map { |sub_type| [sub_type.plural_name, "publication_#{sub_type.id}"] },
+      "News article sub-types" => NewsArticleType.ordered_by_prevalence.map { |sub_type| [sub_type.plural_name, "news_article_#{sub_type.id}"] },
+      "Speech sub-types" => SpeechType.all.map { |sub_type| [sub_type.plural_name, "speech_#{sub_type.id}"] }
     }
     grouped_options_for_select(subtype_options_hash, selected)
   end

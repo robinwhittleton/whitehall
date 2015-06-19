@@ -2,7 +2,7 @@ class Admin::BaseController < ApplicationController
   include Admin::EditionRoutesHelper
   include PermissionsChecker
 
-  layout 'admin'
+  layout "admin"
   prepend_before_filter :authenticate_user!
   before_filter :require_signin_permission!
   before_filter :skip_slimmer

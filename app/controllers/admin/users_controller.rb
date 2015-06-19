@@ -33,7 +33,7 @@ class Admin::UsersController < Admin::BaseController
 
   def user_params
     params.require(:user)
-          .reverse_merge(world_location_ids: [])
-          .permit(world_location_ids: [])
+      .reverse_merge(world_location_ids: [])
+      .permit(world_location_ids: [])
   end
 end

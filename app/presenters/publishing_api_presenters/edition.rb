@@ -34,7 +34,7 @@ module PublishingApiPresenters
         # We're not using edition.rendering_app because we're defaulting to a
         # placeholder and placeholders only exist because they are rendered by whitehall
         rendering_app: "whitehall-frontend",
-        routes: [ { path: base_path, type: "exact" } ],
+        routes: [{ path: base_path, type: "exact" }],
         redirects: [],
         details: details
       }
@@ -67,7 +67,7 @@ module PublishingApiPresenters
     end
 
     def default_update_type
-      edition.minor_change? ? 'minor' : 'major'
+      edition.minor_change? ? "minor" : "major"
     end
 
     def specialist_sectors

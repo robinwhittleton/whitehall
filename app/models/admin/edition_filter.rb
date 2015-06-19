@@ -10,7 +10,9 @@ module Admin
     attr_reader :options
 
     def initialize(source, current_user, options = {})
-      @source, @current_user, @options = source, current_user, options
+      @source = source
+      @current_user = current_user
+      @options = options
     end
 
     def editions(locale = nil)
@@ -18,8 +20,8 @@ module Admin
       return @editions[locale] if @editions[locale]
 
       requested_editions = editions_with_translations(locale)
-        .page(options[:page])
-        .per(options.fetch(:per_page) { default_page_size })
+                           .page(options[:page])
+                           .per(options.fetch(:per_page) { default_page_size })
 
       @editions[locale] = Kaminari.paginate_array(
         permitted_only(requested_editions),
@@ -34,7 +36,7 @@ module Admin
     end
 
     def page_title
-      "#{ownership} #{edition_state} #{type_for_display}#{title_matches}#{location_matches} #{date_range_string}".squeeze(' ').strip
+      "#{ownership} #{edition_state} #{type_for_display}#{title_matches}#{location_matches} #{date_range_string}".squeeze(" ").strip
     end
 
     def default_page_size
@@ -46,7 +48,7 @@ module Admin
     end
 
     def show_stats
-      ['published'].include?(options[:state])
+      ["published"].include?(options[:state])
     end
 
     def published_count
@@ -59,7 +61,7 @@ module Admin
 
     def force_published_percentage
       if published_count > 0
-        (( force_published_count.to_f / published_count.to_f) * 100.0).round(2)
+        ((force_published_count.to_f / published_count.to_f) * 100.0).round(2)
       else
         0
       end
@@ -114,8 +116,8 @@ module Admin
 
     def editions_with_translations(locale = nil)
       editions_without_translations = unpaginated_editions.
-                                        includes(:unpublishing).
-                                        order("editions.updated_at DESC")
+                                      includes(:unpublishing).
+                                      order("editions.updated_at DESC")
 
       if locale
         editions_without_translations.with_translations(locale)
@@ -139,7 +141,7 @@ module Admin
     end
 
     def type
-      EDITION_TYPE_LOOKUP[options[:type].sub(/_\d+$/, '').classify] if options[:type]
+      EDITION_TYPE_LOOKUP[options[:type].sub(/_\d+$/, "").classify] if options[:type]
     end
 
     def subtype
@@ -151,9 +153,7 @@ module Admin
     end
 
     def subtype_id
-      if options[:type] && options[:type][/\d+$/]
-        options[:type][/\d+$/].to_i
-      end
+      options[:type][/\d+$/].to_i if options[:type] && options[:type][/\d+$/]
     end
 
     def subtype_class
@@ -199,7 +199,7 @@ module Admin
     end
 
     def edition_state
-      options[:state].humanize.downcase if options[:state].present? && options[:state] != 'active'
+      options[:state].humanize.downcase if options[:state].present? && options[:state] != "active"
     end
 
     def organisation

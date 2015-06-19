@@ -16,16 +16,16 @@ class User < ActiveRecord::Base
   scope :enabled, -> { where(disabled: false) }
 
   module Permissions
-    SIGNIN = 'signin'
-    DEPARTMENTAL_EDITOR = 'Editor'
-    MANAGING_EDITOR = 'Managing Editor'
-    GDS_EDITOR = 'GDS Editor'
-    PUBLISH_SCHEDULED_EDITIONS = 'Publish scheduled editions'
-    IMPORT = 'Import CSVs'
-    WORLD_WRITER = 'World Writer'
-    WORLD_EDITOR = 'World Editor'
-    FORCE_PUBLISH_ANYTHING = 'Force publish anything'
-    GDS_ADMIN = 'GDS Admin'
+    SIGNIN = "signin"
+    DEPARTMENTAL_EDITOR = "Editor"
+    MANAGING_EDITOR = "Managing Editor"
+    GDS_EDITOR = "GDS Editor"
+    PUBLISH_SCHEDULED_EDITIONS = "Publish scheduled editions"
+    IMPORT = "Import CSVs"
+    WORLD_WRITER = "World Writer"
+    WORLD_EDITOR = "World Editor"
+    FORCE_PUBLISH_ANYTHING = "Force publish anything"
+    GDS_ADMIN = "GDS Admin"
   end
 
   def role
@@ -33,8 +33,8 @@ class User < ActiveRecord::Base
     when gds_editor? then "GDS Editor"
     when departmental_editor? then "Departmental Editor"
     when managing_editor? then "Managing Editor"
-    when world_editor? then 'World Editor'
-    when world_writer? then 'World Writer'
+    when world_editor? then "World Editor"
+    when world_writer? then "World Writer"
     else "Policy Writer"
     end
   end

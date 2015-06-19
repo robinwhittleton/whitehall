@@ -16,8 +16,8 @@ module Edition::AuditTrail
     has_many :versions, -> { order("created_at ASC, id ASC") }, as: :item
 
     has_one :most_recent_version,
-            -> { order('versions.created_at DESC, versions.id DESC') },
-            class_name: 'Version',
+            -> { order("versions.created_at DESC, versions.id DESC") },
+            class_name: "Version",
             as: :item
     has_one :last_author,
             through: :most_recent_version,
@@ -28,13 +28,13 @@ module Edition::AuditTrail
   end
 
   def record_create
-    versions.create event: 'create', user: Edition::AuditTrail.whodunnit, state: state
+    versions.create event: "create", user: Edition::AuditTrail.whodunnit, state: state
   end
   private :record_create
 
   def record_update
     if changed.any?
-      versions.build event: 'update', user: Edition::AuditTrail.whodunnit, state: state
+      versions.build event: "update", user: Edition::AuditTrail.whodunnit, state: state
     end
   end
   private :record_update
@@ -82,7 +82,7 @@ module Edition::AuditTrail
   def most_recent_submission_audit_entry
     matching_entry = nil
     edition_version_trail.reverse.map do |audit_entry|
-      if audit_entry.version.state == 'submitted'
+      if audit_entry.version.state == "submitted"
         matching_entry = audit_entry
       elsif matching_entry.present?
         break
@@ -92,7 +92,7 @@ module Edition::AuditTrail
   end
 
   def publication_audit_entry
-    document_version_trail.detect { | audit_entry | audit_entry.version.state == 'published' }
+    document_version_trail.detect { |audit_entry| audit_entry.version.state == "published" }
   end
 
   class AuditEntry
@@ -114,9 +114,9 @@ module Edition::AuditTrail
 
     def ==(other)
       other.class == self.class &&
-      other.edition_serial_number == edition_serial_number &&
-      other.edition == edition &&
-      other.object == object
+        other.edition_serial_number == edition_serial_number &&
+        other.edition == edition &&
+        other.object == object
     end
 
     def first_edition?

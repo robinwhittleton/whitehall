@@ -32,14 +32,14 @@ class DetailedGuide < Edition
   end
 
   def related_detailed_guide_ids
-    related_to_editions.where(type: 'DetailedGuide').map(&:id)
+    related_to_editions.where(type: "DetailedGuide").map(&:id)
   end
 
   # Ensure that we set related detailed guides without stomping on other related documents
   def related_detailed_guide_ids=(detailed_guide_ids)
     detailed_guide_ids        = Array.wrap(detailed_guide_ids).reject(&:blank?)
-    other_related_documents   = self.related_documents.reject { |document| document.document_type == 'DetailedGuide' }
-    detailed_guide_documents  = DetailedGuide.find(detailed_guide_ids).map {|guide| guide.document }
+    other_related_documents   = self.related_documents.reject { |document| document.document_type == "DetailedGuide" }
+    detailed_guide_documents  = DetailedGuide.find(detailed_guide_ids).map(&:document)
 
     self.related_documents = other_related_documents + detailed_guide_documents
   end
@@ -72,7 +72,7 @@ class DetailedGuide < Edition
     super + [DetailedGuide.search_format_type]
   end
   def self.search_format_type
-    'detailed-guidance'
+    "detailed-guidance"
   end
 
   def translatable?
@@ -83,7 +83,7 @@ class DetailedGuide < Edition
 
   # Returns the published edition of any detailed guide documents that this edition is related to.
   def published_outbound_related_detailed_guides
-    related_documents.published.where(document_type: 'DetailedGuide').map { |document| document.published_edition }.compact
+    related_documents.published.where(document_type: "DetailedGuide").map(&:published_edition).compact
   end
 
   # Returns the published editions that are related to this edition's document.
@@ -104,6 +104,6 @@ class DetailedGuide < Edition
   end
 
   def self.format_name
-    'detailed guidance'
+    "detailed guidance"
   end
 end

@@ -12,7 +12,7 @@ class FeaturedTopicsAndPoliciesList < ActiveRecord::Base
   accepts_nested_attributes_for :featured_items, reject_if: :no_useful_featured_item_attributes?
 
   def current_and_linkable_featured_items
-    featured_items.current.select { |item| item.linkable? }
+    featured_items.current.select(&:linkable?)
   end
 
   protected
@@ -25,6 +25,6 @@ class FeaturedTopicsAndPoliciesList < ActiveRecord::Base
   end
 
   def no_useful_featured_item_attributes?(attrs)
-    attrs.except(:item_type, :ordering, :featured_topics_and_policies_list).all? { |a, v| v.blank? }
+    attrs.except(:item_type, :ordering, :featured_topics_and_policies_list).all? { |_a, v| v.blank? }
   end
 end

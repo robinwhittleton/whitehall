@@ -38,5 +38,4 @@ private
   def document_class
     Publication
   end
-
 end

@@ -5,9 +5,9 @@ module Admin::TabbedNavHelper
   end
 
   def person_tabs(person)
-    { 'Details' => admin_person_path(person),
-      'Translations' => admin_person_translations_path(person),
-      'Historical accounts' => admin_person_historical_accounts_path(person) }
+    { "Details" => admin_person_path(person),
+      "Translations" => admin_person_translations_path(person),
+      "Historical accounts" => admin_person_historical_accounts_path(person) }
   end
 
   def topic_tabs(topic)
@@ -19,21 +19,21 @@ module Admin::TabbedNavHelper
 
   def corporate_information_page_tabs(page)
     {
-      'Details' => polymorphic_path([:edit, :admin, page.organisation, page]),
-      'Attachments' => admin_corporate_information_page_attachments_path(page.id)
+      "Details" => polymorphic_path([:edit, :admin, page.organisation, page]),
+      "Attachments" => admin_corporate_information_page_attachments_path(page.id)
     }
   end
 
   def policy_group_tabs(group)
     {
-      'Group' => edit_admin_policy_group_path(group),
-      'Attachments' => admin_policy_group_attachments_path(group),
+      "Group" => edit_admin_policy_group_path(group),
+      "Attachments" => admin_policy_group_attachments_path(group),
     }
   end
 
   def tab_navigation(tabs, *extra_classes, &block)
     tabs = tab_navigation_header(tabs)
-    content_tag(:div, class: ['tabbable', *extra_classes]) do
+    content_tag(:div, class: ["tabbable", *extra_classes]) do
       if block_given?
         tabs + content_tag(:div, class: "tab-content") { yield }
       else
@@ -43,15 +43,15 @@ module Admin::TabbedNavHelper
   end
 
   def tab_dropdown(label, menu_items)
-    content_tag(:li, class: 'dropdown') do
-      content_tag(:a, class: 'dropdown-toggle', :'data-toggle' => 'dropdown', href: '#') do
-        (label + " " + content_tag(:b, '', class: 'caret')).html_safe
+    content_tag(:li, class: "dropdown") do
+      content_tag(:a, class: "dropdown-toggle", 'data-toggle': "dropdown", href: "#") do
+        (label + " " + content_tag(:b, "", class: "caret")).html_safe
       end +
-      content_tag(:ul, class: 'dropdown-menu') do
-        menu_items.map { |sub_label, sub_content|
-          content_tag(:li, link_to(sub_label, sub_content), class: class_for_tab(sub_content))
-        }.join.html_safe
-      end
+        content_tag(:ul, class: "dropdown-menu") do
+          menu_items.map { |sub_label, sub_content|
+            content_tag(:li, link_to(sub_label, sub_content), class: class_for_tab(sub_content))
+          }.join.html_safe
+        end
     end
   end
 

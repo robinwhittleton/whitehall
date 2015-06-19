@@ -16,7 +16,7 @@ class Government < ActiveRecord::Base
   def self.on_date(date)
     return if date.to_date > Date.today
 
-    where('start_date <= ?', date).order(start_date: :asc).last
+    where("start_date <= ?", date).order(start_date: :asc).last
   end
 
   def current?
@@ -65,8 +65,8 @@ private
 
       if self.overlaps?(existing_government)
         errors.add(:base, "overlaps #{existing_government.name}:
-          Your new government: #{self.start_date} -> #{self.end_date || "present"},
-          overlapping government: #{existing_government.start_date} -> #{existing_government.end_date || "present"}
+          Your new government: #{self.start_date} -> #{self.end_date || 'present'},
+          overlapping government: #{existing_government.start_date} -> #{existing_government.end_date || 'present'}
         ")
       end
     end

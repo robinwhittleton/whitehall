@@ -16,7 +16,7 @@ class WorldLocation < ActiveRecord::Base
   has_many :offsite_links, as: :parent
 
   has_many :featured_links, -> { order(:created_at) }, as: :linkable, dependent: :destroy
-  accepts_nested_attributes_for :featured_links, reject_if: -> attributes { attributes['url'].blank? }, allow_destroy: true
+  accepts_nested_attributes_for :featured_links, reject_if: -> attributes { attributes["url"].blank? }, allow_destroy: true
 
   include Featurable
 
@@ -24,7 +24,7 @@ class WorldLocation < ActiveRecord::Base
   accepts_nested_attributes_for :offsite_links
 
   include AnalyticsIdentifierPopulator
-  self.analytics_prefix = 'WL'
+  self.analytics_prefix = "WL"
 
   include TranslatableModel
   translates :name, :title, :mission_statement
@@ -34,7 +34,7 @@ class WorldLocation < ActiveRecord::Base
              link: :search_link,
              content: :mission_statement,
              only: :active,
-             format: 'world_location',
+             format: "world_location",
              slug: :slug
   include PublishesToPublishingApi
 
@@ -47,7 +47,7 @@ class WorldLocation < ActiveRecord::Base
     remove_from_search_index if self.active_changed? && !self.active
   end
 
-  scope :ordered_by_name, ->() { with_translations(I18n.default_locale).order('world_location_translations.name') }
+  scope :ordered_by_name, ->() { with_translations(I18n.default_locale).order("world_location_translations.name") }
 
   def self.active
     where(active: true)
@@ -55,20 +55,20 @@ class WorldLocation < ActiveRecord::Base
 
   def self.with_announcements
     announcement_conditions = Edition.joins(:edition_world_locations).
-                                            published.
-                                            where(type: Announcement.sti_names).
-                                            where("edition_world_locations.world_location_id = world_locations.id").
-                                            select('*').to_sql
+                              published.
+                              where(type: Announcement.sti_names).
+                              where("edition_world_locations.world_location_id = world_locations.id").
+                              select("*").to_sql
 
     where("exists (#{announcement_conditions})")
   end
 
   def self.with_publications
     publication_conditions = Edition.joins(:edition_world_locations).
-                                            published.
-                                            where(type: Publicationesque.sti_names).
-                                            where("edition_world_locations.world_location_id = world_locations.id").
-                                            select('*').to_sql
+                             published.
+                             where(type: Publicationesque.sti_names).
+                             where("edition_world_locations.world_location_id = world_locations.id").
+                             select("*").to_sql
 
     where("exists (#{publication_conditions})")
   end
@@ -102,7 +102,7 @@ class WorldLocation < ActiveRecord::Base
   end
 
   def self.all_by_type
-    ordered_by_name.group_by(&:world_location_type).sort_by { |type, location| type.sort_order }
+    ordered_by_name.group_by(&:world_location_type).sort_by { |type, _location| type.sort_order }
   end
 
   def self.countries

@@ -1,5 +1,4 @@
 class RoleTypePresenter
-
   class RoleType < Struct.new(:type, :cabinet_member, :permanent_secretary, :chief_of_the_defence_staff)
     def attributes
       { type: type,
@@ -50,10 +49,10 @@ class RoleTypePresenter
 
   def self.options
     options = GROUPS_VS_NAMES_VS_TYPES.map do |group, names_vs_types|
-      [group, names_vs_types.map { |name, type| [name.humanize, name] }]
+      [group, names_vs_types.map { |name, _type| [name.humanize, name] }]
     end
     # Put ministers at the end of the list.
-    ministerial = options.find_index { |opt| opt[0] == 'Ministerial' }
+    ministerial = options.find_index { |opt| opt[0] == "Ministerial" }
     options.append(options.delete_at(ministerial))
   end
 

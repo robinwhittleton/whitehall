@@ -91,7 +91,7 @@ class ForcePublicationAttempt < ActiveRecord::Base
     end
 
     def failure(document, error_message)
-      write_log(:error, "#{document.nil? ? 'nil' : document.id}: #{error_message.to_s}")
+      write_log(:error, "#{document.nil? ? 'nil' : document.id}: #{error_message}")
     end
 
     def success(document)

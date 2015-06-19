@@ -2,13 +2,13 @@ class StatisticsAnnouncement < ActiveRecord::Base
   extend FriendlyId
   friendly_id :title
 
-  belongs_to :creator, class_name: 'User'
-  belongs_to :cancelled_by, class_name: 'User'
+  belongs_to :creator, class_name: "User"
+  belongs_to :cancelled_by, class_name: "User"
   belongs_to :publication
 
   has_one  :current_release_date,
-    -> { order('created_at DESC') },
-    class_name: 'StatisticsAnnouncementDate',
+    -> { order("created_at DESC") },
+    class_name: "StatisticsAnnouncementDate",
     inverse_of: :statistics_announcement
   has_many :statistics_announcement_dates, dependent: :destroy
 
@@ -24,7 +24,7 @@ class StatisticsAnnouncement < ActiveRecord::Base
   validates :publication_type_id,
               inclusion: {
                 in: PublicationType.statistical.map(&:id),
-                message: 'must be a statistical type'
+                message: "must be a statistical type"
               }
 
   accepts_nested_attributes_for :current_release_date, reject_if: :persisted?
@@ -33,8 +33,9 @@ class StatisticsAnnouncement < ActiveRecord::Base
     pattern = "(#{keywords.map { |k| Regexp.escape(k) }.join('|')})"
     where("statistics_announcements.title REGEXP :pattern OR statistics_announcements.slug = :slug", pattern: pattern, slug: keywords)
   }
-  scope :in_organisations, Proc.new { |organisation_ids| joins(:statistics_announcement_organisations)
-    .where(statistics_announcement_organisations: { organisation_id: organisation_ids })
+  scope :in_organisations, Proc.new { |organisation_ids|
+    joins(:statistics_announcement_organisations)
+      .where(statistics_announcement_organisations: { organisation_id: organisation_ids })
   }
 
   include Searchable
@@ -62,7 +63,7 @@ class StatisticsAnnouncement < ActiveRecord::Base
 
   def self.with_topics(topic_ids)
     joins(:statistics_announcement_topics).
-    where(statistics_announcement_topics: { topic_id: topic_ids})
+      where(statistics_announcement_topics: { topic_id: topic_ids})
   end
 
   def last_change_note
@@ -107,7 +108,7 @@ class StatisticsAnnouncement < ActiveRecord::Base
   end
 
   def build_statistics_announcement_date_change(attributes = {})
-    current_date_attributes = current_release_date.attributes.slice('release_date', 'confirmed', 'precision')
+    current_date_attributes = current_release_date.attributes.slice("release_date", "confirmed", "precision")
 
     StatisticsAnnouncementDateChange.new(attributes.reverse_merge(current_date_attributes)) do |change|
       change.statistics_announcement = self
@@ -132,11 +133,11 @@ class StatisticsAnnouncement < ActiveRecord::Base
 
   def state
     if cancelled?
-      'cancelled'
+      "cancelled"
     elsif confirmed?
-      'confirmed'
+      "confirmed"
     else
-      'provisional'
+      "provisional"
     end
   end
 
@@ -144,7 +145,7 @@ private
 
   def last_major_change
     statistics_announcement_dates.
-      where('change_note IS NOT NULL && change_note != ?', '').
+      where("change_note IS NOT NULL && change_note != ?", "").
       order(:created_at).
       last
   end
@@ -156,6 +157,6 @@ private
   end
 
   def type_string
-    national_statistic? ? 'national statistics' : 'statistics'
+    national_statistic? ? "national statistics" : "statistics"
   end
 end

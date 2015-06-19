@@ -1,5 +1,4 @@
 module FeedHelper
-
   def atom_feed_url_for(resource)
     if resource.is_a?(Policy)
       Whitehall.atom_feed_maker.activity_policy_url(resource.slug)
@@ -19,7 +18,7 @@ module FeedHelper
     builder.updated feed_updated_timestamp
 
     documents.each do |document|
-      builder.entry(document, id: document_id(document, builder), url: public_document_url(document), published: document.first_public_at, updated: document.public_timestamp) do |entry|
+      builder.entry(document, id: document_id(document, builder), url: public_document_url(document), published: document.first_public_at, updated: document.public_timestamp) do |_entry|
         document_as_feed_entry(document, builder, govdelivery_version)
       end
     end
@@ -45,8 +44,8 @@ module FeedHelper
   end
 
   def feed_display_type_for(document)
-    return "News story" if (document.is_a?(WorldLocationNewsArticle))
-    return "Priority" if (document.is_a?(WorldwidePriority))
+    return "News story" if document.is_a?(WorldLocationNewsArticle)
+    return "Priority" if document.is_a?(WorldwidePriority)
     document.display_type
   end
 
@@ -54,7 +53,7 @@ module FeedHelper
     builder.title "#{feed_display_type_for(document)}: #{document.title}"
     builder.category label: document.display_type, term: document.display_type
     builder.summary entry_summary(document, govdelivery_version)
-    builder.content entry_content(document), type: 'html'
+    builder.content entry_content(document), type: "html"
   end
 
   def entry_summary(document, govdelivery_version = false)

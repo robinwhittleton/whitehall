@@ -1,11 +1,11 @@
-require 'publishing_api_presenters/edition.rb'
-require 'publishing_api_presenters/case_study.rb'
-require 'publishing_api_presenters/coming_soon.rb'
-require 'publishing_api_presenters/placeholder.rb'
-require 'publishing_api_presenters/unpublishing.rb'
+require "publishing_api_presenters/edition.rb"
+require "publishing_api_presenters/case_study.rb"
+require "publishing_api_presenters/coming_soon.rb"
+require "publishing_api_presenters/placeholder.rb"
+require "publishing_api_presenters/unpublishing.rb"
 
 module PublishingApiPresenters
-  def self.presenter_for(model, options={})
+  def self.presenter_for(model, options = {})
     presenter_class_for(model).new(model, options)
   end
 

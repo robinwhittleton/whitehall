@@ -1,4 +1,4 @@
-require 'csv'
+require "csv"
 
 class Import < ActiveRecord::Base
   serialize :successful_rows
@@ -7,7 +7,7 @@ class Import < ActiveRecord::Base
   has_many :editions, -> { uniq }, through: :documents
   has_many :import_errors, dependent: :destroy
   has_many :force_publication_attempts, dependent: :destroy
-  has_many :import_logs, -> { order('row_number') }, dependent: :destroy
+  has_many :import_logs, -> { order("row_number") }, dependent: :destroy
 
   belongs_to :creator, class_name: "User"
   belongs_to :organisation
@@ -34,7 +34,7 @@ class Import < ActiveRecord::Base
   validate :no_duplicate_old_urls, if: :valid_csv_data_encoding?
 
   def self.excluding_csv_data
-    select(Import.columns.map(&:name) - ['csv_data'])
+    select(Import.columns.map(&:name) - ["csv_data"])
   end
 
   def self.read_file(file)
@@ -44,7 +44,7 @@ class Import < ActiveRecord::Base
       raw[3..-1]
     else
       raw
-    end.force_encoding('utf-8')
+    end.force_encoding("utf-8")
   end
 
   def self.create_from_file(current_user, csv_file, data_type, organisation_id)
@@ -59,7 +59,7 @@ class Import < ActiveRecord::Base
   end
 
   def self.source_of(document)
-    joins(document_sources: :document).where('documents.id' => document.id).first
+    joins(document_sources: :document).where("documents.id" => document.id).first
   end
 
   def enqueue!
@@ -113,21 +113,19 @@ class Import < ActiveRecord::Base
       most_recent = most_recent_force_publication_attempt
       if most_recent.nil? || (most_recent.present?) && most_recent.repeatable?
         if imported_editions.empty?
-          'Import created no documents'
+          "Import created no documents"
         elsif imported_editions.imported.any?
-          'Some still imported'
+          "Some still imported"
         elsif force_publishable_editions.empty?
-          'None to publish'
-        else
-          nil
-        end
+          "None to publish"
+                end
       else
-        'Attempt to force publish is already in progress'
+        "Attempt to force publish is already in progress"
       end
     when :new, :queued, :running
-      'Import still running'
+      "Import still running"
     else
-      'Import failed'
+      "Import failed"
     end
   end
 
@@ -136,7 +134,7 @@ class Import < ActiveRecord::Base
   end
 
   def force_publishable_editions
-    imported_editions.where(state: ['draft', 'submitted'])
+    imported_editions.where(state: %w(draft submitted))
   end
 
   def force_publishable_edition_count
@@ -153,9 +151,7 @@ class Import < ActiveRecord::Base
   end
 
   def import_errors_for_row(row_number)
-    import_errors.where(row_number: row_number).map do |import_error|
-      import_error.message
-    end
+    import_errors.where(row_number: row_number).map(&:message)
   end
 
   def number_of_rows_with_errors
@@ -217,7 +213,7 @@ class Import < ActiveRecord::Base
   end
 
   def valid_csv_data_encoding!
-    if (csv_data)
+    if csv_data
       errors.add(:csv_data, "Invalid #{csv_data.encoding} character encoding") unless valid_csv_data_encoding?
     end
   end
@@ -235,14 +231,14 @@ class Import < ActiveRecord::Base
   end
 
   def all_rows_have_old_url?
-    if blank_row_number = rows.find_index { |row| row.fields.any?(&:present?) && row['old_url'].blank? }
+    if blank_row_number = rows.find_index { |row| row.fields.any?(&:present?) && row["old_url"].blank? }
       errors.add(:csv_data, "Row #{blank_row_number + 2}: old_url is blank")
     end
   end
 
   def no_duplicate_old_urls
-    urls = rows.map.with_index { |row, i| [i + 2, row['old_url']] }
-    duplicates = urls.group_by { |row_number, old_url| old_url }.select { |old_url, set| set.size > 1 }
+    urls = rows.map.with_index { |row, i| [i + 2, row["old_url"]] }
+    duplicates = urls.group_by { |_row_number, old_url| old_url }.select { |_old_url, set| set.size > 1 }
     if duplicates.any?
       duplicates.each do |old_url, set|
         errors.add(:csv_data, "Duplicate old_url '#{old_url}' in rows #{set.map {|r| r[0]}.join(', ')}")
@@ -275,5 +271,4 @@ class Import < ActiveRecord::Base
   def destroy_all_imported_documents
     Document.destroy_all(id: self.document_ids)
   end
-
 end

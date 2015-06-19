@@ -27,15 +27,15 @@ class Admin::OrganisationsController < Admin::BaseController
 
   def people
     @ministerial_organisation_roles = @organisation.organisation_roles.joins(:role).
-                                        merge(Role.ministerial).order(:ordering)
+                                      merge(Role.ministerial).order(:ordering)
     @management_organisation_roles = @organisation.organisation_roles.joins(:role).
-                                        merge(Role.management).order(:ordering)
+                                     merge(Role.management).order(:ordering)
     @traffic_commissioner_organisation_roles = @organisation.organisation_roles.joins(:role).
-                                        merge(Role.traffic_commissioner).order(:ordering)
+                                               merge(Role.traffic_commissioner).order(:ordering)
     @military_organisation_roles = @organisation.organisation_roles.joins(:role).
-                                        merge(Role.military).order(:ordering)
+                                   merge(Role.military).order(:ordering)
     @special_representative_organisation_roles = @organisation.organisation_roles.joins(:role).
-                                        merge(Role.special_representative).order(:ordering)
+                                                 merge(Role.special_representative).order(:ordering)
     @chief_professional_officer_roles = @organisation.organisation_roles.joins(:role).
                                         merge(Role.chief_professional_officer).order(:ordering)
   end
@@ -44,13 +44,13 @@ class Admin::OrganisationsController < Admin::BaseController
     @feature_list = @organisation.load_or_create_feature_list(params[:locale])
 
     filter_params = params.slice(:page, :type, :author, :organisation, :title).
-      merge(state: 'published')
+                    merge(state: "published")
     @filter = Admin::EditionFilter.new(Edition, current_user, filter_params)
     @featurable_topical_events = TopicalEvent.active
     @featurable_offsite_links = @organisation.offsite_links
 
     if request.xhr?
-      render partial: 'admin/feature_lists/search_results', locals: {feature_list: @feature_list}
+      render partial: "admin/feature_lists/search_results", locals: {feature_list: @feature_list}
     else
       render :features
     end
@@ -81,9 +81,9 @@ class Admin::OrganisationsController < Admin::BaseController
 
   def enforce_permissions!
     case action_name
-    when 'new', 'create'
+    when "new", "create"
       enforce_permission!(:create, Organisation)
-    when 'edit', 'update'
+    when "edit", "update"
       enforce_permission!(:edit, @organisation)
     end
   end
@@ -139,9 +139,7 @@ class Admin::OrganisationsController < Admin::BaseController
     return unless params[:organisation] &&
                   params[:organisation][:organisation_classifications_attributes]
     params[:organisation][:organisation_classifications_attributes].each do |p|
-      if p[:classification_id].blank?
-        p["_destroy"] = true
-      end
+      p["_destroy"] = true if p[:classification_id].blank?
     end
   end
 
@@ -149,9 +147,7 @@ class Admin::OrganisationsController < Admin::BaseController
     return unless params[:organisation] &&
                   params[:organisation][:organisation_mainstream_categories_attributes]
     params[:organisation][:organisation_mainstream_categories_attributes].each do |p|
-      if p[:mainstream_category_id].blank?
-        p["_destroy"] = true
-      end
+      p["_destroy"] = true if p[:mainstream_category_id].blank?
     end
   end
 

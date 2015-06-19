@@ -1,5 +1,4 @@
 class DocumentListExportWorker < WorkerBase
-
   def perform(filter_options, user_id)
     user = User.find(user_id)
     filter = create_filter(filter_options, user)

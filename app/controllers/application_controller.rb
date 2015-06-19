@@ -11,7 +11,7 @@ class ApplicationController < ActionController::Base
   before_filter :set_slimmer_application_name
   before_filter :set_audit_trail_whodunnit
 
-  layout 'frontend'
+  layout "frontend"
   after_filter :set_slimmer_template
 
   private
@@ -29,11 +29,11 @@ class ApplicationController < ActionController::Base
   end
 
   def set_slimmer_template
-    slimmer_template('header_footer_only')
+    slimmer_template("header_footer_only")
   end
 
   def set_slimmer_application_name
-    set_slimmer_headers(application_name: 'inside_government')
+    set_slimmer_headers(application_name: "inside_government")
   end
 
   def set_slimmer_organisations_header(organisations)

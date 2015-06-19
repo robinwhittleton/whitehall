@@ -1,7 +1,7 @@
 module Admin::UrlHelper
   def admin_user_organisation_header_link
     if user_signed_in? && organisation = current_user.organisation
-      admin_header_link 'Corporate information', admin_organisation_corporate_information_pages_path(organisation)
+      admin_header_link "Corporate information", admin_organisation_corporate_information_pages_path(organisation)
     end
   end
 
@@ -84,21 +84,19 @@ module Admin::UrlHelper
   end
 
   def admin_header_menu_link(name, path)
-    content_tag(:li, link_to(name, path, role: 'menuitem'), class: 'masthead-menu-item')
+    content_tag(:li, link_to(name, path, role: "menuitem"), class: "masthead-menu-item")
   end
 
   def admin_header_link(name, path, path_matcher = nil, options = {})
     path_matcher ||= Regexp.new("^#{Regexp.escape(path)}")
     if user_signed_in?
       li_class = active_link_class(path_matcher)
-      if options[:class]
-        li_class = [li_class, options[:class]].join(' ')
-      end
+      li_class = [li_class, options[:class]].join(" ") if options[:class]
       content_tag(:li, link_to(name, path), class: "masthead-tab-item #{li_class}")
     end
   end
 
   def active_link_class(path_matcher)
-    request.path =~ path_matcher ? 'active' : ''
+    request.path =~ path_matcher ? "active" : ""
   end
 end

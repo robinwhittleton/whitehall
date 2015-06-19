@@ -22,14 +22,14 @@ class PublishingApiPresenters::ComingSoon
 
   def as_json
     {
-      publishing_app: 'whitehall',
+      publishing_app: "whitehall",
       rendering_app: edition.rendering_app,
-      format: 'coming_soon',
-      title: 'Coming soon',
+      format: "coming_soon",
+      title: "Coming soon",
       locale: locale,
-      update_type: 'major',
+      update_type: "major",
       details: { publish_time: edition.scheduled_publication.as_json },
-      routes: [ { path: base_path, type: "exact" } ],
+      routes: [{ path: base_path, type: "exact" }],
       # We don't store when the coming_soon was created, so use the last time the record was updated
       public_updated_at: edition.updated_at,
     }

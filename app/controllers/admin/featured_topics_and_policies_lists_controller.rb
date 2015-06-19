@@ -5,7 +5,7 @@ class Admin::FeaturedTopicsAndPoliciesListsController < Admin::BaseController
   def show
     fetch_topics_and_policies
     fetch_current_featured_items(@featured_topics_and_policies_list)
-    @featured_items << @featured_topics_and_policies_list.featured_items.build(item_type: 'Topic')
+    @featured_items << @featured_topics_and_policies_list.featured_items.build(item_type: "Topic")
   end
 
   def update
@@ -44,8 +44,8 @@ class Admin::FeaturedTopicsAndPoliciesListsController < Admin::BaseController
         # clobbers marking an instance as ended
         ids = FeaturedItem.where(featured_topics_and_policies_list_id: list.id).current.map(&:id)
         list.featured_items.
-          select { |fi| ids.include?(fi.id) || fi.id.nil? }.
-          sort_by { |fi| fi.ordering || 99 }
+        select { |fi| ids.include?(fi.id) || fi.id.nil? }.
+        sort_by { |fi| fi.ordering || 99 }
       else
         list.featured_items.current.order(:ordering).to_a
       end
@@ -68,20 +68,20 @@ class Admin::FeaturedTopicsAndPoliciesListsController < Admin::BaseController
   end
 
   def prepare_item_id_param(feature_item_params)
-    topic_id = feature_item_params.delete('topic_id')
-    document_id = feature_item_params.delete('document_id')
+    topic_id = feature_item_params.delete("topic_id")
+    document_id = feature_item_params.delete("document_id")
 
-    case feature_item_params['item_type']
-    when 'Topic'
-      feature_item_params['item_id'] = topic_id
-    when 'Document'
-      feature_item_params['item_id'] = document_id
+    case feature_item_params["item_type"]
+    when "Topic"
+      feature_item_params["item_id"] = topic_id
+    when "Document"
+      feature_item_params["item_id"] = document_id
     end
   end
 
   def prepare_ended_at_param(feature_item_params)
-    if feature_item_params.delete('unfeature') == '1'
-      feature_item_params['ended_at'] = Time.current
+    if feature_item_params.delete("unfeature") == "1"
+      feature_item_params["ended_at"] = Time.current
     end
   end
 end

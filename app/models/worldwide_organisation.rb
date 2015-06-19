@@ -8,21 +8,21 @@ class WorldwideOrganisation < ActiveRecord::Base
   has_many :social_media_accounts, as: :socialable, dependent: :destroy
   has_many :sponsorships, dependent: :destroy
   has_many :sponsoring_organisations, through: :sponsorships, source: :organisation
-  has_many :offices, class_name: 'WorldwideOffice', dependent: :destroy
-  belongs_to :main_office, class_name: 'WorldwideOffice'
+  has_many :offices, class_name: "WorldwideOffice", dependent: :destroy
+  belongs_to :main_office, class_name: "WorldwideOffice"
   has_many :worldwide_organisation_roles, inverse_of: :worldwide_organisation, dependent: :destroy
   has_many :roles, through: :worldwide_organisation_roles
   has_many :people, through: :roles
   has_many :edition_worldwide_organisations, dependent: :destroy, inverse_of: :worldwide_organisation
   has_one  :access_and_opening_times, as: :accessible, dependent: :destroy
-  belongs_to :default_news_image, class_name: 'DefaultNewsOrganisationImageData', foreign_key: :default_news_organisation_image_data_id
+  belongs_to :default_news_image, class_name: "DefaultNewsOrganisationImageData", foreign_key: :default_news_organisation_image_data_id
 
   accepts_nested_attributes_for :default_news_image, reject_if: :all_blank
 
   scope :ordered_by_name, ->() { with_translations(I18n.default_locale).order(translation_class.arel_table[:name]) }
 
   include AnalyticsIdentifierPopulator
-  self.analytics_prefix = 'WO'
+  self.analytics_prefix = "WO"
 
   include TranslatableModel
   translates :name
@@ -61,7 +61,7 @@ class WorldwideOrganisation < ActiveRecord::Base
   searchable title: :name,
              link: :search_link,
              content: :summary,
-             format: 'worldwide_organisation'
+             format: "worldwide_organisation"
 
   def search_link
     Whitehall.url_maker.worldwide_organisation_path(slug)
@@ -98,5 +98,4 @@ class WorldwideOrganisation < ActiveRecord::Base
   def office_staff_roles
     roles.where(type: WorldwideOfficeStaffRole.name)
   end
-
 end

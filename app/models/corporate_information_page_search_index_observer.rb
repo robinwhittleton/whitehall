@@ -11,11 +11,10 @@ class CorporateInformationPageSearchIndexObserver < ActiveRecord::Observer
 
   private
   def going_live_on_govuk?(org)
-    org.govuk_status_changed? && org.govuk_status == 'live'
+    org.govuk_status_changed? && org.govuk_status == "live"
   end
 
   def leaving_live_on_govuk?(org)
-    org.govuk_status_changed? && org.govuk_status_was == 'live'
+    org.govuk_status_changed? && org.govuk_status_was == "live"
   end
-
 end

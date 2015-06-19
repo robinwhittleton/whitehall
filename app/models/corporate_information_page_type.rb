@@ -4,7 +4,7 @@ class CorporateInformationPageType
   attr_accessor :id, :title_template, :slug, :menu_heading
 
   def self.find(slug)
-    all.detect { |type| type.slug == slug } or raise ActiveRecord::RecordNotFound
+    all.detect { |type| type.slug == slug } || raise(ActiveRecord::RecordNotFound)
   end
 
   def key
@@ -12,12 +12,12 @@ class CorporateInformationPageType
     # attribute: Publication and WorldLocation for example define this to have
     # different subtype kinds. Our use of _type is slightly different and all
     # types have the same kind, ie CIP.
-    'corporate_information_page'
+    "corporate_information_page"
   end
 
   def title(organisation)
     organisation_name = (organisation.respond_to?(:acronym) && organisation.acronym || "#{organisation.name}")
-    translation_key = slug.gsub('-', '_')
+    translation_key = slug.gsub("-", "_")
     I18n.t("corporate_information_page.type.#{translation_key}", organisation_name: organisation_name)
   end
 
@@ -78,15 +78,15 @@ class CorporateInformationPageType
     id: 16, slug: "staff-update", menu_heading: :other
   )
   MediaEnquiries = create(
-    id: 17, slug: 'media-enquiries', menu_heading: :our_information
+    id: 17, slug: "media-enquiries", menu_heading: :our_information
   )
   SocialMediaUse = create(
-    id: 18, slug: 'social-media-use', menu_heading: :other
+    id: 18, slug: "social-media-use", menu_heading: :other
   )
   AboutOurServices = create(
-    id: 19, slug: 'about-our-services', menu_heading: :other
+    id: 19, slug: "about-our-services", menu_heading: :other
   )
   AboutUs = create(
-    id: 20, slug: 'about', menu_heading: :other
+    id: 20, slug: "about", menu_heading: :other
   )
 end

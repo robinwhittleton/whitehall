@@ -23,7 +23,7 @@ class LatestDocumentsFilter
 
 private
   def documents_source
-    raise NotImplementedError, 'you must provide #documents_source implementation in your LatestDocumentsFilter subclass'
+    raise NotImplementedError, "you must provide #documents_source implementation in your LatestDocumentsFilter subclass"
   end
 
   def page_number
@@ -38,9 +38,9 @@ private
   private
     def documents_source
       subject.published_editions
-             .in_reverse_chronological_order
-             .without_editions_of_type(CorporateInformationPage)
-             .with_translations(I18n.locale)
+        .in_reverse_chronological_order
+        .without_editions_of_type(CorporateInformationPage)
+        .with_translations(I18n.locale)
     end
   end
 
@@ -48,9 +48,9 @@ private
   private
     def documents_source
       subject.published_editions
-             .in_reverse_chronological_order
-             .without_editions_of_type(WorldLocationNewsArticle)
-             .with_translations(I18n.locale)
+        .in_reverse_chronological_order
+        .without_editions_of_type(WorldLocationNewsArticle)
+        .with_translations(I18n.locale)
     end
   end
 
@@ -58,8 +58,8 @@ private
   private
     def documents_source
       subject.published_editions
-             .in_reverse_chronological_order
-             .with_translations(I18n.locale)
+        .in_reverse_chronological_order
+        .with_translations(I18n.locale)
     end
   end
 end

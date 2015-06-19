@@ -15,7 +15,7 @@ class Document < ActiveRecord::Base
 
   has_one  :published_edition,
            -> { where(state: Edition::PUBLICLY_VISIBLE_STATES) },
-           class_name: 'Edition',
+           class_name: "Edition",
            inverse_of: :document
 
   has_one  :latest_edition,
@@ -27,7 +27,7 @@ class Document < ActiveRecord::Base
                AND e2.id > editions.id
                AND e2.state <> 'deleted')))
            },
-           class_name: 'Edition',
+           class_name: "Edition",
            inverse_of: :document
 
   has_many :document_sources, dependent: :destroy
@@ -56,7 +56,7 @@ class Document < ActiveRecord::Base
     slug_without_sequence = slug.split(sequence_separator).first
 
     scope.where("slug IN (?) OR slug LIKE ?", [slug, slug_without_sequence].uniq,
-      slug_without_sequence + sequence_separator + '%').count > 1
+      slug_without_sequence + sequence_separator + "%").count > 1
   end
 
   def should_generate_new_friendly_id?
@@ -67,9 +67,7 @@ class Document < ActiveRecord::Base
     return if published?
 
     candidate_slug = normalize_friendly_id(new_title)
-    unless candidate_slug == slug
-      update_attributes(sluggable_string: new_title)
-    end
+    update_attributes(sluggable_string: new_title) unless candidate_slug == slug
   end
 
   def published?
@@ -97,7 +95,7 @@ class Document < ActiveRecord::Base
   end
 
   def humanized_document_type
-    document_type.underscore.gsub('_', ' ')
+    document_type.underscore.gsub("_", " ")
   end
 
   private
@@ -107,8 +105,6 @@ class Document < ActiveRecord::Base
   end
 
   def ensure_document_has_a_slug
-    if slug.blank?
-      update_column(:slug, id.to_s)
-    end
+    update_column(:slug, id.to_s) if slug.blank?
   end
 end

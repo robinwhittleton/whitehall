@@ -1,13 +1,13 @@
 # @abstract
 class Role < ActiveRecord::Base
-  HISTORIC_ROLE_PARAM_MAPPINGS = { 'past-prime-ministers' => 'prime-minister',
-                                   'past-chancellors'     => 'chancellor-of-the-exchequer',
-                                   'past-foreign-secretaries' => 'foreign-secretary' }
+  HISTORIC_ROLE_PARAM_MAPPINGS = { "past-prime-ministers" => "prime-minister",
+                                   "past-chancellors"     => "chancellor-of-the-exchequer",
+                                   "past-foreign-secretaries" => "foreign-secretary" }
 
   def self.columns
     # This is here to enable us to gracefully remove the biography column
     # in a future commit, *after* this change has been deployed
-    super.reject { |column| ['name', 'responsibilities'].include?(column.name) }
+    super.reject { |column| %w(name responsibilities).include?(column.name) }
   end
 
   has_many :role_appointments, -> { order(started_at: :desc) }
@@ -15,8 +15,8 @@ class Role < ActiveRecord::Base
 
   has_many :current_role_appointments,
            -> { where(RoleAppointment::CURRENT_CONDITION) },
-           class_name: 'RoleAppointment'
-  has_many :current_people, class_name: 'Person', through: :current_role_appointments, source: :person
+           class_name: "RoleAppointment"
+  has_many :current_people, class_name: "Person", through: :current_role_appointments, source: :person
 
   has_many :organisation_roles, inverse_of: :role
   has_many :organisations, through: :organisation_roles
@@ -27,15 +27,15 @@ class Role < ActiveRecord::Base
   has_many :historical_account_roles, inverse_of: :role
   has_many :historical_accounts, through: :historical_account_roles
 
-  scope :alphabetical_by_person,     -> { includes(:current_people, :organisations).order('people.surname', 'people.forename') }
+  scope :alphabetical_by_person,     -> { includes(:current_people, :organisations).order("people.surname", "people.forename") }
 
-  scope :ministerial,                -> { where(type: 'MinisterialRole') }
-  scope :board_member,               -> { where(type: 'BoardMemberRole') }
+  scope :ministerial,                -> { where(type: "MinisterialRole") }
+  scope :board_member,               -> { where(type: "BoardMemberRole") }
   scope :management,                 -> { where("type = 'BoardMemberRole' OR type = 'ChiefScientificAdvisorRole'") }
-  scope :traffic_commissioner,       -> { where(type: 'TrafficCommissionerRole') }
-  scope :military,                   -> { where(type: 'MilitaryRole') }
-  scope :special_representative,     -> { where(type: 'SpecialRepresentativeRole') }
-  scope :chief_professional_officer, -> { where(type: 'ChiefProfessionalOfficerRole') }
+  scope :traffic_commissioner,       -> { where(type: "TrafficCommissionerRole") }
+  scope :military,                   -> { where(type: "MilitaryRole") }
+  scope :special_representative,     -> { where(type: "SpecialRepresentativeRole") }
+  scope :chief_professional_officer, -> { where(type: "ChiefProfessionalOfficerRole") }
 
   validates :name, presence: true
   validates :type, presence: true
@@ -119,7 +119,7 @@ class Role < ActiveRecord::Base
   end
 
   def organisation_names
-    organisations.map(&:name).join(' and ')
+    organisations.map(&:name).join(" and ")
   end
 
   def name_and_organisations

@@ -13,27 +13,27 @@ class Consultation < Publicationesque
   validates :external_url, uri: true, allow_blank: true
   validate :validate_closes_after_opens
 
-  has_one :outcome, class_name: 'ConsultationOutcome', foreign_key: :edition_id, dependent: :destroy
-  has_one :public_feedback, class_name: 'ConsultationPublicFeedback', foreign_key: :edition_id, dependent: :destroy
+  has_one :outcome, class_name: "ConsultationOutcome", foreign_key: :edition_id, dependent: :destroy
+  has_one :public_feedback, class_name: "ConsultationPublicFeedback", foreign_key: :edition_id, dependent: :destroy
   has_one :consultation_participation, foreign_key: :edition_id, dependent: :destroy
 
   accepts_nested_attributes_for :consultation_participation, reject_if: :all_blank_or_empty_hashes
 
   scope :closed, -> { where("closing_at < ?",  Time.zone.now) }
-  scope :closed_since, ->(time) { closed.where('closing_at >= ?', time) }
-  scope :open, -> { where('closing_at >= ? AND opening_at <= ?', Time.zone.now, Time.zone.now) }
-  scope :upcoming, -> { where('opening_at > ?', Time.zone.now) }
+  scope :closed_since, ->(time) { closed.where("closing_at >= ?", time) }
+  scope :open, -> { where("closing_at >= ? AND opening_at <= ?", Time.zone.now, Time.zone.now) }
+  scope :upcoming, -> { where("opening_at > ?", Time.zone.now) }
   scope :responded, -> { joins(:outcome) }
 
   add_trait do
     def process_associations_after_save(edition)
       if @edition.consultation_participation.present?
-        attributes = @edition.consultation_participation.attributes.except('id', 'edition_id')
+        attributes = @edition.consultation_participation.attributes.except("id", "edition_id")
         edition.create_consultation_participation(attributes)
       end
 
       if @edition.outcome.present?
-        new_outcome = edition.build_outcome(@edition.outcome.attributes.except('id', 'edition_id'))
+        new_outcome = edition.build_outcome(@edition.outcome.attributes.except("id", "edition_id"))
         @edition.outcome.attachments.each do |attachment|
           new_outcome.attachments << attachment.deep_clone
         end
@@ -41,7 +41,7 @@ class Consultation < Publicationesque
       end
 
       if @edition.public_feedback.present?
-        new_feedback = edition.build_public_feedback(@edition.public_feedback.attributes.except('id', 'edition_id'))
+        new_feedback = edition.build_public_feedback(@edition.public_feedback.attributes.except("id", "edition_id"))
         @edition.public_feedback.attachments.each do |attachment|
           new_feedback.attachments << attachment.deep_clone
         end
@@ -120,14 +120,14 @@ class Consultation < Publicationesque
   def search_format_types
     consultation_type =
       if outcome_published?
-        'consultation-outcome'
+        "consultation-outcome"
       elsif closed?
-        'consultation-closed'
+        "consultation-closed"
       elsif open?
-        'consultation-open'
+        "consultation-open"
       end
 
-    types = super + ['publicationesque-consultation', Consultation.search_format_type]
+    types = super + ["publicationesque-consultation", Consultation.search_format_type]
     types << consultation_type if consultation_type
     types
   end
@@ -135,8 +135,8 @@ class Consultation < Publicationesque
   def search_index
     super.merge({
       has_official_document: has_official_document? || (outcome.present? && outcome.has_official_document?),
-      has_command_paper:     has_command_paper?     || (outcome.present? && outcome.has_command_paper?),
-      has_act_paper:         has_act_paper?         || (outcome.present? && outcome.has_act_paper?)
+      has_command_paper:     has_command_paper? || (outcome.present? && outcome.has_command_paper?),
+      has_act_paper:         has_act_paper? || (outcome.present? && outcome.has_act_paper?)
     })
   end
 

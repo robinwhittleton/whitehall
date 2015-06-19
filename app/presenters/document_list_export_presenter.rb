@@ -11,23 +11,23 @@ class DocumentListExportPresenter
 
   def self.header_row
     [
-      'Public URL',
-      'Admin URL',
-      'Title',
-      'Lead organisations',
-      'Supporting organisations',
-      'First published',
-      'First published on GOV.UK',
-      'Published by',
-      'Last updated',
-      'Content type',
-      'Content sub-type',
-      'State',
-      'Attachments',
-      'Policies',
-      'Specialist sectors',
-      'Collections',
-      'Affected by history-mode',
+      "Public URL",
+      "Admin URL",
+      "Title",
+      "Lead organisations",
+      "Supporting organisations",
+      "First published",
+      "First published on GOV.UK",
+      "Published by",
+      "Last updated",
+      "Content type",
+      "Content sub-type",
+      "State",
+      "Attachments",
+      "Policies",
+      "Specialist sectors",
+      "Collections",
+      "Affected by history-mode",
     ]
   end
 
@@ -80,7 +80,7 @@ class DocumentListExportPresenter
     when CorporateInformationPage
       edition.corporate_information_page_type.slug.underscore.humanize
     else
-      'N/A'
+      "N/A"
     end
   end
 
@@ -99,9 +99,7 @@ class DocumentListExportPresenter
   end
 
   def policies
-    if edition.respond_to? :related_policies
-      edition.policies.map(&:title)
-    end
+    edition.policies.map(&:title) if edition.respond_to? :related_policies
   end
 
   def specialist_sectors
@@ -130,18 +128,17 @@ class DocumentListExportPresenter
     data.map do |elem|
       case elem
       when Array
-        elem.join(', ')
+        elem.join(", ")
       when Time
         # YYYY-MM-DD hh:mm:ss, which seems to be best understood by spreadsheets.
         elem.to_formatted_s(:db)
       when true
-        'yes'
+        "yes"
       when false
-        'no'
+        "no"
       else
         elem
       end
     end
   end
-
 end

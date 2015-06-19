@@ -9,10 +9,10 @@ private
 
   def gone_item_for(base_path)
     {
-      format: 'gone',
-      publishing_app: 'whitehall',
-      update_type: 'major',
-      routes: [{path: base_path, type: 'exact'}],
+      format: "gone",
+      publishing_app: "whitehall",
+      update_type: "major",
+      routes: [{path: base_path, type: "exact"}],
     }
   end
 end

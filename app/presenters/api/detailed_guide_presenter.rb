@@ -15,7 +15,7 @@ class Api::DetailedGuidePresenter < Api::BasePresenter
 
   def links
     [
-      [detailed_guide_url(model), {'rel' => 'self'}]
+      [detailed_guide_url(model), {"rel" => "self"}]
     ]
   end
 

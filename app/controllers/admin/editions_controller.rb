@@ -26,19 +26,19 @@ class Admin::EditionsController < Admin::BaseController
 
   def enforce_permissions!
     case action_name
-    when 'index', 'topics'
+    when "index", "topics"
       enforce_permission!(:see, edition_class || Edition)
-    when 'show'
+    when "show"
       enforce_permission!(:see, @edition)
-    when 'new'
+    when "new"
       enforce_permission!(:create, edition_class || Edition)
-    when 'create'
+    when "create"
       enforce_permission!(:create, @edition)
-    when 'edit', 'update', 'revise', 'diff'
+    when "edit", "update", "revise", "diff"
       enforce_permission!(:update, @edition)
-    when 'destroy'
+    when "destroy"
       enforce_permission!(:delete, @edition)
-    when 'export', 'confirm_export'
+    when "export", "confirm_export"
       enforce_permission!(:export, edition_class || Edition)
     else
       raise Whitehall::Authority::Errors::InvalidAction.new(action_name)
@@ -49,7 +49,7 @@ class Admin::EditionsController < Admin::BaseController
     if filter && filter.valid?
       session[:document_filters] = params_filters
       if request.xhr?
-        render partial: 'search_results'
+        render partial: "search_results"
       else
         render :index
       end
@@ -99,9 +99,7 @@ class Admin::EditionsController < Admin::BaseController
     if @edition.edit_as(current_user, edition_params)
       updater.perform!
 
-      if @edition.links_reports.last
-        LinksReport.queue_for!(@edition)
-      end
+      LinksReport.queue_for!(@edition) if @edition.links_reports.last
 
       @edition.convert_to_draft! if params[:speed_save_convert]
       redirect_to after_update_path, saved_confirmation_notice
@@ -169,7 +167,7 @@ class Admin::EditionsController < Admin::BaseController
     previous_document = import.document_imported_before(@edition.document) if import
     return admin_edition_path(previous_document.latest_edition) if previous_document
 
-    admin_editions_path(session_filters.merge('state' => :imported))
+    admin_editions_path(session_filters.merge("state" => :imported))
   end
 
   def fetch_version_and_remark_trails
@@ -187,52 +185,52 @@ class Admin::EditionsController < Admin::BaseController
 
   def permitted_edition_attributes
     [:title, :body, :change_note, :summary, :first_published_at,
-      :publication_type_id, :scheduled_publication, :lock_version,
-      :access_limited, :alternative_format_provider_id, :opening_at,
-      :closing_at, :external, :external_url, :minor_change, :previously_published,
-      :roll_call_introduction, :operational_field_id, :news_article_type_id,
-      :relevant_to_local_government, :role_appointment_id, :speech_type_id,
-      :delivered_on, :location, :person_override, :primary_locale,
-      :primary_mainstream_category_id, :related_mainstream_content_url,
-      :related_mainstream_content_title,
-      :additional_related_mainstream_content_url,
-      :additional_related_mainstream_content_title,
-      :primary_specialist_sector_tag,
-      :corporate_information_page_type_id,
-      :political,
-      secondary_specialist_sector_tags: [],
-      lead_organisation_ids: [],
-      supporting_organisation_ids: [],
-      organisation_ids: [],
-      world_location_ids: [],
-      worldwide_organisation_ids: [],
-      worldwide_priority_ids: [],
-      related_policy_ids: [],
-      policy_content_ids: [],
-      other_mainstream_category_ids: [],
-      topic_ids: [],
-      topical_event_ids: [],
-      related_detailed_guide_ids: [],
-      role_appointment_ids: [],
-      statistical_data_set_document_ids: [],
-      policy_group_ids: [],
-      document_collection_group_ids: [],
-      images_attributes: [
-        :id, :alt_text, :caption, :_destroy,
-        image_data_attributes: [:file, :file_cache]
-      ],
-      consultation_participation_attributes: [
-        :id, :link_url, :email, :postal_address,
-        consultation_response_form_attributes: [
-          :id, :title, :_destroy,
-          consultation_response_form_data_attributes: [:id, :file, :file_cache]
-        ]
-      ],
-      nation_inapplicabilities_attributes: [
-        :id, :nation_id, :alternative_url, :excluded
-      ],
-      fatality_notice_casualties_attributes: [:id, :personal_details, :_destroy],
-      need_ids: []
+     :publication_type_id, :scheduled_publication, :lock_version,
+     :access_limited, :alternative_format_provider_id, :opening_at,
+     :closing_at, :external, :external_url, :minor_change, :previously_published,
+     :roll_call_introduction, :operational_field_id, :news_article_type_id,
+     :relevant_to_local_government, :role_appointment_id, :speech_type_id,
+     :delivered_on, :location, :person_override, :primary_locale,
+     :primary_mainstream_category_id, :related_mainstream_content_url,
+     :related_mainstream_content_title,
+     :additional_related_mainstream_content_url,
+     :additional_related_mainstream_content_title,
+     :primary_specialist_sector_tag,
+     :corporate_information_page_type_id,
+     :political,
+     secondary_specialist_sector_tags: [],
+     lead_organisation_ids: [],
+     supporting_organisation_ids: [],
+     organisation_ids: [],
+     world_location_ids: [],
+     worldwide_organisation_ids: [],
+     worldwide_priority_ids: [],
+     related_policy_ids: [],
+     policy_content_ids: [],
+     other_mainstream_category_ids: [],
+     topic_ids: [],
+     topical_event_ids: [],
+     related_detailed_guide_ids: [],
+     role_appointment_ids: [],
+     statistical_data_set_document_ids: [],
+     policy_group_ids: [],
+     document_collection_group_ids: [],
+     images_attributes: [
+       :id, :alt_text, :caption, :_destroy,
+       image_data_attributes: [:file, :file_cache]
+     ],
+     consultation_participation_attributes: [
+       :id, :link_url, :email, :postal_address,
+       consultation_response_form_attributes: [
+         :id, :title, :_destroy,
+         consultation_response_form_data_attributes: [:id, :file, :file_cache]
+       ]
+     ],
+     nation_inapplicabilities_attributes: [
+       :id, :nation_id, :alternative_url, :excluded
+     ],
+     fatality_notice_casualties_attributes: [:id, :personal_details, :_destroy],
+     need_ids: []
     ]
   end
 
@@ -324,7 +322,7 @@ class Admin::EditionsController < Admin::BaseController
   end
 
   def params_filters_with_default_state
-    params_filters.reverse_merge('state' => 'active')
+    params_filters.reverse_merge("state" => "active")
   end
 
   def filter
@@ -358,7 +356,7 @@ class Admin::EditionsController < Admin::BaseController
   end
 
   def redirect_to_controller_for_type
-    if params[:controller] == 'admin/editions'
+    if params[:controller] == "admin/editions"
       redirect_to admin_edition_path(@edition)
     end
   end

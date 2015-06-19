@@ -83,7 +83,7 @@ private
   # locale: 'en' to query_parameters (it gets swallowed by the .:locale in
   # the route and so ends up in path_parameters).
   def redirect_to_canonical_url
-    if request.query_parameters[:locale] == 'en'
+    if request.query_parameters[:locale] == "en"
       redir_params = request.path_parameters.merge(request.query_parameters).symbolize_keys.except(:locale)
       redirect_to canonical_redirect_path(redir_params)
     end

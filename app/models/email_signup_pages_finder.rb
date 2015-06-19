@@ -5,9 +5,7 @@
 # knowledge.
 class EmailSignupPagesFinder
   def self.find(organisation)
-    if organisation.slug == mhra_slug
-      mhra_email_signup_pages
-    end
+    mhra_email_signup_pages if organisation.slug == mhra_slug
   end
 
   def self.exists_for_atom_feed?(atom_feed_url)

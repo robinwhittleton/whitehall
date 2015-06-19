@@ -19,7 +19,7 @@ class HomePageList < ActiveRecord::Base
     owner = opts[:owned_by]
     name = opts[:called]
     build_if_missing = opts.has_key?(:build_if_missing) ? opts[:build_if_missing] : true
-    raise ArgumentError, "Must supply owned_by: and called: options" if (owner.nil? || name.nil?)
+    raise ArgumentError, "Must supply owned_by: and called: options" if owner.nil? || name.nil?
     scoping = where(owner_id: owner.id, owner_type: owner.class, name: name)
     if list = scoping.first
       list
@@ -52,9 +52,7 @@ class HomePageList < ActiveRecord::Base
     HomePageListItem.transaction do
       home_page_list_items.each do |home_page_list_item|
         new_ordering = items_in_order.index(home_page_list_item.item)
-        if new_ordering.nil?
-          new_ordering = items_in_order.size
-        end
+        new_ordering = items_in_order.size if new_ordering.nil?
         home_page_list_item.update_column(:ordering, new_ordering + 1)
       end
     end

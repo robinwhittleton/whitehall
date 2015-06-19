@@ -11,7 +11,7 @@ module Admin::OrganisationHelper
       content_tag(:div,
         organisation_role_form.text_field(:ordering, label_text: label_text, class: "ordering"),
         class: "well"
-      )
+                 )
     end
   end
 
@@ -54,7 +54,7 @@ module Admin::OrganisationHelper
     if organisation.organisation_logo_type_id == OrganisationLogoType::CustomLogo.id
       nil
     else
-      'hidden'
+      "hidden"
     end
   end
 
@@ -62,6 +62,6 @@ module Admin::OrganisationHelper
     [
       topical_event.start_date.try(:to_date),
       topical_event.end_date.try(:to_date)
-    ].compact.map { |date| l(date) }.join(' to ')
+    ].compact.map { |date| l(date) }.join(" to ")
   end
 end

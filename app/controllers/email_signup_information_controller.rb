@@ -1,9 +1,6 @@
 class EmailSignupInformationController < PublicFacingController
-
   def show
-    if email_signup_pages.nil?
-      render_not_found
-    end
+    render_not_found if email_signup_pages.nil?
 
     @email_signup_information = EmailSignupInformationPresenter.new(
       organisation: organisation,

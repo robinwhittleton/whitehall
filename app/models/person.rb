@@ -4,7 +4,7 @@ class Person < ActiveRecord::Base
   def self.columns
     # This is here to enable us to gracefully remove the biography column
     # in a future commit, *after* this change has been deployed
-    super.reject { |column| ['biography'].include?(column.name) }
+    super.reject { |column| ["biography"].include?(column.name) }
   end
 
   include Searchable
@@ -14,18 +14,18 @@ class Person < ActiveRecord::Base
   has_many :role_appointments
   has_many :current_role_appointments,
            -> { where(RoleAppointment::CURRENT_CONDITION) },
-           class_name: 'RoleAppointment'
+           class_name: "RoleAppointment"
   has_many :speeches, through: :role_appointments
   has_many :news_articles, through: :role_appointments
 
   has_many :roles, through: :role_appointments
-  has_many :current_roles, class_name: 'Role', through: :current_role_appointments, source: :role
+  has_many :current_roles, class_name: "Role", through: :current_role_appointments, source: :role
 
-  has_many :ministerial_roles, class_name: 'MinisterialRole', through: :role_appointments, source: :role
-  has_many :current_ministerial_roles, class_name: 'MinisterialRole', through: :current_role_appointments, source: :role
+  has_many :ministerial_roles, class_name: "MinisterialRole", through: :role_appointments, source: :role
+  has_many :current_ministerial_roles, class_name: "MinisterialRole", through: :current_role_appointments, source: :role
 
-  has_many :board_member_roles, class_name: 'BoardMemberRole', through: :role_appointments, source: :role
-  has_many :current_board_member_roles, class_name: 'BoardMemberRole', through: :current_role_appointments, source: :role
+  has_many :board_member_roles, class_name: "BoardMemberRole", through: :role_appointments, source: :role
+  has_many :current_board_member_roles, class_name: "BoardMemberRole", through: :current_role_appointments, source: :role
 
   has_many :organisation_roles, through: :current_roles
   has_many :organisations, through: :organisation_roles
@@ -105,7 +105,7 @@ class Person < ActiveRecord::Base
   end
 
   def sort_key
-    [surname, forename].compact.join(' ').downcase
+    [surname, forename].compact.join(" ").downcase
   end
 
   def can_have_historical_accounts?
@@ -117,15 +117,13 @@ class Person < ActiveRecord::Base
     role_name = role.try(:name)
     organisation = role.organisations.first.try(:name) if role
 
-    [name, role_name, organisation].compact.join(' – ')
+    [name, role_name, organisation].compact.join(" – ")
   end
 
   private
 
   def name_as_words(*elements)
-    elements.select { |word|
-      word.present?
-    }.join(' ')
+    elements.select(&:present?).join(" ")
   end
 
   def image_changed?
@@ -134,7 +132,7 @@ class Person < ActiveRecord::Base
 
   def slug_name
     prefix = forename.present? ? forename : title
-    [prefix, surname].join(' ')
+    [prefix, surname].join(" ")
   end
 
   def prevent_destruction_if_appointed

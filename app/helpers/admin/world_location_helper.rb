@@ -1,5 +1,4 @@
 module Admin::WorldLocationHelper
-
   def world_location_tabs(world_location)
     tabs = {
       "Details" => admin_world_location_path(world_location),

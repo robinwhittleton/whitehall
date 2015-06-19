@@ -36,7 +36,7 @@ class Admin::ImportsController < Admin::BaseController
     filename << "-#{annotation_filter}-"
     filename << @import.import_started_at.strftime("%Y-%m-%d-%H%M%S")
     filename << ".csv"
-    headers["Content-Type"] ||= 'text/csv'
+    headers["Content-Type"] ||= "text/csv"
     headers["Content-Disposition"] = "attachment; filename=\"#{filename}\""
 
     self.response_body = Enumerator.new do |yielder|

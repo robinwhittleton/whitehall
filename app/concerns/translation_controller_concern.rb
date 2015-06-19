@@ -15,7 +15,7 @@ module TranslationControllerConcern
     if translatable_item.update_attributes(translation_params)
       redirect_to update_redirect_path, notice: notice_message("saved")
     else
-      render action: 'edit'
+      render action: "edit"
     end
   end
 

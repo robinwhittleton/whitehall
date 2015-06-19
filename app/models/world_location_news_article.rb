@@ -32,6 +32,6 @@ class WorldLocationNewsArticle < Newsesque
   end
 
   def display_type_key
-    'news_article'
+    "news_article"
   end
 end

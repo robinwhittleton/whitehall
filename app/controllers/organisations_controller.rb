@@ -38,7 +38,7 @@ class OrganisationsController < PublicFacingController
 
           if @organisation.organisation_type.allowed_promotional?
             @promotional_features = PromotionalFeaturesPresenter.new(@organisation.promotional_features, view_context)
-            render 'show-promotional'
+            render "show-promotional"
           else
             @policies = policy_results
             @topics = @organisation.topics
@@ -55,7 +55,7 @@ class OrganisationsController < PublicFacingController
             @foi_contacts = @organisation.foi_contacts
           end
         else
-          render action: 'not_live'
+          render action: "not_live"
         end
       end
       format.atom do
@@ -118,9 +118,9 @@ private
 
   def roles_presenter_for(organisation, association)
     roles = organisation.send("#{association}_roles").
-                         with_translations.
-                         includes(:current_people).
-                         order("organisation_roles.ordering")
+            with_translations.
+            includes(:current_people).
+            order("organisation_roles.ordering")
     RolesPresenter.new(roles, view_context)
   end
 

@@ -5,8 +5,8 @@ class DocumentCollection < Edition
   include Edition::TopicalEvents
 
   has_many :groups,
-           -> { order('document_collection_groups.ordering') },
-           class_name: 'DocumentCollectionGroup',
+           -> { order("document_collection_groups.ordering") },
+           class_name: "DocumentCollectionGroup",
            dependent: :destroy,
            inverse_of: :document_collection
   has_many :documents, through: :groups

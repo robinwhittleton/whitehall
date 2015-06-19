@@ -16,7 +16,7 @@ class Admin::EditionWorkflowController < Admin::BaseController
   rescue_from ActiveRecord::RecordInvalid do
     redirect_to admin_edition_path(@edition),
       alert: "Unable to #{action_name_as_human_interaction(params[:action])} because it is invalid (#{@edition.errors.full_messages.to_sentence}). " +
-             "Please edit it and try again."
+        "Please edit it and try again."
   end
 
   rescue_from Transitions::InvalidTransition do
@@ -26,17 +26,17 @@ class Admin::EditionWorkflowController < Admin::BaseController
 
   def enforce_permissions!
     case action_name
-    when 'submit', 'unschedule', 'convert_to_draft'
+    when "submit", "unschedule", "convert_to_draft"
       enforce_permission!(:update, @edition)
-    when 'reject'
+    when "reject"
       enforce_permission!(:reject, @edition)
-    when 'publish', 'schedule'
+    when "publish", "schedule"
       enforce_permission!(:publish, @edition)
-    when 'force_publish', 'confirm_force_publish', 'force_schedule'
+    when "force_publish", "confirm_force_publish", "force_schedule"
       enforce_permission!(:force_publish, @edition)
-    when 'unpublish', 'confirm_unpublish'
+    when "unpublish", "confirm_unpublish"
       enforce_permission!(:unpublish, @edition)
-    when 'approve_retrospectively'
+    when "approve_retrospectively"
       enforce_permission!(:approve, @edition)
     else
       raise Whitehall::Authority::Errors::InvalidAction.new(action_name)
@@ -88,7 +88,7 @@ class Admin::EditionWorkflowController < Admin::BaseController
     @service_object = withdrawer_or_unpublisher_for(@edition)
 
     if @service_object.perform!
-     redirect_to admin_edition_path(@edition), notice: unpublish_success_notice
+      redirect_to admin_edition_path(@edition), notice: unpublish_success_notice
     else
       @unpublishing = @edition.unpublishing
       flash.now[:alert] = @service_object.failure_reason
@@ -188,7 +188,7 @@ class Admin::EditionWorkflowController < Admin::BaseController
     if params[:lock_version]
       @edition.lock_version = params[:lock_version]
     else
-      render text: 'All workflow actions require a lock version', status: 422
+      render text: "All workflow actions require a lock version", status: 422
     end
   end
 
@@ -206,7 +206,7 @@ class Admin::EditionWorkflowController < Admin::BaseController
 
   def action_name_as_human_interaction(action_name)
     case action_name.to_s
-    when 'convert_to_draft'
+    when "convert_to_draft"
       "convert this imported edition to a draft"
     else
       "#{action_name} this edition"

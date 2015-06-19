@@ -1,4 +1,4 @@
-require 'data_hygiene/govspeak_link_validator'
+require "data_hygiene/govspeak_link_validator"
 
 class EditionPublisher < EditionService
   def failure_reason
@@ -12,7 +12,7 @@ class EditionPublisher < EditionService
     reasons << "This edition is invalid: #{edition.errors.full_messages.to_sentence}" unless edition.valid?
     reasons << "This edition contains bad links" if govspeak_link_errors.any?
     reasons << "An edition that is #{edition.current_state} cannot be #{past_participle}" unless can_transition?
-    reasons << "Scheduled editions cannot be published. This edition is scheduled for publication on #{edition.scheduled_publication.to_s}" if scheduled_for_publication?
+    reasons << "Scheduled editions cannot be published. This edition is scheduled for publication on #{edition.scheduled_publication}" if scheduled_for_publication?
 
     @failure_reasons = reasons
   end
@@ -22,7 +22,7 @@ class EditionPublisher < EditionService
   end
 
   def verb
-    'publish'
+    "publish"
   end
 
 private

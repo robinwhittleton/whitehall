@@ -1,6 +1,6 @@
-require 'active_record_like_interface'
-require 'active_support/core_ext/object/blank.rb'
-require 'active_support/core_ext/string/inflections.rb'
+require "active_record_like_interface"
+require "active_support/core_ext/object/blank.rb"
+require "active_support/core_ext/string/inflections.rb"
 
 class PublicationType
   include ActiveRecordLikeInterface
@@ -16,7 +16,7 @@ class PublicationType
     8 => "<p>Ministerial or departmental responses (eg to campaign letters), announcements, or statements;regularly issued circulars or bulletins (eg fire service circulars), official correspondence to professionals (eg “Dear chief planning officer” letters);letters to individuals or organisations that are published to share with a wider audience than their original recipient;online versions of e-bulletins or newsletters.</p><p>Do <em>not</em> use for: minutes, agendas or other meeting papers. Attach them to relevant “policy detail”, “team” or “our governance” pages instead.</p>",
     10 => "<p>Information made available about departmental operations with the intent of making government more transparent.Includes organisation charts, staff survey results, departmental spending, salaries, contracts, meetings with ministers, etc.</p><p>Do <em>not</em> use for: FOI responses.</p>",
     12 => "<p>Responses to Freedom of Information requests. Ensure the title describes specifically what the request is about.</p>",
-    13 =>"<p>Leaflets, posters, fact sheets and marketing collateral.</p>",
+    13 => "<p>Leaflets, posters, fact sheets and marketing collateral.</p>",
     14 => "<p>Reviews, inquiries and other reports commissioned from or conducted by independent (ie non-governmental) bodies for consideration by the government.</p>",
     15 => "<p>Official statistics that have been produced in accordance with the Code of Practice for Official Statistics, which is indicated using the National Statistics quality mark.</p>",
     17 => "<p>Drawn maps and geographical data.</p>",
@@ -36,7 +36,7 @@ class PublicationType
   end
 
   def self.by_prevalence
-    all.group_by { |type| type.prevalence }
+    all.group_by(&:prevalence)
   end
 
   def self.ordered_by_prevalence
@@ -80,7 +80,7 @@ class PublicationType
   end
 
   def primary_search_format_type
-    'publication-' + self.singular_name.parameterize
+    "publication-" + self.singular_name.parameterize
   end
 
   def additional_search_format_types
@@ -88,16 +88,16 @@ class PublicationType
   end
 
   def genus_key
-    'publication'
+    "publication"
   end
 
   PolicyPaper            = create(id: 1, key: "policy_paper", singular_name: "Policy paper", plural_name: "Policy papers", prevalence: :primary)
   ImpactAssessment       = create(id: 2, key: "impact_assessment", singular_name: "Impact assessment", plural_name: "Impact assessments", prevalence: :primary)
-  Guidance               = create(id: 3, key: "guidance", singular_name: "Guidance", plural_name: "Guidance", prevalence: :primary, additional_search_format_types: ['publicationesque-guidance', 'publication-statutory_guidance'])
-  StatutoryGuidance      = create(id: 19, key: "statutory_guidance", singular_name: "Statutory guidance", plural_name: "Statutory guidance", prevalence: :primary, additional_search_format_types: ['publicationesque-guidance'])
+  Guidance               = create(id: 3, key: "guidance", singular_name: "Guidance", plural_name: "Guidance", prevalence: :primary, additional_search_format_types: ["publicationesque-guidance", "publication-statutory_guidance"])
+  StatutoryGuidance      = create(id: 19, key: "statutory_guidance", singular_name: "Statutory guidance", plural_name: "Statutory guidance", prevalence: :primary, additional_search_format_types: ["publicationesque-guidance"])
   Form                   = create(id: 4, key: "form", singular_name: "Form", plural_name: "Forms", prevalence: :primary)
-  Statistics             = create(id: 5, key: "statistics", singular_name: "Statistics", plural_name: "Statistics", prevalence: :primary, access_limited_by_default: true, additional_search_format_types: ['publicationesque-statistics'])
-  NationalStatistics     = create(id: 15, key: "national_statistics", singular_name: "Statistics - national statistics", plural_name: "Statistics - national statistics", prevalence: :primary, access_limited_by_default: true, additional_search_format_types: ['publicationesque-statistics'])
+  Statistics             = create(id: 5, key: "statistics", singular_name: "Statistics", plural_name: "Statistics", prevalence: :primary, access_limited_by_default: true, additional_search_format_types: ["publicationesque-statistics"])
+  NationalStatistics     = create(id: 15, key: "national_statistics", singular_name: "Statistics - national statistics", plural_name: "Statistics - national statistics", prevalence: :primary, access_limited_by_default: true, additional_search_format_types: ["publicationesque-statistics"])
   ResearchAndAnalysis    = create(id: 6, key: "research", singular_name: "Research and analysis", plural_name: "Research and analysis", prevalence: :primary)
   CorporateReport        = create(id: 7, key: "corporate_report", singular_name: "Corporate report", plural_name: "Corporate reports", prevalence: :primary)
   Map                    = create(id: 17, key: "map", singular_name: "Map", plural_name: "Maps", prevalence: :primary)
@@ -111,7 +111,7 @@ class PublicationType
   Decision               = create(id: 21, key: "decision", singular_name: "Decision", plural_name: "Decisions", prevalence: :less_common)
 
   # Use is discouraged
-  Correspondence         = create(id: 8 , key: "correspondence", singular_name: "Correspondence", plural_name: "Correspondence", prevalence: :discouraged)
+  Correspondence         = create(id: 8, key: "correspondence", singular_name: "Correspondence", plural_name: "Correspondence", prevalence: :discouraged)
   PromotionalMaterial    = create(id: 13, key: "promotional", singular_name: "Promotional material", plural_name: "Promotional material", prevalence: :discouraged)
   Regulation             = create(id: 22, key: "regulation", singular_name: "Regulation", plural_name: "Regulations", prevalence: :discouraged)
 

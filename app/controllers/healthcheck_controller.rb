@@ -10,17 +10,17 @@ class HealthcheckController < ActionController::Base
 
   def overdue
     # Check the number of overdue editions
-    render json: { 'overdue' => Edition.due_for_publication.count }
+    render json: { "overdue" => Edition.due_for_publication.count }
   end
 
 private
 
   def overall_status
-    queued_job_count_matches_scheduled_editions? ? 'ok' : 'warning'
+    queued_job_count_matches_scheduled_editions? ? "ok" : "warning"
   end
 
   def scheduled_queue_status_hash
-    status = queued_job_count_matches_scheduled_editions? ? 'ok' : 'warning'
+    status = queued_job_count_matches_scheduled_editions? ? "ok" : "warning"
     { status: status }.tap do |status_hash|
       status_hash[:message] = "#{scheduled_edition_count} scheduled edition(s); #{scheduled_queue_size} job(s) queued"
     end

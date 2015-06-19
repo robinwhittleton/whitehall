@@ -8,7 +8,7 @@ module Organisation::OrganisationTypeConcern
               length: { minimum: 1, message: "must not be empty for sub-organisations" },
               if: lambda { organisation_type_key == :sub_organisation }
     validates :govuk_status,
-              inclusion: {in: ['exempt'], message: "must be 'exempt' for devolved administrations"},
+              inclusion: {in: ["exempt"], message: "must be 'exempt' for devolved administrations"},
               if: lambda { organisation_type_key == :devolved_administration }
 
     # Creates a scope for each department type. (eg. Organisation.ministerial_departments)
@@ -39,7 +39,7 @@ module Organisation::OrganisationTypeConcern
       hmcts_id = Organisation.where(slug: "hm-courts-and-tribunals-service").ids.first
       distinct.joins("LEFT JOIN organisational_relationships parent_organisational_relationships
         ON parent_organisational_relationships.child_organisation_id = organisations.id").
-      where("NOT (parent_organisational_relationships.parent_organisation_id = ? AND
+        where("NOT (parent_organisational_relationships.parent_organisation_id = ? AND
               organisations.organisation_type_key = ?) OR
               parent_organisational_relationships.child_organisation_id IS NULL",
               hmcts_id, :tribunal_ndpb)
@@ -76,9 +76,9 @@ module Organisation::OrganisationTypeConcern
   end
 
   def supporting_bodies_grouped_by_type
-      supporting_bodies.
-        group_by(&:organisation_type).
-        sort_by { |type, department| type.listing_position }
+    supporting_bodies.
+      group_by(&:organisation_type).
+      sort_by { |type, _department| type.listing_position }
   end
 
   def hmcts_tribunal?

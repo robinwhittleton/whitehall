@@ -30,7 +30,7 @@ module Future
     end
 
     def slug
-      @slug ||= base_path.split('/').last
+      @slug ||= base_path.split("/").last
     end
 
     def policy_areas

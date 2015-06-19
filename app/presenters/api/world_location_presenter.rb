@@ -12,14 +12,14 @@ class Api::WorldLocationPresenter < Api::BasePresenter
       },
       organisations: {
         id: context.api_world_location_worldwide_organisations_url(model),
-        web_url: Whitehall.url_maker.world_location_url(model, anchor: 'organisations'),
+        web_url: Whitehall.url_maker.world_location_url(model, anchor: "organisations"),
       }
     }
   end
 
   def links
     [
-      [context.api_world_location_url(model), {'rel' => 'self'}]
+      [context.api_world_location_url(model), {"rel" => "self"}]
     ]
   end
 end

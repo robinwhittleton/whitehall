@@ -2,7 +2,7 @@ class Admin::WorldLocationsController < Admin::BaseController
   before_filter :load_world_location, only: [:edit, :update, :show, :features]
 
   def index
-    @active_world_locations, @inactive_world_locations = WorldLocation.ordered_by_name.partition { |wl| wl.active? }
+    @active_world_locations, @inactive_world_locations = WorldLocation.ordered_by_name.partition(&:active?)
   end
 
   def update
@@ -17,8 +17,8 @@ class Admin::WorldLocationsController < Admin::BaseController
     @feature_list = @world_location.load_or_create_feature_list(params[:locale])
 
     filter_params = default_filter_params
-      .merge(params.slice(:page, :type, :world_location, :title).symbolize_keys)
-      .merge(state: 'published')
+                    .merge(params.slice(:page, :type, :world_location, :title).symbolize_keys)
+                    .merge(state: "published")
     @filter = Admin::EditionFilter.new(Edition, current_user, filter_params)
     @featurable_topical_events = TopicalEvent.active
     @featurable_offsite_links = @world_location.offsite_links

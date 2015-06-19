@@ -26,9 +26,7 @@ class RolePresenter < Whitehall::Decorators::Decorator
   end
 
   def path
-    if ministerial?
-      context.ministerial_role_path model
-    end
+    context.ministerial_role_path model if ministerial?
   end
 
   def link
@@ -48,7 +46,7 @@ class RolePresenter < Whitehall::Decorators::Decorator
   end
 
   def previous_appointments
-    model.previous_appointments.reorder('started_at DESC').map { |ra| RoleAppointmentPresenter.new(ra, context) }
+    model.previous_appointments.reorder("started_at DESC").map { |ra| RoleAppointmentPresenter.new(ra, context) }
   end
 
   def responsibilities

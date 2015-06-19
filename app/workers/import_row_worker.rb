@@ -29,7 +29,7 @@ protected
 
   def import_row!
     progress_logger.with_transaction(row_number) do
-      attributes = row.attributes.merge(creator: import_user, state: 'imported')
+      attributes = row.attributes.merge(creator: import_user, state: "imported")
       html_attachment_attributes = attributes.delete(:html_attachment_attributes) || {}
 
       model = import.model_class.new(attributes)
@@ -81,20 +81,20 @@ protected
   end
 
   def record_errors_for(model, row_number, translated = false)
-    error_prefix = translated ? 'Translated ' : ''
+    error_prefix = translated ? "Translated " : ""
 
     model.errors.keys.each do |attribute|
       next if [:attachments, :images].include?(attribute)
-      progress_logger.error("#{error_prefix}#{attribute}: #{model.errors[attribute].join(", ")}", row_number)
+      progress_logger.error("#{error_prefix}#{attribute}: #{model.errors[attribute].join(', ')}", row_number)
     end
     if model.respond_to?(:attachments)
       model.attachments.reject(&:valid?).each do |a|
-        progress_logger.error("#{error_prefix}Attachment '#{a.attachment_source.url}': #{a.errors.full_messages.to_s}", row_number)
+        progress_logger.error("#{error_prefix}Attachment '#{a.attachment_source.url}': #{a.errors.full_messages}", row_number)
       end
     end
     if model.respond_to?(:images)
       model.images.reject(&:valid?).each do |i|
-        progress_logger.error("#{error_prefix}Image '#{i.caption}': #{i.errors.full_messages.to_s}", row_number)
+        progress_logger.error("#{error_prefix}Image '#{i.caption}': #{i.errors.full_messages}", row_number)
       end
     end
   end

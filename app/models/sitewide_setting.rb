@@ -11,5 +11,4 @@ class SitewideSetting < ActiveRecord::Base
   def name
     key.humanize
   end
-
 end

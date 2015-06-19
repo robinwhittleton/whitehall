@@ -17,7 +17,7 @@ module LeadImagePresenterHelper
     if images.first
       images.first.alt_text
     else
-      'placeholder'
+      "placeholder"
     end
   end
 

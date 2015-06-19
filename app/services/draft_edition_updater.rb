@@ -1,5 +1,4 @@
 class DraftEditionUpdater < EditionService
-
   def perform!
     if can_perform?
       notify!
@@ -16,6 +15,6 @@ class DraftEditionUpdater < EditionService
   end
 
   def verb
-    'update_draft'
+    "update_draft"
   end
 end

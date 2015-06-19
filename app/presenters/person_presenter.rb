@@ -1,5 +1,4 @@
 class PersonPresenter < Whitehall::Decorators::Decorator
-
   delegate_instance_methods_of Person
 
   def available_in_multiple_languages?
@@ -62,7 +61,7 @@ class PersonPresenter < Whitehall::Decorators::Decorator
 
   def image
     if img = image_url(:s216)
-     context.image_tag img, alt: name
+      context.image_tag img, alt: name
    end
   end
 

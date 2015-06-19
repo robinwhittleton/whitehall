@@ -1,4 +1,4 @@
-require 'pdf-reader'
+require "pdf-reader"
 
 class AttachmentData < ActiveRecord::Base
   mount_uploader :file, AttachmentUploader, mount_on: :carrierwave_file
@@ -13,7 +13,7 @@ class AttachmentData < ActiveRecord::Base
   validate :file_is_not_empty
 
   attr_accessor :to_replace_id
-  belongs_to :replaced_by, class_name: 'AttachmentData'
+  belongs_to :replaced_by, class_name: "AttachmentData"
   validate :cant_be_replaced_by_self
   after_save :handle_to_replace_id
 
@@ -24,7 +24,7 @@ class AttachmentData < ActiveRecord::Base
   end
 
   def filename_without_extension
-    url && filename.sub(/.[^\.]*$/, '')
+    url && filename.sub(/.[^\.]*$/, "")
   end
 
   def file_extension
@@ -77,9 +77,7 @@ class AttachmentData < ActiveRecord::Base
     if carrierwave_file.present? && carrierwave_file_changed?
       self.content_type = file.file.content_type
       self.file_size = file.file.size
-      if pdf?
-        self.number_of_pages = calculate_number_of_pages
-      end
+      self.number_of_pages = calculate_number_of_pages if pdf?
     end
   end
 

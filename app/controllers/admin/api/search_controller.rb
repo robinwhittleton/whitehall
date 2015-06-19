@@ -3,10 +3,8 @@ class Admin::Api::SearchController < Admin::BaseController
 
   def reindex_specialist_sector_editions
     published_and_tagged_editions = Edition.published.joins(:specialist_sectors).where(specialist_sectors: {tag: params[:slug]})
-    published_and_tagged_editions.each do |edition|
-      edition.update_in_search_index
-    end
+    published_and_tagged_editions.each(&:update_in_search_index)
 
-    render json: {result: 'ok', count: published_and_tagged_editions.count}
+    render json: {result: "ok", count: published_and_tagged_editions.count}
   end
 end

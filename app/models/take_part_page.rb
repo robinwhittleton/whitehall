@@ -1,5 +1,4 @@
 class TakePartPage < ActiveRecord::Base
-
   validates_with SafeHtmlValidator
   validates :title, :summary, presence: true, length: { maximum: 255 }
   validates :body, presence: true, length: { maximum: (16.megabytes - 1) }
@@ -22,7 +21,7 @@ class TakePartPage < ActiveRecord::Base
              link: :search_link,
              content: :body_without_markup,
              description: :summary,
-             format: 'take_part'
+             format: "take_part"
 
   def search_link
     Whitehall.url_maker.take_part_page_path(self.slug)
@@ -43,7 +42,7 @@ class TakePartPage < ActiveRecord::Base
       TakePartPage.where(id: ids_in_new_ordering).each do |page|
         page.update_column(:ordering, ids_in_new_ordering.index(page.id.to_s) + 1)
       end
-      TakePartPage.where('id NOT IN (?)', ids_in_new_ordering).update_all(ordering: ids_in_new_ordering.size + 1)
+      TakePartPage.where("id NOT IN (?)", ids_in_new_ordering).update_all(ordering: ids_in_new_ordering.size + 1)
     end
   end
 

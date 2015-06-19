@@ -70,5 +70,4 @@ class Contact < ActiveRecord::Base
   def missing_translations
     super & contactable.non_english_translated_locales
   end
-
 end

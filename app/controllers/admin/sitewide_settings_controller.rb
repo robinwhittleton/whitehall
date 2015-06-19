@@ -1,4 +1,4 @@
-class Admin::SitewideSettingsController <  Admin::BaseController
+class Admin::SitewideSettingsController < Admin::BaseController
   before_filter :enforce_permissions!
 
   def enforce_permissions!

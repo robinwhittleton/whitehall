@@ -2,7 +2,7 @@ module Edition::SupportingPages
   extend ActiveSupport::Concern
 
   def supporting_pages
-    related_editions.where(type: 'SupportingPage')
+    related_editions.where(type: "SupportingPage")
   end
 
   # In the admin system we often want to see the latest active edition

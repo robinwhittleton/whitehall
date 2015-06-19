@@ -8,13 +8,13 @@ module Admin::HomePageListController
     params_name = (opts[:params_name] || single_name).to_sym
     home_page_list_controller_methods = Module.new do
       define_method(:remove_from_home_page) do
-        @show_on_home_page = '0'
+        @show_on_home_page = "0"
         handle_show_on_home_page_param
         redirect_to redirect_proc.call(home_page_list_container, home_page_list_item), notice: %{"#{home_page_list_item.title}" removed from home page successfully}
       end
 
       define_method(:add_to_home_page) do
-        @show_on_home_page = '1'
+        @show_on_home_page = "1"
         handle_show_on_home_page_param
         redirect_to redirect_proc.call(home_page_list_container, home_page_list_item), notice: %{"#{home_page_list_item.title}" added to home page successfully}
       end
@@ -40,9 +40,9 @@ module Admin::HomePageListController
 
       define_method(:handle_show_on_home_page_param) do
         if @show_on_home_page.present?
-          if @show_on_home_page == '1'
+          if @show_on_home_page == "1"
             home_page_list_container.__send__(:"add_#{single_name}_to_home_page!", home_page_list_item)
-          elsif @show_on_home_page == '0'
+          elsif @show_on_home_page == "0"
             home_page_list_container.__send__(:"remove_#{single_name}_from_home_page!", home_page_list_item)
           end
         end
@@ -51,13 +51,13 @@ module Admin::HomePageListController
       define_method(:extract_items_from_ordering_params) do |ids_and_orderings|
         ids_and_orderings.
           # convert to useful forms
-          map {|item_id, ordering| [item_type.find_by(id: item_id), ordering.to_i] }.
+        map {|item_id, ordering| [item_type.find_by(id: item_id), ordering.to_i] }.
           # sort by ordering
-          sort_by { |_, ordering| ordering }.
+        sort_by { |_, ordering| ordering }.
           # discard ordering
-          map {|item, _| item }.
+        map {|item, _| item }.
           # reject any blank contacts
-          compact
+        compact
       end
     end
     self.before_filter :extract_show_on_home_page_param, only: [:create, :update]

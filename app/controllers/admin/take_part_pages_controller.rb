@@ -15,7 +15,7 @@ class Admin::TakePartPagesController < Admin::BaseController
   def create
     @take_part_page = TakePartPage.new(take_part_page_params)
     if @take_part_page.save
-      redirect_to [:admin, TakePartPage], notice: %Q{Take part page "#{@take_part_page.title}" created!}
+      redirect_to [:admin, TakePartPage], notice: %{Take part page "#{@take_part_page.title}" created!}
     else
       render :new
     end
@@ -28,7 +28,7 @@ class Admin::TakePartPagesController < Admin::BaseController
   def update
     @take_part_page = TakePartPage.friendly.find(params[:id])
     if @take_part_page.update_attributes(take_part_page_params)
-      redirect_to [:admin, TakePartPage], notice: %Q{Take part page "#{@take_part_page.title}" updated!}
+      redirect_to [:admin, TakePartPage], notice: %{Take part page "#{@take_part_page.title}" updated!}
     else
       render :edit
     end
@@ -37,13 +37,13 @@ class Admin::TakePartPagesController < Admin::BaseController
   def destroy
     @take_part_page = TakePartPage.friendly.find(params[:id])
     @take_part_page.destroy
-    redirect_to [:admin, TakePartPage], notice: %Q{Take part page "#{@take_part_page.title}" deleted!}
+    redirect_to [:admin, TakePartPage], notice: %{Take part page "#{@take_part_page.title}" deleted!}
   end
 
   def reorder
-    new_ordering = (params[:ordering] || []).sort_by {|id, ordering| ordering.to_i}.map(&:first)
+    new_ordering = (params[:ordering] || []).sort_by {|_id, ordering| ordering.to_i}.map(&:first)
     TakePartPage.reorder!(new_ordering)
-    redirect_to admin_take_part_pages_path, notice: 'Take part pages reordered!'
+    redirect_to admin_take_part_pages_path, notice: "Take part pages reordered!"
   end
 
 private

@@ -1,7 +1,6 @@
 module Admin::EditionsHelper
-
   def edition_type(edition)
-    if (edition.is_a?(Speech) && edition.speech_type.written_article?)
+    if edition.is_a?(Speech) && edition.speech_type.written_article?
       type = edition.speech_type.singular_name
     else
       type = edition.type.underscore.humanize
@@ -11,7 +10,8 @@ module Admin::EditionsHelper
   end
 
   def nested_attribute_destroy_checkbox_options(form, html_args = {})
-    checked_value, unchecked_value = '0', '1'
+    checked_value = "0"
+    unchecked_value = "1"
     checked = form.object[:_destroy].present? ? (form.object[:_destroy] == checked_value) : form.object.persisted?
     [html_args.merge({ checked: checked }), checked_value, unchecked_value]
   end
@@ -21,7 +21,7 @@ module Admin::EditionsHelper
   end
 
   def link_to_filter(link, options, filter, html_options = {})
-    content_tag(:li, link_to(link, url_for(filter.options.slice('state', 'type', 'author', 'organisation', 'title', 'world_location').merge(options)), html_options), class: active_filter_if_options_match_class(filter, options))
+    content_tag(:li, link_to(link, url_for(filter.options.slice("state", "type", "author", "organisation", "title", "world_location").merge(options)), html_options), class: active_filter_if_options_match_class(filter, options))
   end
 
   def active_filter_if_options_match_class(filter, options)
@@ -29,29 +29,29 @@ module Admin::EditionsHelper
       options[key].to_param == filter.options[key].to_param
     end
 
-    'active' if current
+    "active" if current
   end
 
   def active_filter_unless_values_match_class(filter, key, *disallowed_values)
     filter_value = filter.options[key]
-    'active' if filter_value && disallowed_values.none? { |disallowed_value| filter_value == disallowed_value }
+    "active" if filter_value && disallowed_values.none? { |disallowed_value| filter_value == disallowed_value }
   end
 
   def admin_organisation_filter_options(current_user, selected_organisation)
     organisations = Organisation.with_translations(:en).order(:name).excluding_govuk_status_closed || []
     closed_organisations = Organisation.with_translations(:en).closed || []
     if current_user.organisation
-        organisations = [current_user.organisation] + (organisations - [current_user.organisation])
+      organisations = [current_user.organisation] + (organisations - [current_user.organisation])
     end
 
     options_for_select([["All organisations", ""]], selected_organisation) +
-    grouped_options_for_select(
-      [
-        ["Live organisations", organisations.map { |o| [o.select_name, o.id] }],
-        ["Closed organisations", closed_organisations.map { |o| [o.select_name, o.id] }]
-      ],
-      selected_organisation
-    )
+      grouped_options_for_select(
+        [
+          ["Live organisations", organisations.map { |o| [o.select_name, o.id] }],
+          ["Closed organisations", closed_organisations.map { |o| [o.select_name, o.id] }]
+        ],
+        selected_organisation
+      )
   end
 
   def admin_author_filter_options(current_user)
@@ -61,32 +61,30 @@ module Admin::EditionsHelper
 
   def admin_state_filter_options
     [
-      ["All states", 'active'],
-      ["Imported (pre-draft)", 'imported'],
-      ["Draft", 'draft'],
-      ["Submitted", 'submitted'],
-      ["Rejected", 'rejected'],
-      ["Scheduled", 'scheduled'],
-      ["Published", 'published'],
-      ["Force published (not reviewed)", 'force_published'],
-      ['Withdrawn', 'withdrawn']
+      ["All states", "active"],
+      ["Imported (pre-draft)", "imported"],
+      %w(Draft draft),
+      %w(Submitted submitted),
+      %w(Rejected rejected),
+      %w(Scheduled scheduled),
+      %w(Published published),
+      ["Force published (not reviewed)", "force_published"],
+      %w(Withdrawn withdrawn)
     ]
   end
 
   def admin_edition_state_text(edition)
-    edition.withdrawn? ? 'Withdrawn' : edition.state.humanize
+    edition.withdrawn? ? "Withdrawn" : edition.state.humanize
   end
 
   def admin_world_location_filter_options(current_user)
     options = [["All locations", ""]]
-    if current_user.world_locations.any?
-      options << ["My locations", "user"]
-    end
+    options << ["My locations", "user"] if current_user.world_locations.any?
     options + WorldLocation.ordered_by_name.map { |l| [l.name, l.id] }
   end
 
   def viewing_all_active_editions?
-    params[:state] == 'active'
+    params[:state] == "active"
   end
 
   def speech_type_label_data
@@ -98,8 +96,8 @@ module Admin::EditionsHelper
       })
     end
 
-    imported_type = SpeechType.find_by_name('Imported - Awaiting Type')
-    label_data.merge('' => {
+    imported_type = SpeechType.find_by_name("Imported - Awaiting Type")
+    label_data.merge("" => {
         ownerGroup: I18n.t("document.speech.#{imported_type.owner_key_group}"),
         publishedExternallyLabel: t_delivered_on(imported_type),
         locationRelevant: imported_type.location_relevant
@@ -113,31 +111,31 @@ module Admin::EditionsHelper
   # Edition::Organisations mixin module to see why this is required.
   def lead_organisation_id_at_index(edition, index)
     edition.edition_organisations.
-            select { |eo| eo.lead? }.
-            sort_by { |eo| eo.lead_ordering }[index].try(:organisation_id)
+      select(&:lead?).
+      sort_by(&:lead_ordering)[index].try(:organisation_id)
   end
 
   # As above for the lead_organisation_id_at_index helper, this helper is
   # required to identify the selected supporting organisation at a given index
   # in the list supporting organisations for the edition.
   def supporting_organisation_id_at_index(edition, index)
-    edition.edition_organisations.reject { |eo| eo.lead? }[index].try(:organisation_id)
+    edition.edition_organisations.reject(&:lead?)[index].try(:organisation_id)
   end
 
   def standard_edition_form(edition, &blk)
-    initialise_script "GOVUK.adminEditionsForm", selector: '.js-edition-form', right_to_left_locales: Locale.right_to_left.collect(&:to_param)
+    initialise_script "GOVUK.adminEditionsForm", selector: ".js-edition-form", right_to_left_locales: Locale.right_to_left.collect(&:to_param)
 
     form_classes = ["edition-form js-edition-form"]
-    form_classes << 'js-supports-non-english' if edition.locale_can_be_changed?
+    form_classes << "js-supports-non-english" if edition.locale_can_be_changed?
 
     form_for form_url_for_edition(edition), as: :edition, html: { class: form_classes } do |form|
-      concat render('locale_fields', form: form, edition: edition)
+      concat render("locale_fields", form: form, edition: edition)
       concat edition_information(@information) if @information
       concat form.errors
       concat render(partial: "standard_fields",
                     locals: { form: form, edition: edition })
       yield(form)
-      concat render('access_limiting_fields',
+      concat render("access_limiting_fields",
                     form: form, edition: edition) if edition.can_be_access_limited?
       concat render(partial: "scheduled_publication_fields",
                     locals: { form: form, edition: edition })
@@ -170,12 +168,12 @@ module Admin::EditionsHelper
   end
 
   def default_edition_tabs(edition)
-    { 'Document' => tab_url_for_edition(edition) }.tap do |tabs|
+    { "Document" => tab_url_for_edition(edition) }.tap do |tabs|
       if edition.allows_attachments? && edition.persisted?
         text = if edition.attachments.count > 0
-          "Attachments <span class='badge'>#{edition.attachments.count}</span>".html_safe
-        else
-          "Attachments"
+                 "Attachments <span class='badge'>#{edition.attachments.count}</span>".html_safe
+               else
+                 "Attachments"
         end
         tabs[text] = admin_edition_attachments_path(edition)
       end
@@ -194,8 +192,8 @@ module Admin::EditionsHelper
   def consultation_editing_tabs(edition, &blk)
     tabs = default_edition_tabs(edition)
     if edition.persisted?
-      tabs['Public feedback'] = admin_consultation_public_feedback_path(edition)
-      tabs['Final outcome'] = admin_consultation_outcome_path(edition)
+      tabs["Public feedback"] = admin_consultation_public_feedback_path(edition)
+      tabs["Final outcome"] = admin_consultation_outcome_path(edition)
     end
     tab_navigation(tabs) { yield blk }
   end
@@ -225,7 +223,7 @@ module Admin::EditionsHelper
   end
 
   def mainstream_category_options(edition, selected)
-    grouped_options = MainstreamCategory.all.group_by {|c| c.parent_title}.map do |group, members|
+    grouped_options = MainstreamCategory.all.group_by(&:parent_title).map do |group, members|
       [group, members.map {|c| [c.title, c.id]}]
     end
     grouped_options_for_select(grouped_options, selected, { prompt: "" })
@@ -254,27 +252,27 @@ module Admin::EditionsHelper
 
   def attachment_metadata_tag(attachment)
     labels = {
-      isbn: 'ISBN',
-      unique_reference: 'Unique reference',
-      command_paper_number: 'Command paper number',
-      order_url: 'Order URL',
-      price: 'Price',
-      hoc_paper_number: 'House of Commons paper number',
-      parliamentary_session: 'Parliamentary session'
+      isbn: "ISBN",
+      unique_reference: "Unique reference",
+      command_paper_number: "Command paper number",
+      order_url: "Order URL",
+      price: "Price",
+      hoc_paper_number: "House of Commons paper number",
+      parliamentary_session: "Parliamentary session"
     }
     parts = []
     labels.each do |attribute, label|
       value = attachment.send(attribute)
       parts << "#{label}: #{value}" if value.present?
     end
-    content_tag(:p, parts.join(', ')) if parts.any?
+    content_tag(:p, parts.join(", ")) if parts.any?
   end
 
   def translation_preview_links(edition)
     links = []
 
     if edition.available_in_english?
-      links << [preview_document_path(edition), 'Language: English']
+      links << [preview_document_path(edition), "Language: English"]
     end
 
     links + edition.non_english_translated_locales.map do |locale|
@@ -284,7 +282,7 @@ module Admin::EditionsHelper
   end
 
   def withdrawal_or_unpublishing(edition)
-    edition.unpublishing.unpublishing_reason_id == UnpublishingReason::Withdrawn.id ? 'withdrawal' : 'unpublishing'
+    edition.unpublishing.unpublishing_reason_id == UnpublishingReason::Withdrawn.id ? "withdrawal" : "unpublishing"
   end
 
   def specialist_sector_options_for_select(sectors)

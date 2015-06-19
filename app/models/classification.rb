@@ -7,7 +7,7 @@ class Classification < ActiveRecord::Base
              link: :search_link,
              content: :description,
              description: :description_without_markup,
-             format: 'topic',
+             format: "topic",
              slug: :slug
 
   has_many :classification_memberships, inverse_of: :classification
@@ -23,10 +23,12 @@ class Classification < ActiveRecord::Base
             }
 
   has_many :classification_featurings,
-            -> { where("editions.state = 'published' or classification_featurings.edition_id is null").
-                 references(:edition).
-                 includes(edition: :translations).
-                 order("classification_featurings.ordering asc") },
+            -> {
+              where("editions.state = 'published' or classification_featurings.edition_id is null").
+                references(:edition).
+                includes(edition: :translations).
+                order("classification_featurings.ordering asc")
+            },
             foreign_key: :classification_id,
             inverse_of: :classification
 
@@ -59,8 +61,8 @@ class Classification < ActiveRecord::Base
   def self.grouped_by_type
     Rails.cache.fetch("filter_options/topics", expires_in: 30.minutes) do
       {
-        'Topics' => Topic.alphabetical.map { |o| [o.name, o.slug] },
-        'Topical events' => TopicalEvent.active.order_by_start_date.map { |o| [o.name, o.slug] }
+        "Topics" => Topic.alphabetical.map { |o| [o.name, o.slug] },
+        "Topical events" => TopicalEvent.active.order_by_start_date.map { |o| [o.name, o.slug] }
       }
     end
   end
@@ -70,7 +72,7 @@ class Classification < ActiveRecord::Base
   end
 
   def scheduled_editions
-    editions.scheduled.order('scheduled_publication ASC')
+    editions.scheduled.order("scheduled_publication ASC")
   end
 
   def published_announcements

@@ -1,5 +1,5 @@
-require 'tmpdir'
-require 'open3'
+require "tmpdir"
+require "open3"
 
 # There are two ways to create and use a BulkUpload instance. You can
 # either a) call BulkUpload.from_files, which will build new FileAttachment
@@ -39,7 +39,7 @@ class BulkUpload
   end
 
   def attachments_attributes=(attributes)
-    @attachments = attributes.map do |index, params|
+    @attachments = attributes.map do |_index, params|
       attachment_attrs = params.except(:attachment_data_attrs)
       data_attrs = params.fetch(:attachment_data_attributes, {})
       find_and_update_existing_attachment(attachment_attrs, data_attrs) || FileAttachment.new(params)
@@ -65,8 +65,8 @@ class BulkUpload
   end
 
   def attachments_must_be_valid
-    unless attachments.all? { |attachment| attachment.valid? }
-      errors[:base] << 'Please enter missing fields for each attachment'
+    unless attachments.all?(&:valid?)
+      errors[:base] << "Please enter missing fields for each attachment"
     end
   end
 
@@ -118,11 +118,11 @@ class BulkUpload
 
     def extracted_file_paths
       if @extracted_files_paths.nil?
-        lines = extract_contents.split(/[\r\n]+/).map { |line| line.strip }
+        lines = extract_contents.split(/[\r\n]+/).map(&:strip)
         lines = lines
-          .reject { |line| line =~ /\A(Archive|creating):/ }
-          .reject { |line| line =~ /\/__MACOSX\// }
-        files = lines.map { |f| f.gsub(/\A(inflating|extracting):\s+/, '') }
+                .reject { |line| line =~ /\A(Archive|creating):/ }
+                .reject { |line| line =~ /\/__MACOSX\// }
+        files = lines.map { |f| f.gsub(/\A(inflating|extracting):\s+/, "") }
         @extracted_files_paths = files.map { |file| File.expand_path(file) }
       end
       @extracted_files_paths
@@ -134,13 +134,13 @@ class BulkUpload
 
     def extract_contents
       unzip = Whitehall.system_binaries[:unzip]
-      destination = File.join(self.temp_dir, 'extracted')
+      destination = File.join(self.temp_dir, "extracted")
       @unzip_output ||= `#{unzip} -o -d #{destination} #{self.temp_location.shellescape}`
     end
 
     def must_be_a_zip_file
       if @zip_file.present? && (!is_a_zip?)
-        errors.add(:zip_file, 'not a zip file')
+        errors.add(:zip_file, "not a zip file")
       end
     end
 
@@ -154,13 +154,13 @@ class BulkUpload
 
     def contains_only_whitelisted_file_types
       if @zip_file.present? && is_a_zip? && contains_disallowed_file_types?
-        errors.add(:zip_file, 'contains invalid files')
+        errors.add(:zip_file, "contains invalid files")
       end
     end
 
     def contains_disallowed_file_types?
       extracted_file_paths.any? do |path|
-        extension = File.extname(path).sub(/^\./, '')
+        extension = File.extname(path).sub(/^\./, "")
         !AttachmentUploader::EXTENSION_WHITE_LIST.include?(extension)
       end
     end

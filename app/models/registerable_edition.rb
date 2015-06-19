@@ -13,9 +13,7 @@ class RegisterableEdition
     # strip the preceding slash character from the generated slug,
     # to be consistent with Panopticon's slug format.
     panopticon_slug = Whitehall.url_maker.public_document_path(edition).sub(/\A\//, "")
-    if edition.deleted?
-      panopticon_slug.sub!(%r{/deleted-([^/]+)$}, '/\1')
-    end
+    panopticon_slug.sub!(%r{/deleted-([^/]+)$}, '/\1') if edition.deleted?
     panopticon_slug
   end
 

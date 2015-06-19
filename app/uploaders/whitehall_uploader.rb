@@ -1,4 +1,4 @@
-require 'carrierwave/processing/mime_types'
+require "carrierwave/processing/mime_types"
 
 class WhitehallUploader < CarrierWave::Uploader::Base
   def store_dir

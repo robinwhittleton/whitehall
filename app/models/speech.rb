@@ -61,7 +61,7 @@ private
 
   def only_speeches_allowed_invalid_data_can_be_awaiting_type
     unless self.can_have_some_invalid_data?
-      errors.add(:speech_type, 'must be changed') if SpeechType::ImportedAwaitingType == self.speech_type
+      errors.add(:speech_type, "must be changed") if SpeechType::ImportedAwaitingType == self.speech_type
     end
   end
 end

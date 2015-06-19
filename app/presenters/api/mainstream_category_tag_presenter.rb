@@ -1,5 +1,4 @@
 class Api::MainstreamCategoryTagPresenter < Struct.new(:categories)
-
   def as_json
     {
       results: categories.map { |c| tag_hash(c) }
@@ -14,7 +13,7 @@ class Api::MainstreamCategoryTagPresenter < Struct.new(:categories)
       id: mainstream_category.path,
       web_url: nil,
       details: {
-        type: 'section',
+        type: "section",
         description: mainstream_category.description
       },
       content_with_tag: {

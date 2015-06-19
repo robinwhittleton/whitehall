@@ -23,7 +23,7 @@ module Edition::Organisations
   end
 
   def lead_edition_organisations
-    edition_organisations.where(lead: true).order('edition_organisations.lead_ordering')
+    edition_organisations.where(lead: true).order("edition_organisations.lead_ordering")
   end
 
   def supporting_edition_organisations
@@ -31,7 +31,7 @@ module Edition::Organisations
   end
 
   def lead_organisations
-    organisations.where(edition_organisations: { lead: true }).reorder('edition_organisations.lead_ordering')
+    organisations.where(edition_organisations: { lead: true }).reorder("edition_organisations.lead_ordering")
   end
 
   def lead_organisation_ids
@@ -86,7 +86,7 @@ module Edition::Organisations
 
   def at_least_one_lead_organisation
     unless skip_organisation_validation?
-      unless edition_organisations.detect { |eo| eo.lead? }
+      unless edition_organisations.detect(&:lead?)
         errors[:lead_organisations] = "at least one required"
       end
     end
@@ -99,11 +99,11 @@ module Edition::Organisations
     # give us a nice error (edition_organisations is invalid), so lets try
     # something on the edition itself.
     all_organisations = edition_organisations
-      .reject { |eo| eo.marked_for_destruction? || __edition_organisations_for_destruction_on_save.include?(eo) }
-      .map {|eo| eo.organisation_id }
+                        .reject { |eo| eo.marked_for_destruction? || __edition_organisations_for_destruction_on_save.include?(eo) }
+                        .map(&:organisation_id)
 
     if all_organisations.uniq.size != all_organisations.size
-      errors.add(:organisations, 'must be unique')
+      errors.add(:organisations, "must be unique")
     end
   end
 
@@ -117,8 +117,8 @@ module Edition::Organisations
     new_organisation_ids.each.with_index do |new_organisation_id, idx|
       # find an existing instance
       existing = existing_edition_organisations
-        .reject { |eo| __edition_organisations_touched_by_lead_or_supporting_organisations_setters.include?(eo) }
-        .detect { |eo| eo.organisation_id.to_s == new_organisation_id.to_s }
+                 .reject { |eo| __edition_organisations_touched_by_lead_or_supporting_organisations_setters.include?(eo) }
+                 .detect { |eo| eo.organisation_id.to_s == new_organisation_id.to_s }
 
       if existing
         # and remove it from the things to look at now...
@@ -162,7 +162,7 @@ module Edition::Organisations
   end
 
   def mark_for_destruction_all_edition_organisations_for_destruction
-    __edition_organisations_for_destruction_on_save.each { |eo| eo.mark_for_destruction }
+    __edition_organisations_for_destruction_on_save.each(&:mark_for_destruction)
   end
 
   def clear_edition_organisations_touched_or_destroyed_by_lead_or_supporting_organisations_setters

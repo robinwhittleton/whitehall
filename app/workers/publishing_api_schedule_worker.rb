@@ -10,9 +10,9 @@ class PublishingApiScheduleWorker < WorkerBase
   def build_publish_intent(base_path, publish_timestamp)
     {
       publish_time: publish_timestamp,
-      publishing_app: 'whitehall',
-      rendering_app: 'whitehall-frontend',
-      routes: [ { path: base_path, type: 'exact'} ]
+      publishing_app: "whitehall",
+      rendering_app: "whitehall-frontend",
+      routes: [{ path: base_path, type: "exact"}]
     }
   end
 end

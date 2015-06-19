@@ -1,5 +1,4 @@
 class Admin::CabinetMinistersController < Admin::BaseController
-
   before_filter :enforce_permissions!
 
   def show

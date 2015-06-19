@@ -1,4 +1,4 @@
-require 'cgi'
+require "cgi"
 
 class MainstreamCategory < ActiveRecord::Base
   has_many :primary_detailed_guides, class_name: "DetailedGuide",
@@ -52,5 +52,4 @@ class MainstreamCategory < ActiveRecord::Base
   def subsubsection
     slug
   end
-
 end

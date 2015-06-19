@@ -22,10 +22,10 @@ private
 
   def redirect_hash
     {
-      format: 'redirect',
-      publishing_app: 'whitehall',
+      format: "redirect",
+      publishing_app: "whitehall",
       redirects: [
-        { path: base_path, type: 'exact', destination: alternative_path }
+        { path: base_path, type: "exact", destination: alternative_path }
       ],
       update_type: update_type,
     }
@@ -36,14 +36,14 @@ private
       content_id: edition.content_id,
       title: edition.title,
       description: edition.summary,
-      format: 'unpublishing',
+      format: "unpublishing",
       locale: I18n.locale.to_s,
       need_ids: edition.need_ids,
       public_updated_at: edition.public_timestamp,
       update_type: update_type,
-      publishing_app: 'whitehall',
+      publishing_app: "whitehall",
       rendering_app: edition.rendering_app,
-      routes: [ { path: base_path, type: 'exact' } ],
+      routes: [{ path: base_path, type: "exact" }],
       redirects: [],
       details: details,
     }
@@ -75,6 +75,6 @@ private
   end
 
   def default_update_type
-    'major'
+    "major"
   end
 end

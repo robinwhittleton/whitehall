@@ -1,4 +1,4 @@
-require 'sidekiq/api'
+require "sidekiq/api"
 
 class ScheduledPublishingWorker < WorkerBase
   class ScheduledPublishingFailure < StandardError; end
@@ -11,7 +11,7 @@ class ScheduledPublishingWorker < WorkerBase
 
   def self.dequeue(edition)
     Sidekiq::ScheduledSet.new.select do |joby|
-      joby['class'] == name && joby.args[0] == edition.id
+      joby["class"] == name && joby.args[0] == edition.id
     end.map(&:delete)
   end
 
@@ -25,7 +25,7 @@ class ScheduledPublishingWorker < WorkerBase
   end
 
   def self.queued_edition_ids
-    queued_jobs.map { |job| job['args'][0] }
+    queued_jobs.map { |job| job["args"][0] }
   end
 
   def perform(edition_id)
@@ -35,14 +35,14 @@ class ScheduledPublishingWorker < WorkerBase
     publisher = Whitehall.edition_services.scheduled_publisher(edition)
 
     Edition::AuditTrail.acting_as(publishing_robot) do
-      publisher.perform! or raise ScheduledPublishingFailure, publisher.failure_reason
+      publisher.perform! || raise(ScheduledPublishingFailure, publisher.failure_reason)
     end
   end
 
 private
 
   def self.queued_jobs
-    Sidekiq::ScheduledSet.new.select { |job| job['class'] == name }
+    Sidekiq::ScheduledSet.new.select { |job| job["class"] == name }
   end
 
   def publishing_robot

@@ -10,8 +10,8 @@ module Edition::RelatedPolicies
   end
 
   included do
-    has_many :related_policies, through: :related_documents, source: :latest_edition, class_name: 'Policy'
-    has_many :published_related_policies, through: :related_documents, source: :published_edition, class_name: 'Policy'
+    has_many :related_policies, through: :related_documents, source: :latest_edition, class_name: "Policy"
+    has_many :published_related_policies, through: :related_documents, source: :published_edition, class_name: "Policy"
     has_many :edition_policies, foreign_key: :edition_id
     add_trait Trait
   end

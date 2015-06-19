@@ -9,11 +9,11 @@ class LatestController < PublicFacingController
 private
   def subject
     case subject_param
-    when 'departments'
+    when "departments"
       Organisation.with_translations(I18n.locale).find(subject_id)
-    when 'topics'
+    when "topics"
       Classification.find(subject_id)
-    when 'world_locations'
+    when "world_locations"
       WorldLocation.with_translations(I18n.locale).find(subject_id)
     end
   end

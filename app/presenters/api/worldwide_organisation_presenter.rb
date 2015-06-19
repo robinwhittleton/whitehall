@@ -3,7 +3,7 @@ class Api::WorldwideOrganisationPresenter < Api::BasePresenter
     {
       id: context.api_worldwide_organisation_url(model),
       title: model.name,
-      format: 'Worldwide Organisation',
+      format: "Worldwide Organisation",
       updated_at: model.updated_at,
       web_url: Whitehall.url_maker.worldwide_organisation_url(model),
       details: {
@@ -16,7 +16,7 @@ class Api::WorldwideOrganisationPresenter < Api::BasePresenter
 
   def links
     [
-      [context.api_worldwide_organisation_url(model), {'rel' => 'self'}]
+      [context.api_worldwide_organisation_url(model), {"rel" => "self"}]
     ]
   end
 
@@ -29,7 +29,7 @@ class Api::WorldwideOrganisationPresenter < Api::BasePresenter
       title: sponsor.name,
       web_url: Whitehall.url_maker.organisation_url(sponsor),
       details: {
-        acronym: sponsor.acronym || ''
+        acronym: sponsor.acronym || ""
       }
     }
   end
@@ -44,13 +44,13 @@ class Api::WorldwideOrganisationPresenter < Api::BasePresenter
   def office_as_json(office_worldwide_organisation)
     {
       title: office_worldwide_organisation.contact.title,
-      format: 'World Office',
+      format: "World Office",
       updated_at: office_worldwide_organisation.updated_at,
       web_url: Whitehall.url_maker.worldwide_organisation_worldwide_office_url(model, office_worldwide_organisation),
       details: {
-        email: office_worldwide_organisation.contact.email || '',
-        description: office_worldwide_organisation.contact.comments || '',
-        contact_form_url: office_worldwide_organisation.contact.contact_form_url || '',
+        email: office_worldwide_organisation.contact.email || "",
+        description: office_worldwide_organisation.contact.comments || "",
+        contact_form_url: office_worldwide_organisation.contact.contact_form_url || "",
         access_and_opening_times: office_access_and_opening_times_as_json(office_worldwide_organisation),
         type: office_worldwide_organisation.worldwide_office_type.name
       }
@@ -63,7 +63,7 @@ class Api::WorldwideOrganisationPresenter < Api::BasePresenter
     if office_worldwide_organisation.access_and_opening_times_body.present?
       context.govspeak_to_html(office_worldwide_organisation.access_and_opening_times_body)
     else
-      ''
+      ""
     end
   end
 

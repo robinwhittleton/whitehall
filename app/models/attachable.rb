@@ -3,11 +3,11 @@ module Attachable
 
   included do
     has_many :attachments,
-             -> { order('attachments.ordering, attachments.id') },
+             -> { order("attachments.ordering, attachments.id") },
              as: :attachable,
              inverse_of: :attachable
     has_many :html_attachments,
-             -> { order('attachments.ordering, attachments.id') },
+             -> { order("attachments.ordering, attachments.id") },
              as: :attachable
 
     if respond_to?(:add_trait)
