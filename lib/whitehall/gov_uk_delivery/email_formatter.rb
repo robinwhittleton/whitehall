@@ -1,6 +1,6 @@
 module Whitehall
   module GovUkDelivery
-    class EmailFormatter < Struct.new(:edition, :notification_date, :title, :summary)
+    EmailFormatter = Struct.new(:edition, :notification_date, :title, :summary) do
       def initialize(edition, notification_date, options = {})
         options[:title] ||= edition.title
         options[:summary] ||= edition.summary

@@ -87,7 +87,7 @@ class AttachmentUploader < WhitehallUploader
       end.compact
     end
 
-    class Examiner < Struct.new(:zip_file); end
+    Examiner = Struct.new(:zip_file)
 
     class UTF8FilenamesExaminer < Examiner
       def valid?

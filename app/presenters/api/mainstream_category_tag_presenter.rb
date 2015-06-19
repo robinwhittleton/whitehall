@@ -1,4 +1,4 @@
-class Api::MainstreamCategoryTagPresenter < Struct.new(:categories)
+Api::MainstreamCategoryTagPresenter = Struct.new(:categories) do
   def as_json
     {
       results: categories.map { |c| tag_hash(c) }

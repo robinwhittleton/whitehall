@@ -1,5 +1,5 @@
 module DataHygiene
-  class DupFilenameAttachmentFixer < Struct.new(:attachable)
+  DupFilenameAttachmentFixer = Struct.new(:attachable) do
     def run!
       file_attachments.each do |attachment|
         DuplicateFilenameReplacer.new(attachment, file_attachments).replace_duplicates
@@ -10,7 +10,7 @@ module DataHygiene
       @file_attachments ||= attachable.attachments.files
     end
 
-    class DuplicateFilenameReplacer < Struct.new(:attachment, :attachments)
+    DuplicateFilenameReplacer = Struct.new(:attachment, :attachments) do
       def initialize(attachment, attachments)
         @sequence_number = 0
         super

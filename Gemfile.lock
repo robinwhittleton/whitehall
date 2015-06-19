@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/alphagov/govuk-lint.git
-  revision: 2b88247ff8d0ed56567cdf75242a97898560e47b
+  revision: 5788def78a249e2543b6de12b817d199f95d2784
   branch: initial-commit
   specs:
     govuk-lint (0.1.0)
