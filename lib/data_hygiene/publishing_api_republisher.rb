@@ -14,7 +14,7 @@ module DataHygiene
   class PublishingApiRepublisher
     attr_reader :logger, :scope, :republished
 
-    def initialize(scope, logger=Logger.new(STDOUT))
+    def initialize(scope, logger = Logger.new(STDOUT))
       @scope = scope
       @logger = logger
       @republished = 0
@@ -32,8 +32,8 @@ module DataHygiene
 
     def republish(instance)
       Whitehall::PublishingApi.republish_async(instance)
-      logger << '.'
-      @republished +=1
+      logger << "."
+      @republished += 1
     end
   end
 end

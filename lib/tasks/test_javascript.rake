@@ -1,9 +1,8 @@
-require 'socket'
+require "socket"
 
 namespace :test do
-
   desc "Run javascript tests"
-  task :javascript => :environment do
+  task javascript: :environment do
     phantomjs_requirement = Gem::Requirement.new(">= 1.3.0")
     phantomjs_version = Gem::Version.new(`phantomjs --version`.match(/\d+\.\d+\.\d+/)[0]) rescue Gem::Version.new("0.0.0")
     unless phantomjs_requirement.satisfied_by?(phantomjs_version)
@@ -13,7 +12,7 @@ namespace :test do
     end
 
     test_port = 3100
-    pid_file = Rails.root.join('tmp', 'pids', 'javascript_tests.pid')
+    pid_file = Rails.root.join("tmp", "pids", "javascript_tests.pid")
 
     if File.exists?(pid_file)
       STDERR.puts "It looks like the javascript test server is running with pid #{File.read(pid_file)}."
@@ -30,7 +29,7 @@ namespace :test do
 
     puts "Waiting for the server to come up"
     not_connected = true
-    while (not_connected) do
+    while not_connected do
       begin
         TCPSocket.new("127.0.0.1", test_port)
         not_connected = false
@@ -41,7 +40,7 @@ namespace :test do
     end
 
     runner = "http://127.0.0.1:#{test_port}/test/qunit"
-    phantom_driver = Rails.root.join('test', 'javascripts', 'support', 'phantom-driver.js')
+    phantom_driver = Rails.root.join("test", "javascripts", "support", "phantom-driver.js")
 
     command = "phantomjs #{phantom_driver} #{runner}"
 
@@ -66,7 +65,6 @@ namespace :test do
 
     exit test_result
   end
-
 end
 
-task :default => "test:javascript"
+task default: "test:javascript"

@@ -23,15 +23,15 @@ module Whitehall::Uploader
     end
 
     def opening_at
-      Parsers::DateParser.parse(row['opening_date'], @logger, @line_number)
+      Parsers::DateParser.parse(row["opening_date"], @logger, @line_number)
     end
 
     def closing_at
-      Parsers::DateParser.parse(row['closing_date'], @logger, @line_number)
+      Parsers::DateParser.parse(row["closing_date"], @logger, @line_number)
     end
 
     def related_editions
-      Finders::EditionFinder.new(Policy, @logger, @line_number).find(row['policy_1'], row['policy_2'], row['policy_3'], row['policy_4'])
+      Finders::EditionFinder.new(Policy, @logger, @line_number).find(row["policy_1"], row["policy_2"], row["policy_3"], row["policy_4"])
     end
 
     def alternative_format_provider
@@ -88,11 +88,11 @@ module Whitehall::Uploader
       end
 
       def summary
-        @row['response_summary']
+        @row["response_summary"]
       end
 
       def published_on
-        Parsers::DateParser.parse(row['response_date'], @logger, @line_number)
+        Parsers::DateParser.parse(row["response_date"], @logger, @line_number)
       end
 
       def attachments

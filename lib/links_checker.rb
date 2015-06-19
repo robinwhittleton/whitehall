@@ -2,11 +2,11 @@ class LinksChecker
   mattr_accessor :authed_domains
   self.authed_domains = {}
 
-  LOGGER = Logger.new(Rails.root.join('log/broken_link_checks.log'))
+  LOGGER = Logger.new(Rails.root.join("log/broken_link_checks.log"))
 
   attr_accessor :links, :logger
 
-  def initialize(links, logger=LOGGER)
+  def initialize(links, logger = LOGGER)
     @links = links
     @broken_links = Set.new
     @logger = logger

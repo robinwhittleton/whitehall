@@ -1,5 +1,5 @@
 class ContentRegisterer
-  def initialize(scope, logger=NullLogger.instance)
+  def initialize(scope, logger = NullLogger.instance)
     @scope = scope
     @logger = logger
   end
@@ -9,7 +9,7 @@ class ContentRegisterer
 
     scope.find_each do |instance|
       register_entry(instance)
-      logger << '.'
+      logger << "."
     end
 
     logger.info "\n#{count} #{plural_name} registered with content register"
@@ -24,9 +24,9 @@ private
 
   def entry_for(instance)
     {
-      base_path: instance.search_index['link'],
+      base_path: instance.search_index["link"],
       format: format,
-      title: instance.search_index['title'],
+      title: instance.search_index["title"],
     }
   end
 

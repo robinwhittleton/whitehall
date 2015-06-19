@@ -1,6 +1,6 @@
 class Whitehall::Uploader::Finders::WorldLocationsFinder
   def self.find(*slugs, logger, line_number)
-    slugs = slugs.reject { |slug| slug.blank? }
+    slugs = slugs.reject(&:blank?)
 
     world_locations = slugs.map do |slug|
       world_location = WorldLocation.find_by(slug: slug)

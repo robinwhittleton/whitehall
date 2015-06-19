@@ -22,11 +22,11 @@ module Whitehall::Uploader
     end
 
     def title
-      row['title']
+      row["title"]
     end
 
     def summary
-      summary_text = Parsers::RelativeToAbsoluteLinks.parse(row['summary'], organisation.try(:url))
+      summary_text = Parsers::RelativeToAbsoluteLinks.parse(row["summary"], organisation.try(:url))
       if summary_text.blank?
         Parsers::SummariseBody.parse(body)
       else
@@ -35,16 +35,16 @@ module Whitehall::Uploader
     end
 
     def body
-      body_parts = [row['body']] + (1..9).map {|n| row["body_#{n}"]}
-      Parsers::RelativeToAbsoluteLinks.parse(body_parts.compact.join(''), organisation.try(:url))
+      body_parts = [row["body"]] + (1..9).map {|n| row["body_#{n}"]}
+      Parsers::RelativeToAbsoluteLinks.parse(body_parts.compact.join(""), organisation.try(:url))
     end
 
     def translated_title
-      row['title_translation'].to_s
+      row["title_translation"].to_s
     end
 
     def translated_summary
-      summary_text = Parsers::RelativeToAbsoluteLinks.parse(row['summary_translation'], organisation.try(:url))
+      summary_text = Parsers::RelativeToAbsoluteLinks.parse(row["summary_translation"], organisation.try(:url))
       if summary_text.blank?
         Parsers::SummariseBody.parse(translated_body).to_s
       else
@@ -53,15 +53,15 @@ module Whitehall::Uploader
     end
 
     def translated_body
-      Parsers::RelativeToAbsoluteLinks.parse(row['body_translation'], organisation.try(:url)).to_s
+      Parsers::RelativeToAbsoluteLinks.parse(row["body_translation"], organisation.try(:url)).to_s
     end
 
     def legacy_urls
-      Parsers::OldUrlParser.parse(row['old_url'], @logger, @line_number)
+      Parsers::OldUrlParser.parse(row["old_url"], @logger, @line_number)
     end
 
     def organisation
-      @organisation ||= Finders::OrganisationFinder.find(row['organisation'], @logger, @line_number, @default_organisation).first
+      @organisation ||= Finders::OrganisationFinder.find(row["organisation"], @logger, @line_number, @default_organisation).first
     end
 
     def organisations
@@ -77,11 +77,11 @@ module Whitehall::Uploader
     end
 
     def translation_locale
-      row['locale']
+      row["locale"]
     end
 
     def translation_url
-      row['translation_url']
+      row["translation_url"]
     end
 
     # Default translation attributes. Override as required
@@ -104,11 +104,11 @@ module Whitehall::Uploader
     end
 
     def first_published_at
-      Parsers::DateParser.parse(row['first_published'], @logger, @line_number)
+      Parsers::DateParser.parse(row["first_published"], @logger, @line_number)
     end
 
     def topics
-      Finders::SluggedModelFinder.new(Topic, @logger, @line_number).find(fields(1..4, 'topic_#'))
+      Finders::SluggedModelFinder.new(Topic, @logger, @line_number).find(fields(1..4, "topic_#"))
     end
 
   protected
@@ -118,7 +118,7 @@ module Whitehall::Uploader
 
     def fields(range, pattern)
       range.map do |n|
-        row[pattern.gsub('#', n.to_s)]
+        row[pattern.gsub("#", n.to_s)]
       end
     end
 

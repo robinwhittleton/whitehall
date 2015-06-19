@@ -39,7 +39,7 @@ module FriendlyId
       # Underscores (matching a single character) and percent signs (matching
       # any number of characters) need to be escaped
       # (While this seems like an excessive number of backslashes, it is correct)
-      "#{slug}#{sequence_separator}".gsub(/[_%]/, '\\\\\&') + '%'
+      "#{slug}#{sequence_separator}".gsub(/[_%]/, '\\\\\&') + "%"
     end
 
     # Return the unnumbered (shortest) slug first, followed by the numbered ones

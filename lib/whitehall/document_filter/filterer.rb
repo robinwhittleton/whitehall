@@ -26,19 +26,19 @@ module Whitehall::DocumentFilter
     end
 
     def announcements_search
-      raise NotImplementedError, 'you must provide #announcements_search implementation in your filterer subclass'
+      raise NotImplementedError, "you must provide #announcements_search implementation in your filterer subclass"
     end
 
     def publications_search
-      raise NotImplementedError, 'you must provide #publications_search implementation in your filterer subclass'
+      raise NotImplementedError, "you must provide #publications_search implementation in your filterer subclass"
     end
 
     def policies_search
-      raise NotImplementedError, 'you must provide #policies_search implementation in your filterer subclass'
+      raise NotImplementedError, "you must provide #policies_search implementation in your filterer subclass"
     end
 
     def documents
-      raise NotImplementedError, 'you must provide #documents implementation in your filterer subclass'
+      raise NotImplementedError, "you must provide #documents implementation in your filterer subclass"
     end
 
     def selected_topics
@@ -83,7 +83,7 @@ module Whitehall::DocumentFilter
     end
 
     def include_world_location_news
-      @include_world_location_news.to_s == '1'
+      @include_world_location_news.to_s == "1"
     end
 
     private
@@ -91,9 +91,9 @@ module Whitehall::DocumentFilter
     def find_by_slug(klass, slugs)
       @selected ||= {}
       @selected[klass] ||= if slugs.present? && !slugs.include?("all")
-        klass.where(slug: slugs)
-      else
-        []
+                             klass.where(slug: slugs)
+                           else
+                             []
       end
     end
 

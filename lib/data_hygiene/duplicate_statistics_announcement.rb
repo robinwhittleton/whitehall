@@ -1,10 +1,10 @@
-require 'gds_api/router'
+require "gds_api/router"
 
 module DataHygiene
   class DuplicateStatisticsAnnouncement
     attr_reader :logger
 
-    def initialize(duplicate, logger=Rails.logger, noop=false)
+    def initialize(duplicate, logger = Rails.logger, noop = false)
       @duplicate = duplicate
       @logger = logger
       @noop = noop
@@ -14,9 +14,7 @@ module DataHygiene
       register_redirect_to(authoritative_announcement)
 
       log "Destroying duplicate announcement with slug #{@duplicate.slug}"
-      unless noop?
-        @duplicate.destroy
-      end
+      @duplicate.destroy unless noop?
     end
 
   private
@@ -44,7 +42,7 @@ module DataHygiene
     end
 
     def router
-      @router ||= GdsApi::Router.new(Plek.find('router-api'))
+      @router ||= GdsApi::Router.new(Plek.find("router-api"))
     end
   end
 end

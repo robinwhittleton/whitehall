@@ -1,5 +1,4 @@
 class EditionDependenciesPopulator
-
   def initialize(edition)
     @edition = edition
   end
@@ -11,5 +10,4 @@ class EditionDependenciesPopulator
       @edition.depended_upon_editions = Govspeak::DependableEditionsExtractor.new(@edition.body).editions
     end
   end
-
 end

@@ -1,13 +1,12 @@
-require 'csv'
+require "csv"
 
 class AttachmentDataReporter
-
   include ActionView::Helpers::NumberHelper
 
   attr_reader :data_path, :start_date, :end_date
 
-  def initialize(opts={})
-    @data_path  = opts.fetch(:data_path, ENV['HOME'])
+  def initialize(opts = {})
+    @data_path  = opts.fetch(:data_path, ENV["HOME"])
     @start_date = Date.parse(opts.fetch(:start_date, 1.month.ago.to_s))
     @end_date   = Date.parse(opts.fetch(:end_date,   1.day.since.to_s))
   end
@@ -17,28 +16,27 @@ class AttachmentDataReporter
 
     grouped_editions = published_editions_with_attachments.group_by { |e| e.organisations.first }
 
-    CSV.open(csv_file_path('overview'), 'wb') do |csv|
+    CSV.open(csv_file_path("overview"), "wb") do |csv|
       csv << ["Organisation", "Total attachments", "Total accessible", "Content types", "Combined size"]
       grouped_editions.each do |org, editions|
         org_attachments = editions.map(&:attachments).flatten
         org_name = org ? org.name : "No Organisation"
         csv << [org_name, org_attachments.size, accessible_details(org_attachments), content_type_details(org_attachments),
-          combined_attachments_file_size(org_attachments)]
+                combined_attachments_file_size(org_attachments)]
       end
 
       csv << []
       csv << ["Total attachments from #{start_date} to #{end_date}", total, ""]
     end
-
   end
 
   def report
-    CSV.open(csv_file_path, 'wb') do |csv|
+    CSV.open(csv_file_path, "wb") do |csv|
       csv << ["Slug", "Organisations", "Total attachments", "Accessible attachments", "Content types", "Combined size"]
       published_editions_with_attachments.each do |edition|
         csv << [edition.document.slug, edition.organisations.map(&:name).join(","), edition.attachments.size,
-          accessible_details(edition.attachments), content_type_details(edition.attachments),
-          combined_attachments_file_size(edition.attachments)]
+                accessible_details(edition.attachments), content_type_details(edition.attachments),
+                combined_attachments_file_size(edition.attachments)]
       end
     end
   end
@@ -93,7 +91,7 @@ private
     number_to_percentage((number.to_f / total) * 100)
   end
 
-  def csv_file_path(report_type='report')
-    File.join(data_path, "attachments-#{report_type}-#{Time.zone.now.strftime("%y%m%d-%H%M%S")}.csv")
+  def csv_file_path(report_type = "report")
+    File.join(data_path, "attachments-#{report_type}-#{Time.zone.now.strftime('%y%m%d-%H%M%S')}.csv")
   end
 end

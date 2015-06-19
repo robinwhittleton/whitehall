@@ -10,7 +10,7 @@ module Whitehall
     end
 
     def self.indexer_class
-      if ENV.has_key?('RUMMAGER_HOST') || Rails.env.production?
+      if ENV.has_key?("RUMMAGER_HOST") || Rails.env.production?
         Rummageable::Index
       else
         FakeRummageableIndex
@@ -18,7 +18,7 @@ module Whitehall
     end
 
     def self.rummager_host
-      ENV.fetch('RUMMAGER_HOST', Plek.find('search'))
+      ENV.fetch("RUMMAGER_HOST", Plek.find("search"))
     end
 
     def self.add(instance)
@@ -32,7 +32,7 @@ module Whitehall
     end
 
     def self.delete(instance)
-      SearchIndexDeleteWorker.perform_async(instance.search_index['link'], instance.rummager_index)
+      SearchIndexDeleteWorker.perform_async(instance.search_index["link"], instance.rummager_index)
     end
   end
 
@@ -64,8 +64,8 @@ module Whitehall
     end
 
     private
-      def store
-        self.class.store
-      end
+    def store
+      self.class.store
+    end
   end
 end

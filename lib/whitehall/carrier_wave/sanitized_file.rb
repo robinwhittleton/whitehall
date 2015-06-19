@@ -33,7 +33,7 @@ module CarrierWave
       end
 
       def strip_parent_folder(path, parent)
-        path.sub(/^#{parent}/, '').to_s
+        path.sub(/^#{parent}/, "").to_s
       end
 
       def routing_prefix

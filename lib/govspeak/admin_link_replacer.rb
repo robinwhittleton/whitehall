@@ -1,4 +1,4 @@
-require 'data_hygiene/govspeak_link_validator'
+require "data_hygiene/govspeak_link_validator"
 
 module Govspeak
   class AdminLinkReplacer
@@ -9,8 +9,8 @@ module Govspeak
     end
 
     def replace!(&block)
-      @nokogiri_fragment.search('a').each do |anchor|
-        next unless DataHygiene::GovspeakLinkValidator.is_internal_admin_link?(anchor['href'])
+      @nokogiri_fragment.search("a").each do |anchor|
+        next unless DataHygiene::GovspeakLinkValidator.is_internal_admin_link?(anchor["href"])
 
         replacement_html = replacement_html_for_admin_link(anchor, &block)
         anchor.replace Nokogiri::HTML.fragment(replacement_html)
@@ -18,7 +18,7 @@ module Govspeak
     end
 
     def replacement_html_for_admin_link(anchor, &block)
-      case anchor['href']
+      case anchor["href"]
       when ADMIN_SUPPORTING_PAGE_PATH
         convert_link_for_old_supporting_page(anchor, $1, $2, &block)
       when ADMIN_ORGANISATION_CIP_PATH
@@ -58,11 +58,11 @@ module Govspeak
 
     def convert_link_for_edition(anchor, edition, options = {})
       new_html = if edition.present? && edition.linkable?
-        anchor.dup.tap do |anchor|
-          anchor['href'] = Whitehall.url_maker.public_document_url(edition, options)
-        end.to_html.html_safe
-      else
-        anchor.inner_text
+                   anchor.dup.tap do |anchor|
+                     anchor["href"] = Whitehall.url_maker.public_document_url(edition, options)
+                   end.to_html.html_safe
+                 else
+                   anchor.inner_text
       end
 
       block_given? ? yield(new_html, edition) : new_html

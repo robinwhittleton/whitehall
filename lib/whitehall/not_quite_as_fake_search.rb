@@ -1,4 +1,4 @@
-require 'whitehall/document_filter/filterer'
+require "whitehall/document_filter/filterer"
 module Whitehall
   module NotQuiteAsFakeSearch
     def self.stop_faking_it_quite_so_much!
@@ -14,7 +14,6 @@ module Whitehall
     end
 
     class GdsApiRummager
-
       def initialize(index_name, store, field_mappings = nil)
         @index_name = index_name
         @field_mappings = field_mappings || default_field_mappings
@@ -92,9 +91,7 @@ module Whitehall
             raise GdsApi::HTTPErrorResponse, "cannot filter by field '#{field_name}', its type is not known"
           end
         end
-        if order && order.any?
-          results = Ordering.new(order).sort(results)
-        end
+        results = Ordering.new(order).sort(results) if order && order.any?
         {
           "total" => results.count,
           "results" => paginate(results, per_page, page)
@@ -194,7 +191,7 @@ module Whitehall
         docs.each do |document|
           document = normalize(document)
           index = self.index(index_name)
-          index[document['link']] = document
+          index[document["link"]] = document
         end
       end
 
@@ -217,8 +214,8 @@ module Whitehall
         document = document.stringify_keys
         document.each_with_object({}) do |(k, v), memo|
           memo[k] = case v
-          when String, Array, Fixnum, TrueClass, FalseClass then v
-          else v.to_s
+                    when String, Array, Fixnum, TrueClass, FalseClass then v
+                    else v.to_s
           end
         end
       end

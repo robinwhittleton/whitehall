@@ -1,18 +1,18 @@
 namespace :db do
   desc "Report any data integrity issues"
-  task :lint => :environment do
-    require 'data_hygiene/orphaned_attachment_finder'
+  task lint: :environment do
+    require "data_hygiene/orphaned_attachment_finder"
     o = DataHygiene::OrphanedAttachmentFinder.new
     $stderr.puts o.summarize_by_type
   end
 end
 
-task :supporting_page_cleanup => :environment do
-  require 'data_hygiene/supporting_page_cleaner'
+task supporting_page_cleanup: :environment do
+  require "data_hygiene/supporting_page_cleaner"
 
-  logger = Logger.new(Rails.root.join('log/supporting_page_cleanup.log'))
+  logger = Logger.new(Rails.root.join("log/supporting_page_cleanup.log"))
 
-  Document.where(document_type: 'SupportingPage').find_each do |document|
+  Document.where(document_type: "SupportingPage").find_each do |document|
     logger.info "Reparing: #{document.slug}"
     cleaner = SupportingPageCleaner.new(document, logger)
     if cleaner.needs_cleaning?
@@ -22,7 +22,7 @@ task :supporting_page_cleanup => :environment do
   end
 end
 
-task :specialist_sector_cleanup => :environment do
+task specialist_sector_cleanup: :environment do
   require "data_hygiene/specialist_sector_cleanup"
 
   puts "Which specialist sector is being deleted?"
@@ -63,9 +63,9 @@ desc "Export csv for topic retagging"
 task topic_retagging_csv_export: :environment do
   require "data_hygiene/tag_changes_exporter"
 
-  csv_location = ENV['CSV_LOCATION']
-  source_topic_id = ENV['SOURCE']
-  destination_topic_id = ENV['DESTINATION']
+  csv_location = ENV["CSV_LOCATION"]
+  source_topic_id = ENV["SOURCE"]
+  destination_topic_id = ENV["DESTINATION"]
 
   unless csv_location
     $stderr.puts "No location for output: please pass CSV_LOCATION"
@@ -99,7 +99,7 @@ desc "Process csv for topic retagging"
 task process_topic_retagging_csv: :environment do
   require "data_hygiene/tag_changes_processor"
 
-  csv_location = ENV['CSV_LOCATION']
+  csv_location = ENV["CSV_LOCATION"]
 
   unless csv_location
     $stderr.puts "No CSV path specified: please pass CSV_LOCATION"
@@ -110,12 +110,12 @@ task process_topic_retagging_csv: :environment do
 end
 
 desc "Unwithdraw an edition (creates and publishes a draft with audit trail)"
-task :unwithdraw_edition, [:edition_id] => :environment do |t,args|
+task :unwithdraw_edition, [:edition_id] => :environment do |_t, args|
   DataHygiene::EditionUnwithdrawer.new(args[:edition_id], Logger.new(STDOUT)).unwithdraw!
 end
 
 desc "Unpublish a statistics announcement and register a 410 GONE route for it"
-task :unpublish_statistics_announcement, [:slug] => :environment do |t, args|
+task :unpublish_statistics_announcement, [:slug] => :environment do |_t, args|
   DataHygiene::StatisticsAnnouncementUnpublisher.new(
     announcement_slug: args[:slug],
     logger: Logger.new(STDOUT),

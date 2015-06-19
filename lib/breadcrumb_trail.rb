@@ -30,7 +30,7 @@ class DetailedGuideBreadcrumbTrail < BreadcrumbTrail
     return unless @detailed_guide.primary_mainstream_category.parent_tag.present?
     @hash ||= {
       title: @detailed_guide.title,
-      format: 'detailedguidance',
+      format: "detailedguidance",
       web_url: url_maker.public_document_path(@detailed_guide),
       tags: [tag_hash(@detailed_guide.primary_mainstream_category)]
     }
@@ -44,7 +44,7 @@ private
       id: mainstream_category.path,
       web_url: nil,
       details: {
-        type: 'section'
+        type: "section"
       },
       content_with_tag: {
         id: mainstream_category.path,
@@ -53,7 +53,6 @@ private
       parent: tag.to_hash
     }
   end
-
 end
 
 class MainstreamCategoryBreadcrumbTrail < BreadcrumbTrail
@@ -65,7 +64,7 @@ class MainstreamCategoryBreadcrumbTrail < BreadcrumbTrail
     return unless @mainstream_category.parent_tag.present?
     @hash ||= {
       title: @mainstream_category.title,
-      format: 'section',
+      format: "section",
       web_url: url_maker.mainstream_category_path(@mainstream_category),
       id: @mainstream_category.path,
       tags: [Whitehall.content_api.tag(@mainstream_category.parent_tag).to_hash]

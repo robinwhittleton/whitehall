@@ -1,4 +1,4 @@
-require 'whitehall/document_filter/filterer'
+require "whitehall/document_filter/filterer"
 
 module Whitehall::DocumentFilter
   class Rummager < Filterer
@@ -9,7 +9,7 @@ module Whitehall::DocumentFilter
 
     def publications_search
       filter_args = standard_filter_args.merge(filter_by_publication_type)
-                                        .merge(filter_by_official_document_status)
+                    .merge(filter_by_official_document_status)
       @results = Whitehall.government_search_client.advanced_search(filter_args)
     end
 

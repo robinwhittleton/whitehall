@@ -1,8 +1,8 @@
-require 'json'
+require "json"
 
 class Whitehall::Uploader::Parsers::OldUrlParser
   def self.parse(old_url, logger, line_number)
-    if old_url[0] == '['
+    if old_url[0] == "["
       parse_json_old_url(old_url, logger, line_number)
     elsif old_url.blank?
       []

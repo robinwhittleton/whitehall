@@ -32,15 +32,15 @@ module Whitehall
 
     def csv_row_for(checker)
       [checker.public_url,
-        checker.admin_url,
-        checker.timestamp,
-        checker.edition_type,
-        checker.broken_links.size,
-        checker.broken_links.join("\r\n")]
+       checker.admin_url,
+       checker.timestamp,
+       checker.edition_type,
+       checker.broken_links.size,
+       checker.broken_links.join("\r\n")]
     end
 
     def csv_for_organisation(organisation)
-      slug = organisation.try(:slug) || 'no-organisation'
+      slug = organisation.try(:slug) || "no-organisation"
       csv_reports[slug] ||= CsvReport.new(csv_report_path(slug))
     end
 
@@ -60,11 +60,11 @@ module Whitehall
       end
 
       def public_url
-        Whitehall.url_maker.public_document_url(edition, host: public_host, protocol: 'https')
+        Whitehall.url_maker.public_document_url(edition, host: public_host, protocol: "https")
       end
 
       def admin_url
-        Whitehall.url_maker.admin_edition_url(edition, host: admin_host, protocol: 'https')
+        Whitehall.url_maker.admin_edition_url(edition, host: admin_host, protocol: "https")
       end
 
       def edition_type
@@ -107,7 +107,7 @@ module Whitehall
       end
 
       def admin_host
-        'whitehall-admin.production.alphagov.co.uk'
+        "whitehall-admin.production.alphagov.co.uk"
       end
 
       def run_links_report
@@ -120,14 +120,12 @@ module Whitehall
       delegate :<<, :close, to: :csv
 
       def initialize(file_path)
-        @csv = CSV.open(file_path, 'w', encoding: 'UTF-8')
+        @csv = CSV.open(file_path, "w", encoding: "UTF-8")
         @csv << headings
       end
 
     private
-      def csv
-        @csv
-      end
+      attr_reader :csv
 
       def headings
         ["page", "admin link", "public timestamp", "format", "broken link count", "broken links"]

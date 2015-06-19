@@ -1,7 +1,6 @@
 module Whitehall
   module DocumentFilter
     class Options
-
       def initialize(options = {})
         @locale = options[:locale] || I18n.locale
       end
@@ -23,13 +22,13 @@ module Whitehall
       end
 
       OPTION_NAMES_TO_FILTER_KEYS = {
-        document_type: 'document_type',
-        publication_type: 'publication_filter_option',
-        organisations: 'departments',
-        topics: 'topics',
-        announcement_type: 'announcement_filter_option',
-        official_documents: 'official_document_status',
-        locations: 'world_locations',
+        document_type: "document_type",
+        publication_type: "publication_filter_option",
+        organisations: "departments",
+        topics: "topics",
+        announcement_type: "announcement_filter_option",
+        official_documents: "official_document_status",
+        locations: "world_locations",
       }.freeze
 
       def valid_option_name?(option_name)
@@ -80,9 +79,9 @@ module Whitehall
         @options_for_document_type ||= StructuredOptions.new(
           all_label: "All document types",
           ungrouped: [
-            ['Announcements', 'announcements'],
-            ['Policies', 'policies'],
-            ['Publications', 'publications']
+            %w(Announcements announcements),
+            %w(Policies policies),
+            %w(Publications publications)
           ]
         )
       end
@@ -99,9 +98,9 @@ module Whitehall
         @options_for_official_documents ||= StructuredOptions.new(
           all_label: "All documents",
           ungrouped: [
-            ['Command or act papers', 'command_and_act_papers'],
-            ['Command papers only', 'command_papers_only'],
-            ['Act papers only', 'act_papers_only']
+            ["Command or act papers", "command_and_act_papers"],
+            ["Command papers only", "command_papers_only"],
+            ["Act papers only", "act_papers_only"]
           ]
         )
       end

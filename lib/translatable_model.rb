@@ -16,7 +16,7 @@ module TranslatableModel
   end
 
   def remove_translations_for(locale)
-    translations.where(locale: locale).each { |t| t.destroy }
+    translations.where(locale: locale).each(&:destroy)
   end
 
   def non_english_translated_locales

@@ -1,5 +1,4 @@
 module DeprecatedColumns
-
   # This is here to enable us to gracefully remove columns
   # in a future commit, *after* the code marking the column
   # as deprecated has been deployed

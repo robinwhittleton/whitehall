@@ -31,9 +31,7 @@ private
     # The below code is done before calling `super` as the overridden method may
     # add the :format component to the end of the path and we want the
     # "(.:locale)" component to come before that.
-    if localised_routing?
-      path = "#{path}(.:locale)"
-    end
+    path = "#{path}(.:locale)" if localised_routing?
 
     super path, format
   end
@@ -43,9 +41,7 @@ private
   def normalize_defaults!(options)
     super(options)
 
-    if localised_routing?
-      @defaults[:locale] = I18n.default_locale.to_s
-    end
+    @defaults[:locale] = I18n.default_locale.to_s if localised_routing?
   end
 
   def localised_routing?

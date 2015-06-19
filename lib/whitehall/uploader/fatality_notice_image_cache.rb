@@ -8,7 +8,7 @@ module Whitehall::Uploader
 
     def fetch(url)
       filename = Pathname.new(@root_dir) + (Digest::MD5.hexdigest(url) + ".jpg")
-      File.open(filename, 'r:binary')
+      File.open(filename, "r:binary")
     rescue Errno::ENOENT
       @logger.error("Couldn't find image for url '#{url}', was looking for file '#{filename}'", @line_number)
       nil

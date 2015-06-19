@@ -1,7 +1,7 @@
 module Whitehall
   class PublishingApi
     class LiveEnvironmentPopulator < Populator
-      def initialize(logger: )
+      def initialize(logger:)
         super(
           items: self.class.default_items,
           sender: self.class.method(:send_to_publishing_api),
@@ -10,8 +10,8 @@ module Whitehall
       end
 
       def self.send_to_publishing_api(item)
-        update_type = 'bulk_update'
-        queue_name = 'bulk_republishing'
+        update_type = "bulk_update"
+        queue_name = "bulk_republishing"
         PublishingApi.publish_async(item, update_type, queue_name)
       end
 

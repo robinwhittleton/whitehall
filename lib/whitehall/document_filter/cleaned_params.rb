@@ -38,17 +38,13 @@ module Whitehall::DocumentFilter
       PERMITTED_SCALAR_PARAMETER_KEYS + PERMITTED_ARRAY_PARAMETER_KEYS + ActionController::Parameters.always_permitted_parameters
     end
 
-    def params
-      @params
-    end
+    attr_reader :params
 
     # Facebook referer changes the Rails array syntax in URLs.
     # Use this when the expected filter value can have multiple values.
     # This method converts a nested hash to a hash with just the values
     def clean_malformed_array_params(key)
-      if params[key].kind_of?(Hash)
-        params[key] = params[key].values
-      end
+      params[key] = params[key].values if params[key].is_a?(Hash)
     end
   end
 end

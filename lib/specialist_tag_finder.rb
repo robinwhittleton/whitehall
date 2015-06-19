@@ -1,5 +1,4 @@
 class SpecialistTagFinder
-
   def initialize(document)
     @document = document
   end
@@ -26,7 +25,6 @@ private
 
   def specialist_sector_tags
     return [] if artefact.nil?
-    artefact.tags.select {|t| t.details['type'] == 'specialist_sector' }
+    artefact.tags.select {|t| t.details["type"] == "specialist_sector" }
   end
-
 end

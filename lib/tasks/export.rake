@@ -7,19 +7,19 @@ namespace :export do
   end
 
   desc "Export mappings (for eg the Transition app to consume)"
-  task :mappings => :environment do
+  task mappings: :environment do
     # Read off the MySQL slave - we want performance here and
     # non-contention as this job runs for up to 45 minutes.
     if Rails.env.production?
-      mysql_slave_config = ActiveRecord::Base.configurations['production_slave']
+      mysql_slave_config = ActiveRecord::Base.configurations["production_slave"]
       ActiveRecord::Base.establish_connection(mysql_slave_config)
     end
 
     exporter = Whitehall::Exporters::Mappings.new
 
-    filename = 'public/government/mappings.csv'
-    temporary_filename = filename + '.new'
-    CSV.open(Rails.root.join(temporary_filename), 'wb') do |csv_out|
+    filename = "public/government/mappings.csv"
+    temporary_filename = filename + ".new"
+    CSV.open(Rails.root.join(temporary_filename), "wb") do |csv_out|
       exporter.export(csv_out)
     end
 
@@ -27,7 +27,7 @@ namespace :export do
   end
 
   desc "Export Redirector compatible document mappings"
-  task :redirector_mappings => :environment do
+  task redirector_mappings: :environment do
     # This can be removed once redirector or at least the "munge" process is
     # dead.
     #
@@ -38,19 +38,19 @@ namespace :export do
     # Read off the MySQL slave - we want performance here and
     # non-contention as this job runs for up to 45 minutes.
     if Rails.env.production?
-      mysql_slave_config = ActiveRecord::Base.configurations['production_slave']
+      mysql_slave_config = ActiveRecord::Base.configurations["production_slave"]
       ActiveRecord::Base.establish_connection(mysql_slave_config)
     end
 
     exporter = Whitehall::Exporters::RedirectorDocumentMappings.new
 
-    CSV.open(Rails.root.join('public/government/all_document_attachment_and_non_document_mappings.csv'), 'wb') do |csv_out|
+    CSV.open(Rails.root.join("public/government/all_document_attachment_and_non_document_mappings.csv"), "wb") do |csv_out|
       exporter.export(csv_out)
     end
   end
 
   desc "Export list of documents"
-  task :document_list => :environment do
+  task document_list: :environment do
     path = "tmp/document_list-#{Time.now.to_i}.csv"
     puts "generating csv in #{path}"
     CSV.open(path, "w") do |csv|
@@ -86,10 +86,9 @@ namespace :export do
   end
 
   desc "Export list of published editions for orgs export:published_editions ORGS=org-slug"
-  task :published_editions, [:orgs] => :environment do |t, args|
-
-    if ENV['ORGS']
-      orgs = Organisation.where(slug: ENV['ORGS'].split(',')).all
+  task :published_editions, [:orgs] => :environment do |_t, _args|
+    if ENV["ORGS"]
+      orgs = Organisation.where(slug: ENV["ORGS"].split(",")).all
     else
       orgs = Organisation.all
     end
@@ -98,7 +97,6 @@ namespace :export do
     puts "generating csv in #{path}"
 
     CSV.open(path, "w") do |csv|
-
       csv << [
         "Org",
         "URL",
@@ -122,11 +120,11 @@ namespace :export do
             edition.title,
             edition.display_type,
             edition.public_timestamp,
-            edition.respond_to?(:role_appointments) ? edition.role_appointments.map(&:slug).join('|') : nil,
-            edition.respond_to?(:published_document_collections) ? edition.published_document_collections.map(&:slug).join('|') : nil,
-            edition.respond_to?(:related_policies) ? edition.related_policies.map(&:slug).join('|') : nil,
-            edition.respond_to?(:topics) ? edition.topics.map(&:slug).join('|') : nil,
-            edition.respond_to?(:topical_events) ? edition.topical_events.map(&:slug).join('|') : nil,
+            edition.respond_to?(:role_appointments) ? edition.role_appointments.map(&:slug).join("|") : nil,
+            edition.respond_to?(:published_document_collections) ? edition.published_document_collections.map(&:slug).join("|") : nil,
+            edition.respond_to?(:related_policies) ? edition.related_policies.map(&:slug).join("|") : nil,
+            edition.respond_to?(:topics) ? edition.topics.map(&:slug).join("|") : nil,
+            edition.respond_to?(:topical_events) ? edition.topical_events.map(&:slug).join("|") : nil,
           ]
         end
       end
@@ -134,17 +132,17 @@ namespace :export do
   end
 
   desc "Exports mappings between organisations and analytics keys"
-  task :organisation_analytics => :environment do
-    puts 'Mappings orgs to analytics keys...'
-    path = 'tmp/organisation-analytics.csv'
+  task organisation_analytics: :environment do
+    puts "Mappings orgs to analytics keys..."
+    path = "tmp/organisation-analytics.csv"
     puts "Generating CSV in #{path}"
 
-    CSV.open(path, 'w') do |csv|
+    CSV.open(path, "w") do |csv|
       csv << [
-        'Name',
-        'Acronym',
-        'Slug',
-        'Analytics key'
+        "Name",
+        "Acronym",
+        "Slug",
+        "Analytics key"
       ]
 
       Organisation.all.each do |org|
@@ -157,5 +155,4 @@ namespace :export do
       end
     end
   end
-
 end

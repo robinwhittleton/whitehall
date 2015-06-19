@@ -1,6 +1,6 @@
 module Whitehall::Uploader
   class StatisticalDataSetRow < Row
-    DEFAULT_CHANGE_NOTE = 'Data set updated.'
+    DEFAULT_CHANGE_NOTE = "Data set updated."
 
     def self.validator
       HeadingValidator.new
@@ -13,7 +13,7 @@ module Whitehall::Uploader
     end
 
     def summary
-      summary_text = row['summary']
+      summary_text = row["summary"]
       if summary_text.blank?
         Parsers::SummariseBody.parse(body)
       else
@@ -26,14 +26,14 @@ module Whitehall::Uploader
     end
 
     def document_collections
-      fields(1..4, 'document_collection_#').compact.reject(&:blank?)
+      fields(1..4, "document_collection_#").compact.reject(&:blank?)
     end
 
     def change_note
-      if row['change_note'].blank?
+      if row["change_note"].blank?
         StatisticalDataSetRow::DEFAULT_CHANGE_NOTE
       else
-        row['change_note']
+        row["change_note"]
       end
     end
 

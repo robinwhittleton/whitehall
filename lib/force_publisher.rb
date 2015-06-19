@@ -16,9 +16,9 @@ class ForcePublisher
     def force_publish!(editions, reporter)
       editions.each do |edition|
         if edition.nil?
-          reporter.failure(edition, 'Edition is nil')
+          reporter.failure(edition, "Edition is nil")
         else
-          publisher = Whitehall.edition_services.force_publisher(edition, user: user, remark: 'Bulk force published after import')
+          publisher = Whitehall.edition_services.force_publisher(edition, user: user, remark: "Bulk force published after import")
           if !publisher.can_perform?
             reporter.failure(edition, publisher.failure_reason)
           else
@@ -52,7 +52,7 @@ class ForcePublisher
   end
 
   def failure(edition, reason)
-    puts "ERR: #{edition.id unless edition.nil?}: #{reason.to_s}"
+    puts "ERR: #{edition.id unless edition.nil?}: #{reason}"
     @failures << [edition, reason]
   end
 
@@ -71,9 +71,9 @@ class ForcePublisher
       Object.const_get(type_name)
     end
     editions_to_publish = organisation.editions
-      .draft
-      .latest_edition
-      .where("exists (select * from document_sources ds where ds.document_id=editions.document_id)")
+                          .draft
+                          .latest_edition
+                          .where("exists (select * from document_sources ds where ds.document_id=editions.document_id)")
     if excluded_types.any?
       editions_to_publish = editions_to_publish.where("type not in (?)", excluded_types.map(&:name))
     end

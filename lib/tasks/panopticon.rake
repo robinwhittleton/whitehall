@@ -1,31 +1,31 @@
-require 'ostruct'
+require "ostruct"
 require "data_hygiene/registerable_edition_builder_for_unpublished_editions"
 
 namespace :panopticon do
-  require 'gds_api/panopticon'
+  require "gds_api/panopticon"
 
   desc "Register application metadata with Panopticon"
-  task :register => :environment do
+  task register: :environment do
     logger = GdsApi::Base.logger = Logger.new(STDERR).tap { |l| l.level = Logger::INFO }
 
-    registerer = GdsApi::Panopticon::Registerer.new(owning_app: 'whitehall', rendering_app: 'whitehall-frontend')
+    registerer = GdsApi::Panopticon::Registerer.new(owning_app: "whitehall", rendering_app: "whitehall-frontend")
     logger.info "Registering application with Panopticon..."
 
     record = OpenStruct.new(
-      slug: 'government',
+      slug: "government",
       title: "Departments and Policy",
       description: "All government department and organisation corporate publishing",
-      prefixes: ['/government'],
-      state: 'live',
+      prefixes: ["/government"],
+      state: "live",
       indexable_content: "Departments and Policy")
     registerer.register(record)
   end
 
   desc "Register detailed guides with Panopticon"
-  task :register_guidance => :environment do
+  task register_guidance: :environment do
     logger = GdsApi::Base.logger = Logger.new(STDERR).tap { |l| l.level = Logger::INFO }
     logger.info "Registering detailed guides with Panopticon..."
-    registerer = GdsApi::Panopticon::Registerer.new(owning_app: 'whitehall', rendering_app: 'whitehall-frontend', kind: 'detailed_guide')
+    registerer = GdsApi::Panopticon::Registerer.new(owning_app: "whitehall", rendering_app: "whitehall-frontend", kind: "detailed_guide")
 
     DetailedGuide.published.includes(:document, :primary_mainstream_category, :other_mainstream_categories).each do |guide|
       artefact = RegisterableEdition.new(guide)
@@ -39,7 +39,7 @@ namespace :panopticon do
   end
 
   desc "Register all content for a specialist sector with Panopticon"
-  task :register_specialist_sector_content => :environment do
+  task register_specialist_sector_content: :environment do
     logger = GdsApi::Base.logger = Logger.new(STDERR).tap { |l| l.level = Logger::INFO }
 
     unless ENV["TAG"].present?
@@ -55,7 +55,7 @@ namespace :panopticon do
 
     published_editions.each do |edition|
       artefact = RegisterableEdition.new(edition)
-      registerer = GdsApi::Panopticon::Registerer.new(owning_app: 'whitehall', rendering_app: 'whitehall-frontend', kind: artefact.kind)
+      registerer = GdsApi::Panopticon::Registerer.new(owning_app: "whitehall", rendering_app: "whitehall-frontend", kind: artefact.kind)
       logger.info "Registering /#{artefact.slug} with Panopticon..."
 
       begin
@@ -67,13 +67,13 @@ namespace :panopticon do
   end
 
   desc "Re-register unpublished content with Panopticon"
-  task :re_register_unpublished_content => :environment do
+  task re_register_unpublished_content: :environment do
     logger = GdsApi::Base.logger = Logger.new(STDERR).tap { |l| l.level = Logger::INFO }
 
     registerable_editions = RegisterableEditionBuilderForUnpublishedEditions.build
 
     registerable_editions.each do |registerable_edition|
-      registerer = GdsApi::Panopticon::Registerer.new(owning_app: 'whitehall', rendering_app: 'whitehall-frontend', kind: registerable_edition.kind)
+      registerer = GdsApi::Panopticon::Registerer.new(owning_app: "whitehall", rendering_app: "whitehall-frontend", kind: registerable_edition.kind)
 
       begin
         logger.info "About to register #{registerable_edition.edition.id}"

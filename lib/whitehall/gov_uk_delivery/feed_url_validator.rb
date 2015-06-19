@@ -1,6 +1,6 @@
-require 'whitehall/document_filter/options'
-require 'uri'
-require 'cgi'
+require "whitehall/document_filter/options"
+require "uri"
+require "cgi"
 
 module Whitehall
   module GovUkDelivery
@@ -21,10 +21,10 @@ module Whitehall
 
       def valid?
         uri &&
-        recognised_url? &&
-        recognised_feed_type? &&
-        resource_exists? &&
-        filter_parameters_are_valid?
+          recognised_url? &&
+          recognised_feed_type? &&
+          resource_exists? &&
+          filter_parameters_are_valid?
       end
 
       def feed_params
@@ -56,7 +56,7 @@ module Whitehall
       end
 
       def valid_extension?
-        File.extname(uri.path) == '.atom'
+        File.extname(uri.path) == ".atom"
       end
 
       def resource_exists?
@@ -89,41 +89,41 @@ module Whitehall
 
       def parse_feed_url
         if uri.path == url_maker.publications_path
-          @feed_type = 'publications'
+          @feed_type = "publications"
         elsif uri.path == url_maker.announcements_path
-          @feed_type = 'announcements'
+          @feed_type = "announcements"
         elsif uri.path == url_maker.statistics_path
-          @feed_type = 'statistics'
+          @feed_type = "statistics"
         else
-          path_root_fragment = uri.path.split('/')[2];
+          path_root_fragment = uri.path.split("/")[2];
           @feed_object_slug = uri.path.match(/([^\/]*)\.atom$/)[1]
 
           case path_root_fragment
           when "policies"
             @feed_object_slug = uri.path.match(/([^\/]*)\/activity\.atom$/)[1]
-            @feed_type = 'policy'
-          when 'organisations'
-            @feed_type = 'organisation'
-          when 'topics'
-            @feed_type = 'topic'
-          when 'topical-events'
-            @feed_type = 'topical_event'
-          when 'world'
-            @feed_type = 'world_location'
-          when 'people'
-            @feed_type = 'person'
-          when 'ministers'
-            @feed_type = 'role'
+            @feed_type = "policy"
+          when "organisations"
+            @feed_type = "organisation"
+          when "topics"
+            @feed_type = "topic"
+          when "topical-events"
+            @feed_type = "topical_event"
+          when "world"
+            @feed_type = "world_location"
+          when "people"
+            @feed_type = "person"
+          when "ministers"
+            @feed_type = "role"
           end
         end
       end
 
       def leading_fragment
-        if feed_params['publication_filter_option'].present?
-          fragment_for_filter_option('publication_filter_option').downcase
-        elsif feed_params['announcement_filter_option'].present?
-          fragment_for_filter_option('announcement_filter_option').downcase
-        elsif ['publications', 'announcements', 'statistics'].include? feed_type
+        if feed_params["publication_filter_option"].present?
+          fragment_for_filter_option("publication_filter_option").downcase
+        elsif feed_params["announcement_filter_option"].present?
+          fragment_for_filter_option("announcement_filter_option").downcase
+        elsif %w(publications announcements statistics).include? feed_type
           feed_type
         else
           label_for_resource
@@ -139,14 +139,12 @@ module Whitehall
           "related to " + (resource_filter_params.map { |param_key, _|
             fragment_for_filter_option(param_key)
           }.to_sentence)
-        else
-          nil
         end
       end
 
       def command_and_act_fragment
-        if feed_params['official_document_status'].present?
-          case feed_params['official_document_status']
+        if feed_params["official_document_status"].present?
+          case feed_params["official_document_status"]
           when "command_and_act_papers"
             "which are command or act papers"
           when "command_papers_only"
@@ -179,7 +177,7 @@ module Whitehall
       end
 
       def resource_class
-        if !['organisation', 'policy', 'topic', 'topical_event', 'person', 'role', 'world_location'].include? feed_type
+        if !%w(organisation policy topic topical_event person role world_location).include? feed_type
           raise ArgumentError.new("Can't process a feed for unknown type '#{feed_type}'")
         end
         Kernel.const_get feed_type.camelize

@@ -29,7 +29,7 @@ private
         opts.on("--diff-to COMMITISH", "ref to compare to (default: HEAD)") do |t|
           options[:diff_to] = t
         end
-        opts.on("--cached", "diff staged files") do |c|
+        opts.on("--cached", "diff staged files") do |_c|
           options[:cached] = true
         end
       end.parse!

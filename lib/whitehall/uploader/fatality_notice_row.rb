@@ -29,11 +29,11 @@ module Whitehall::Uploader
     end
 
     def operational_field
-      Finders::OperationalFieldFinder.find(row['field_of_operation'], @logger, @line_number)
+      Finders::OperationalFieldFinder.find(row["field_of_operation"], @logger, @line_number)
     end
 
     def roll_call_introduction
-      row['roll_call_introduction']
+      row["roll_call_introduction"]
     end
 
     def organisation
@@ -61,7 +61,7 @@ module Whitehall::Uploader
       end
 
       def build(image_attributes)
-        filehandle = @image_cache.fetch(image_attributes['imgurl'])
+        filehandle = @image_cache.fetch(image_attributes["imgurl"])
         Image.new(image_data: ImageData.new(file: filehandle),
           alt_text: image_attributes["imgalt"],
           caption: image_attributes["imgcapmd"])

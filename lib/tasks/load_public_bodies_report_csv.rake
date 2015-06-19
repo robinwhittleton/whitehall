@@ -2,20 +2,20 @@
 require "csv"
 
 def clean_money(raw_money)
-  if raw_money == '0'
+  if raw_money == "0"
     money = 0
   elsif /£[0-9,]+/.match(raw_money)
-    money = raw_money.gsub(/[£,]/, '').to_i
+    money = raw_money.gsub(/[£,]/, "").to_i
   else
     money = nil
   end
-  return money
+  money
 end
 
 def clean_yes_no(raw_boolean)
-  if raw_boolean.downcase == 'yes'
+  if raw_boolean.downcase == "yes"
     return true
-  elsif raw_boolean.downcase == 'no'
+  elsif raw_boolean.downcase == "no"
     return false
   else
     return nil
@@ -25,8 +25,8 @@ end
 namespace :public_bodies do
   desc "Import Public Bodies report data from CSV"
   task :import, [:filename, :year] => :environment do |_, args|
-    csv = CSV.open(args[:filename], { :headers => :first_row })
-      .map{ |body| body}
+    csv = CSV.open(args[:filename], { headers: :first_row })
+          .map { |body| body}
 
     Organisation.all.each do |organisation|
       if organisation.type.non_departmental_public_body?

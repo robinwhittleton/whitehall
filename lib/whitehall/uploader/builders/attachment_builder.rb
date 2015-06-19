@@ -4,7 +4,7 @@ class Whitehall::Uploader::Builders::AttachmentBuilder
     begin
       file = cache.fetch(url, line_number)
     rescue Whitehall::Uploader::AttachmentCache::RetrievalError => e
-      logger.error "Unable to fetch attachment '#{url}' - #{e.to_s}", line_number
+      logger.error "Unable to fetch attachment '#{url}' - #{e}", line_number
     end
     attachment_data = AttachmentData.new(file: file)
     attachment = FileAttachment.new(attributes.merge(attachment_data: attachment_data))

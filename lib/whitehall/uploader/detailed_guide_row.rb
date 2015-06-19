@@ -10,23 +10,23 @@ module Whitehall::Uploader
         .optional("first_published")
         .ignored("ignore_*")
         .multiple(%w{attachment_#_url attachment_#_title}, 0..Row::ATTACHMENT_LIMIT)
-        .optional('json_attachments')
+        .optional("json_attachments")
     end
 
     def primary_mainstream_category
-      Finders::SluggedModelFinder.new(MainstreamCategory, @logger, @line_number).find([row['detailed_guidance_category_1']]).first
+      Finders::SluggedModelFinder.new(MainstreamCategory, @logger, @line_number).find([row["detailed_guidance_category_1"]]).first
     end
 
     def other_mainstream_categories
-      Finders::SluggedModelFinder.new(MainstreamCategory, @logger, @line_number).find(fields(2..4, 'detailed_guidance_category_#'))
+      Finders::SluggedModelFinder.new(MainstreamCategory, @logger, @line_number).find(fields(2..4, "detailed_guidance_category_#"))
     end
 
     def document_collections
-      fields(1..4, 'document_collection_#').compact.reject(&:blank?)
+      fields(1..4, "document_collection_#").compact.reject(&:blank?)
     end
 
     def related_documents
-      Finders::SluggedModelFinder.new(Document, @logger, @line_number).find(fields(1..4, 'related_detailed_guide_#'))
+      Finders::SluggedModelFinder.new(Document, @logger, @line_number).find(fields(1..4, "related_detailed_guide_#"))
     end
 
     def attachments
@@ -38,19 +38,19 @@ module Whitehall::Uploader
     end
 
     def related_mainstream_content_url
-      row['related_mainstream_content_url_1']
+      row["related_mainstream_content_url_1"]
     end
 
     def related_mainstream_content_title
-      row['related_mainstream_content_title_1']
+      row["related_mainstream_content_title_1"]
     end
 
     def additional_related_mainstream_content_url
-      row['related_mainstream_content_url_2']
+      row["related_mainstream_content_url_2"]
     end
 
     def additional_related_mainstream_content_title
-      row['related_mainstream_content_title_2']
+      row["related_mainstream_content_title_2"]
     end
 
   protected

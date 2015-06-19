@@ -62,9 +62,7 @@ module Whitehall
           end
 
           @i += 1
-          if @i % 1000 == 0
-            logger.info "done #{@i}..."
-          end
+          logger.info "done #{@i}..." if @i % 1000 == 0
         end
       end
     end

@@ -1,6 +1,5 @@
 module Whitehall::Uploader
   class CaseStudyRow < Row
-
     def self.validator
       super
         .required("first_published")
@@ -10,11 +9,11 @@ module Whitehall::Uploader
     end
 
     def document_collections
-      fields(1..4, 'document_collection_#').compact.reject(&:blank?)
+      fields(1..4, "document_collection_#").compact.reject(&:blank?)
     end
 
     def related_editions
-      Finders::EditionFinder.new(Policy, @logger, @line_number).find(*fields(1..4, 'policy_#'))
+      Finders::EditionFinder.new(Policy, @logger, @line_number).find(*fields(1..4, "policy_#"))
     end
 
   protected

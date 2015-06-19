@@ -2,7 +2,7 @@
 class Whitehall::Uploader::Parsers::SummariseBody
   class Govspeaker
     def self.htmlize(text)
-      ::Govspeak::Document.new(text.gsub(attachment_matcher, '')).to_html
+      ::Govspeak::Document.new(text.gsub(attachment_matcher, "")).to_html
     end
     def self.attachment_matcher
       # NOTE: our govspeeak helper uses /\n{0,2}^!@([0-9]+)\s*/ to match
@@ -21,7 +21,7 @@ class Whitehall::Uploader::Parsers::SummariseBody
   end
 
   def initialize(body_text_as_govspeak, govspeaker = Govspeaker, sanitizer = Sanitizer)
-    @original_text = body_text_as_govspeak || ''
+    @original_text = body_text_as_govspeak || ""
     @govspeaker = govspeaker
     @sanitizer = sanitizer
   end

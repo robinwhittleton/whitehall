@@ -1,5 +1,5 @@
-require 'net/https'
-require 'mime/types'
+require "net/https"
+require "mime/types"
 
 class Whitehall::Uploader::AttachmentCache
   class RetrievalError < RuntimeError; end
@@ -28,15 +28,13 @@ class Whitehall::Uploader::AttachmentCache
         :doc
       elsif file_type =~ /Microsoft PowerPoint/
         :ppt
-      else
-        nil
-      end
+            end
     end
 
-    IGNORED_CONTENT_TYPES = ['application/octet-stream']
+    IGNORED_CONTENT_TYPES = ["application/octet-stream"]
     def self.detected_content_type(response)
-      if response['Content-Type'] && !IGNORED_CONTENT_TYPES.include?(response['Content-Type'])
-        type = MIME::Types[response['Content-Type']]
+      if response["Content-Type"] && !IGNORED_CONTENT_TYPES.include?(response["Content-Type"])
+        type = MIME::Types[response["Content-Type"]]
         return type.first.extensions.first if type && type.any?
       end
       nil
@@ -57,7 +55,7 @@ class Whitehall::Uploader::AttachmentCache
 
     def fetch
       if cached_file
-        File.open(cached_file, 'r')
+        File.open(cached_file, "r")
       else
         download(original_url)
       end
@@ -75,9 +73,9 @@ class Whitehall::Uploader::AttachmentCache
       response = do_request(url)
       if response.is_a?(Net::HTTPOK)
         local_path = store(url, response)
-        File.open(local_path, 'r')
+        File.open(local_path, "r")
       elsif response.is_a?(Net::HTTPMovedPermanently) || response.is_a?(Net::HTTPMovedTemporarily)
-        download(response['Location'])
+        download(response["Location"])
       else
         raise RetrievalError, "got response status #{response.code}"
       end
@@ -100,8 +98,8 @@ class Whitehall::Uploader::AttachmentCache
     end
 
     def filename_from_content_disposition_header(response)
-      if response['Content-Disposition']
-        parts = response['Content-Disposition'].split(/; */)
+      if response["Content-Disposition"]
+        parts = response["Content-Disposition"].split(/; */)
         parts.each do |part|
           # The spec tells us that the filename part of
           # Content-disposition should be quoted, but certain
@@ -118,7 +116,7 @@ class Whitehall::Uploader::AttachmentCache
     # Some CMSs use a common endpoint like `/download.php` to serve
     # files - we should ignore these as they're not the actual
     # extension of the file.
-    IGNORED_COMMON_WEB_EXTENSIONS = ['.do', '.php', '.aspx', '.asp', '.pl', '.jsp', '.cgi', '.dll']
+    IGNORED_COMMON_WEB_EXTENSIONS = [".do", ".php", ".aspx", ".asp", ".pl", ".jsp", ".cgi", ".dll"]
     def filename_from_url(url)
       filename = File.basename(URI.parse(url).path)
       extension = File.extname(filename)
@@ -133,7 +131,7 @@ class Whitehall::Uploader::AttachmentCache
       FileUtils.mkdir_p(cache_path)
       local_path = File.join(cache_path, filename(url, response))
       @logger.info "Fetching #{url} to #{local_path}", @line_number
-      File.open(local_path, 'w', encoding: 'ASCII-8BIT') do |file|
+      File.open(local_path, "w", encoding: "ASCII-8BIT") do |file|
         file.write(response.body)
       end
       ensure_file_has_extension(local_path, response)
@@ -158,7 +156,7 @@ class Whitehall::Uploader::AttachmentCache
       # when comparing, remove the trailing . that might be present
       # from File.extname.  EXTENSION_WHITE_LIST doesn't include them
       extension.blank? ||
-      !AttachmentUploader::EXTENSION_WHITE_LIST.include?(extension.downcase.gsub(/^\./, ''))
+        !AttachmentUploader::EXTENSION_WHITE_LIST.include?(extension.downcase.gsub(/^\./, ""))
     end
 
     def extension_from_file(local_path)
@@ -168,6 +166,5 @@ class Whitehall::Uploader::AttachmentCache
     def extension_from_content_type(response)
       FileTypeDetector.detected_content_type(response)
     end
-
   end
 end

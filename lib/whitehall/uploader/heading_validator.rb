@@ -25,7 +25,7 @@ module Whitehall
       end
 
       def ignored(pattern)
-        @ignored_patterns << Regexp.new('\A' + Regexp.escape(pattern.downcase).gsub('\*', '.*') + '\z')
+        @ignored_patterns << Regexp.new('\A' + Regexp.escape(pattern.downcase).gsub('\*', ".*") + '\z')
         self
       end
 
@@ -53,7 +53,7 @@ module Whitehall
 
     private
       def duplicates(headings)
-        normalise(headings).group_by {|heading| heading}.reject {|k, list| list.size < 2}.keys
+        normalise(headings).group_by {|heading| heading}.reject {|_k, list| list.size < 2}.keys
       end
 
       def missing(headings)
@@ -81,15 +81,15 @@ module Whitehall
       end
 
       def includes_translation?(headings)
-        headings.include?('locale')
+        headings.include?("locale")
       end
 
       def translation_fields
-        ['locale', 'translation_url'] + @translatable_fields.map {|field| "#{field}_translation" }
+        %w(locale translation_url) + @translatable_fields.map {|field| "#{field}_translation" }
       end
 
       def required_translation_fields
-        ['locale', 'translation_url'] + (@translatable_fields & @required_fields).map {|field| "#{field}_translation" }
+        %w(locale translation_url) + (@translatable_fields & @required_fields).map {|field| "#{field}_translation" }
       end
 
       def normalise(headings)
@@ -141,7 +141,7 @@ module Whitehall
         def initialize(correlated_fields, acceptable_cohort_count = 1..Float::INFINITY)
           @correlated_fields = [*correlated_fields].map(&:downcase)
           @acceptable_cohort_count = acceptable_cohort_count
-          bad_fields = @correlated_fields.reject {|f| f.count('#') == 1 }
+          bad_fields = @correlated_fields.reject {|f| f.count("#") == 1 }
           if bad_fields.any?
             raise "All numerically correlated fields must contain exactly one number placeholder '#' (these ones didn't: '#{bad_fields.join("', '")}')"
           end
@@ -169,13 +169,13 @@ module Whitehall
       private
         def field_regexps
           @correlated_fields.map do |f|
-            Regexp.new('\A' + f.gsub('#', '([0-9]+)') + '\Z')
+            Regexp.new('\A' + f.gsub("#", "([0-9]+)") + '\Z')
           end
         end
 
         def required_fields_for_cohort(cohort_number)
           @correlated_fields.map do |field_pattern|
-            field_pattern.gsub('#', cohort_number.to_s)
+            field_pattern.gsub("#", cohort_number.to_s)
           end
         end
 
@@ -190,9 +190,7 @@ module Whitehall
           end
           cohorts
         end
-
       end
-
     end
   end
 end

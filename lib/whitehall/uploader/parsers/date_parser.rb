@@ -3,11 +3,11 @@ class Whitehall::Uploader::Parsers::DateParser
     return nil if date.blank?
     begin
       if date =~ /^\d{1,2}\-[A-Za-z]{3}\-\d{4}/
-        Date.strptime(date, '%d-%b-%Y')
+        Date.strptime(date, "%d-%b-%Y")
       elsif date =~ /^\d{1,2}\-[A-Za-z]{3}\-\d{2}/
-        Date.strptime(date, '%d-%b-%y')
+        Date.strptime(date, "%d-%b-%y")
       elsif date =~ /\d{4}\-\d{2}\-\d{2}/
-        Date.strptime(date, '%Y-%m-%d')
+        Date.strptime(date, "%Y-%m-%d")
       else
         raise "unparsable"
       end

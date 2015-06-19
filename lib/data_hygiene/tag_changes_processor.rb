@@ -1,5 +1,4 @@
 class TagChangesProcessor
-
   def initialize(csv_location, logger: Logger.new(nil))
     @csv_location = csv_location
     @logger = logger
@@ -45,7 +44,7 @@ private
 
     add_editorial_remark(edition,
       "Bulk retagging from topic '#{@source_topic_id}' to '#{@destination_topic_id}' resulted in duplicate tag - removed it"
-    )
+                        )
   end
 
   def change_tagging(tagging)
@@ -56,7 +55,7 @@ private
 
     add_editorial_remark(edition,
       "Bulk retagging from topic '#{@source_topic_id}' to '#{@destination_topic_id}' changed tag"
-    )
+                        )
   end
 
   def latest_edition

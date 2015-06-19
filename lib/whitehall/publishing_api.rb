@@ -10,11 +10,11 @@ module Whitehall
   class UnpublishableInstanceError < StandardError; end
 
   class PublishingApi
-    def self.publish_async(model_instance, update_type_override=nil, queue_override=nil)
+    def self.publish_async(model_instance, update_type_override = nil, queue_override = nil)
       push_live(model_instance, update_type_override, queue_override)
     end
 
-    def self.publish_draft_async(model_instance, update_type_override=nil, queue_override=nil)
+    def self.publish_draft_async(model_instance, update_type_override = nil, queue_override = nil)
       return if skip_sending_to_content_store?(model_instance)
       locales_for(model_instance).each do |locale|
         PublishingApiDraftWorker.perform_async_in_queue(queue_override, model_instance.class.name, model_instance.id, update_type_override, locale)
@@ -22,7 +22,7 @@ module Whitehall
     end
 
     def self.republish_async(model_instance)
-      push_live(model_instance, 'republish')
+      push_live(model_instance, "republish")
     end
 
     def self.schedule_async(edition)
@@ -61,7 +61,7 @@ module Whitehall
       end
     end
 
-    def self.push_live(model_instance, update_type_override=nil, queue_override=nil)
+    def self.push_live(model_instance, update_type_override = nil, queue_override = nil)
       return if skip_sending_to_content_store?(model_instance)
       self.assert_public_edition!(model_instance)
       locales_for(model_instance).each do |locale|
@@ -70,7 +70,7 @@ module Whitehall
     end
 
     def self.served_from_content_store?(edition)
-      edition.kind_of?(CaseStudy)
+      edition.is_a?(CaseStudy)
     end
 
     # We want to avoid sending unpublishings for content types which are not
@@ -81,15 +81,15 @@ module Whitehall
     end
 
     def self.unpublishing_not_served_from_content_store?(instance)
-      instance.kind_of?(Unpublishing) && !served_from_content_store?(instance.edition)
+      instance.is_a?(Unpublishing) && !served_from_content_store?(instance.edition)
     end
 
     def self.policy?(instance)
-      instance.kind_of?(Policy)
+      instance.is_a?(Policy)
     end
 
     def self.assert_public_edition!(instance)
-      if instance.kind_of?(Edition) && !instance.publicly_visible?
+      if instance.is_a?(Edition) && !instance.publicly_visible?
         raise UnpublishableInstanceError, "#{instance.class} with ID #{instance.id} is not publishable"
       end
     end

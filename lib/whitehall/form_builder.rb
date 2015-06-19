@@ -1,6 +1,5 @@
 module Whitehall
   class FormBuilder < ActionView::Helpers::FormBuilder
-
     def label(method, text = nil, options = {}, &block)
       if calculate_required(method, options)
         unless !options[:required].nil? && options[:required] == false
@@ -18,7 +17,7 @@ module Whitehall
     def labelled_radio_button(label_text, *radio_button_args)
       # 2nd arg is either all the args for the radio_button, or an options
       # hash for the label, then all the args for the radio_button.
-      label_opts = {class: 'radio inline'}
+      label_opts = {class: "radio inline"}
       label_opts = label_opts.merge(radio_button_args.shift) if radio_button_args.first.is_a?(Hash)
       @template.label_tag(nil, label_opts) do
         radio_button(*radio_button_args) + label_text
@@ -26,16 +25,16 @@ module Whitehall
     end
 
     def errors
-       return unless object.errors.any?
-       error_list = @template.content_tag(:ul, "class" => "errors disc") do
-         object.errors.full_messages.each do |msg|
-           @template.concat @template.content_tag(:li, msg)
-         end
-       end
-       @template.content_tag(:div, "class" => "alert alert-error form-errors") do
-         @template.concat @template.content_tag(:p, "To save the #{object.class.name.demodulize.underscore.humanize.downcase} please fix the following issues:")
-         @template.concat error_list
-       end
+      return unless object.errors.any?
+      error_list = @template.content_tag(:ul, "class" => "errors disc") do
+        object.errors.full_messages.each do |msg|
+          @template.concat @template.content_tag(:li, msg)
+        end
+      end
+      @template.content_tag(:div, "class" => "alert alert-error form-errors") do
+        @template.concat @template.content_tag(:p, "To save the #{object.class.name.demodulize.underscore.humanize.downcase} please fix the following issues:")
+        @template.concat error_list
+      end
      end
 
     def form_actions(options = {})
@@ -45,13 +44,13 @@ module Whitehall
         end
         @template.concat @template.content_tag(:span, "class" => "or_cancel") {
           @template.concat %{ or }
-          @template.concat @template.link_to('cancel', cancel_path(options[:cancel]))
+          @template.concat @template.link_to("cancel", cancel_path(options[:cancel]))
         }
       }
     end
 
     def save_or_cancel(options = {})
-      form_actions(options.reverse_merge(buttons: { save: 'Save' }))
+      form_actions(options.reverse_merge(buttons: { save: "Save" }))
     end
 
     def save_or_cancel_buttons(options = {})
@@ -59,12 +58,12 @@ module Whitehall
         options[:buttons].each do |name, value|
           @template.concat submit(value, name: name, class: "btn btn-large btn-primary")
         end
-        @template.concat @template.link_to('Cancel', cancel_path(options[:cancel]), class: 'btn btn-large add-left-gutter')
+        @template.concat @template.link_to("Cancel", cancel_path(options[:cancel]), class: "btn btn-large add-left-gutter")
       }
     end
 
     def save_or_continue_or_cancel(options = {})
-      buttons = { save: 'Save', save_and_continue: 'Save and continue editing' }
+      buttons = { save: "Save", save_and_continue: "Save and continue editing" }
       form_actions(options.reverse_merge(buttons: buttons))
     end
 
@@ -196,7 +195,7 @@ module Whitehall
     end
 
     def translated_input(method, input, options = {})
-      options = right_to_left? ? {class: 'right-to-left'} : {}
+      options = right_to_left? ? {class: "right-to-left"} : {}
       @template.content_tag :fieldset, options do
         input + untranslated_text(method)
       end
@@ -204,7 +203,7 @@ module Whitehall
 
     def translated_input_options(options)
       if right_to_left?
-        options.merge(dir: 'rtl')
+        options.merge(dir: "rtl")
       else
         options
       end
@@ -213,11 +212,11 @@ module Whitehall
     def horizontal_group(label_tag, content_tag, options = {})
       @template.content_tag(:div, class: "control-group") do
         label_tag +
-        @template.content_tag(:div, class: "controls") do
-          content_tag +
-            (options[:help_block] ? @template.content_tag(:span, options[:help_block], class: "help-block") : "") +
-            (options[:help_inline] ? @template.content_tag(:span, options[:help_inline], class: "help-inline") : "")
-        end
+          @template.content_tag(:div, class: "controls") do
+            content_tag +
+              (options[:help_block] ? @template.content_tag(:span, options[:help_block], class: "help-block") : "") +
+              (options[:help_inline] ? @template.content_tag(:span, options[:help_inline], class: "help-inline") : "")
+          end
       end
     end
 
@@ -236,7 +235,7 @@ module Whitehall
     end
 
     def file_cache_already_uploaded(method)
-      @template.content_tag(:span, "#{File.basename(object.send("#{method}_cache"))} already uploaded", class: 'already_uploaded')
+      @template.content_tag(:span, "#{File.basename(object.send("#{method}_cache"))} already uploaded", class: "already_uploaded")
     end
   end
 end

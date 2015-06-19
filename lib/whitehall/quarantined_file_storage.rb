@@ -1,4 +1,4 @@
-require 'whitehall/carrier_wave/sanitized_file'
+require "whitehall/carrier_wave/sanitized_file"
 
 class Whitehall::QuarantinedFileStorage < CarrierWave::Storage::Abstract
   def store!(file)

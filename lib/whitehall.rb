@@ -1,12 +1,12 @@
 module Whitehall
-  autoload :Random, 'whitehall/random'
-  autoload :RandomKey, 'whitehall/random_key'
-  autoload :FormBuilder, 'whitehall/form_builder'
-  autoload :Uploader, 'whitehall/uploader'
-  autoload :UrlMaker, 'whitehall/url_maker'
-  autoload :ExtraQuoteRemover, 'whitehall/extra_quote_remover'
-  autoload :GovUkDelivery, 'whitehall/gov_uk_delivery'
-  autoload :EditionGovspeakRenderer, 'whitehall/edition_govspeak_renderer'
+  autoload :Random, "whitehall/random"
+  autoload :RandomKey, "whitehall/random_key"
+  autoload :FormBuilder, "whitehall/form_builder"
+  autoload :Uploader, "whitehall/uploader"
+  autoload :UrlMaker, "whitehall/url_maker"
+  autoload :ExtraQuoteRemover, "whitehall/extra_quote_remover"
+  autoload :GovUkDelivery, "whitehall/gov_uk_delivery"
+  autoload :EditionGovspeakRenderer, "whitehall/edition_govspeak_renderer"
 
   mattr_accessor :search_backend
   mattr_accessor :government_search_client
@@ -36,9 +36,7 @@ module Whitehall
   end
 
   asset_host_override = Rails.root.join("config/initializers/asset_host.rb")
-  if File.exist?(asset_host_override)
-    load asset_host_override
-  end
+  load asset_host_override if File.exist?(asset_host_override)
 
   class NoConfigurationError < StandardError; end
 
@@ -49,10 +47,10 @@ module Whitehall
   def self.available_locales
     [
       :en, :ar, :az, :be, :bg, :bn, :cs, :cy, :de, :dr, :el,
-      :es, 'es-419', :et, :fa, :fr, :he, :hi, :hu, :hy, :id,
+      :es, "es-419", :et, :fa, :fr, :he, :hi, :hu, :hy, :id,
       :it, :ja, :ka, :ko, :lt, :lv, :ms, :pl, :ps, :pt, :ro,
       :ru, :si, :sk, :so, :sq, :sr, :sw, :ta, :th, :tk, :tr,
-      :uk, :ur, :uz, :vi, :zh, 'zh-hk', 'zh-tw'
+      :uk, :ur, :uz, :vi, :zh, "zh-hk", "zh-tw"
     ]
   end
 
@@ -72,7 +70,7 @@ module Whitehall
   end
 
   def self.admin_host
-    @admin_host ||=  URI(admin_root).host
+    @admin_host ||= URI(admin_root).host
   end
 
   def self.public_host
@@ -84,7 +82,7 @@ module Whitehall
   end
 
   def self.admin_root
-    @admin_root ||= Plek.find('whitehall-admin')
+    @admin_root ||= Plek.find("whitehall-admin")
   end
 
   # NOOP until alphagov-deployment is updated to not set this in the
@@ -110,28 +108,28 @@ module Whitehall
   end
 
   def self.uploads_root_for_test_env
-    env_number = ENV['TEST_ENV_NUMBER'].blank? ? '1' : ENV['TEST_ENV_NUMBER']
+    env_number = ENV["TEST_ENV_NUMBER"].blank? ? "1" : ENV["TEST_ENV_NUMBER"]
     Rails.root.join("tmp/test/env_#{env_number}")
   end
 
   def self.incoming_uploads_root
-    File.join(uploads_root, 'incoming-uploads')
+    File.join(uploads_root, "incoming-uploads")
   end
 
   def self.clean_uploads_root
-    File.join(uploads_root, 'clean-uploads')
+    File.join(uploads_root, "clean-uploads")
   end
 
   def self.infected_uploads_root
-    File.join(uploads_root, 'infected-uploads')
+    File.join(uploads_root, "infected-uploads")
   end
 
   def self.government_search_index_path
-    '/government'
+    "/government"
   end
 
   def self.detailed_guidance_search_index_path
-    '/detailed'
+    "/detailed"
   end
 
   def self.government_search_index
@@ -204,7 +202,7 @@ module Whitehall
   end
 
   def self.rummager_work_queue_name
-    'rummager-delayed-indexing'
+    "rummager-delayed-indexing"
   end
 
   def self.url_maker
@@ -212,7 +210,7 @@ module Whitehall
   end
 
   def self.atom_feed_maker
-    @atom_feed_maker ||= Whitehall::UrlMaker.new(host: Whitehall.public_host, protocol: Whitehall.public_protocol, format: 'atom')
+    @atom_feed_maker ||= Whitehall::UrlMaker.new(host: Whitehall.public_host, protocol: Whitehall.public_protocol, format: "atom")
   end
 
   def self.edition_services
@@ -220,7 +218,7 @@ module Whitehall
   end
 
   def self.panopticon_registerer_for(registerable_edition)
-    GdsApi::Panopticon::Registerer.new(owning_app: 'whitehall', rendering_app: registerable_edition.rendering_app, kind: registerable_edition.kind)
+    GdsApi::Panopticon::Registerer.new(owning_app: "whitehall", rendering_app: registerable_edition.rendering_app, kind: registerable_edition.kind)
   end
 
   def self.load_secrets
@@ -233,7 +231,7 @@ module Whitehall
   private_class_method :load_secrets
 
   def self.secrets_path
-    Rails.root + 'config' + 'whitehall_secrets.yml'
+    Rails.root + "config" + "whitehall_secrets.yml"
   end
   private_class_method :secrets_path
 end

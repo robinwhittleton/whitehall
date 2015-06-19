@@ -1,4 +1,4 @@
-require 'gds_api/router'
+require "gds_api/router"
 
 module DataHygiene
   class StatisticsAnnouncementUnpublisher

@@ -17,11 +17,11 @@ module Whitehall
 
       def should_notify_govuk_delivery?
         edition.published? &&
-        edition_type_is_deliverable? &&
-        major_change? &&
-        published_today? &&
-        !outdated_speech? &&
-        available_in_english?
+          edition_type_is_deliverable? &&
+          major_change? &&
+          published_today? &&
+          !outdated_speech? &&
+          available_in_english?
       end
 
       def edition_type_is_deliverable?

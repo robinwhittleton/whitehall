@@ -9,19 +9,19 @@ module Whitehall::Uploader
         .optional(%w{hoc_paper_number parliamentary_session unnumbered_hoc_paper unnumbered_command_paper}) # First attachment
         .ignored("ignore_*")
         .multiple(%w{attachment_#_url attachment_#_title}, 0..Row::ATTACHMENT_LIMIT)
-        .optional('json_attachments')
+        .optional("json_attachments")
         .multiple("country_#", 0..4)
         .optional(%w(html_title html_body))
-        .multiple('html_body_#', 0..99)
+        .multiple("html_body_#", 0..99)
         .multiple("topic_#", 0..4)
     end
 
     def first_published_at
-      Parsers::DateParser.parse(row['publication_date'], @logger, @line_number)
+      Parsers::DateParser.parse(row["publication_date"], @logger, @line_number)
     end
 
     def publication_type
-      Finders::PublicationTypeFinder.find(row['publication_type'], @logger, @line_number)
+      Finders::PublicationTypeFinder.find(row["publication_type"], @logger, @line_number)
     end
 
     def related_editions
@@ -29,7 +29,7 @@ module Whitehall::Uploader
     end
 
     def document_collections
-      fields(1..4, 'document_collection_#').compact.reject(&:blank?)
+      fields(1..4, "document_collection_#").compact.reject(&:blank?)
     end
 
     def attachments
@@ -45,16 +45,16 @@ module Whitehall::Uploader
     end
 
     def world_locations
-      Finders::WorldLocationsFinder.find(row['country_1'], row['country_2'], row['country_3'], row['country_4'], @logger, @line_number)
+      Finders::WorldLocationsFinder.find(row["country_1"], row["country_2"], row["country_3"], row["country_4"], @logger, @line_number)
     end
 
     def html_title
-      row['html_title']
+      row["html_title"]
     end
 
     def html_body
-      if row['html_body']
-        ([row['html_body']] + (1..99).map {|n| row["html_body_#{n}"] }).compact.join
+      if row["html_body"]
+        ([row["html_body"]] + (1..99).map {|n| row["html_body_#{n}"] }).compact.join
       end
     end
 
@@ -80,7 +80,7 @@ module Whitehall::Uploader
   private
 
     def policy_slugs
-      row.to_hash.select {|k, v| k =~ /^policy_\d+$/ }.values
+      row.to_hash.select {|k, _v| k =~ /^policy_\d+$/ }.values
     end
 
     def attachments_from_json

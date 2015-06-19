@@ -1,6 +1,6 @@
 class Whitehall::Uploader::Finders::RoleAppointmentsFinder
   def self.find(date, *slugs, logger, line_number)
-    slugs = slugs.reject { |slug| slug.blank? }
+    slugs = slugs.reject(&:blank?)
 
     people = slugs.map do |slug|
       person = Person.find_by(slug: slug)

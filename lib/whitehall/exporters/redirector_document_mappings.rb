@@ -1,28 +1,27 @@
 class Whitehall::Exporters::RedirectorDocumentMappings
-
   def url_maker
     @url_maker ||= Whitehall.url_maker
   end
 
   def row(public_url, admin_url)
     [
-      '',
+      "",
       public_url,
-      '',
-      '',
+      "",
+      "",
       admin_url,
-      ''
+      ""
     ]
   end
 
   def edition_values(edition, document, document_source = nil)
     public_url, slug = document_url_and_slug(edition, document, document_source)
-    [(document_source.try(:url) || ''),
-      public_url,
-      http_status(edition),
-      slug,
-      url_maker.admin_edition_url(edition),
-      edition.state]
+    [(document_source.try(:url) || ""),
+     public_url,
+     http_status(edition),
+     slug,
+     url_maker.admin_edition_url(edition),
+     edition.state]
   rescue => e
     Rails.logger.error("Whitehall::Exporters::RedirectorDocumentMappings: when exporting #{edition} - #{e} - #{e.backtrace.join("\n")}")
     nil
@@ -54,9 +53,9 @@ class Whitehall::Exporters::RedirectorDocumentMappings
 
   def http_status(edition)
     if edition.document.published? || any_edition_has_ever_been_published?(edition)
-      '301'
+      "301"
     else
-      '418'
+      "418"
     end
   end
 
@@ -67,7 +66,7 @@ class Whitehall::Exporters::RedirectorDocumentMappings
   end
 
   def export(target)
-    target << ['Old Url', 'New Url', 'Status', 'Slug', 'Admin Url', 'State']
+    target << ["Old Url", "New Url", "Status", "Slug", "Admin Url", "State"]
     Document.find_each do |document|
       document.editions.each do |edition|
         if document.document_sources.any?
@@ -88,11 +87,11 @@ class Whitehall::Exporters::RedirectorDocumentMappings
 
     AttachmentSource.all.each do |attachment_source|
       attachment_url = attachment_source.attachment ? "#{Whitehall.public_root}#{attachment_source.attachment.url}" : ""
-      status = (attachment_url.blank? ? '' : '301')
+      status = (attachment_url.blank? ? "" : "301")
       if attachment_url.present?
         visibility = AttachmentVisibility.new(attachment_source.attachment.attachment_data, nil)
-        state = visibility.visible? ? 'published' : 'draft'
-        target << [attachment_source.url, attachment_url, status, '', '', state]
+        state = visibility.visible? ? "published" : "draft"
+        target << [attachment_source.url, attachment_url, status, "", "", state]
       end
     end
 
