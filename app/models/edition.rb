@@ -210,7 +210,7 @@ class Edition < ActiveRecord::Base
                 edition.related_editions
               else
                 edition.related_policies
-    end
+              end
 
     where(id: related.pluck(:id))
   end

@@ -109,7 +109,7 @@ module OrganisationHelper
                     end
                   else
                     (type_name != "other") ? "#{name} is #{relationship}." : "#{name}"
-    end
+                  end
 
     description.html_safe
   end

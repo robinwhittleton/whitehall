@@ -12,7 +12,7 @@ module Whitehall
                 Dir["#{@path}/#{ENV['VERSION']}_*.rb"]
               else
                 Dir["#{@path}/*_*.rb"]
-      end
+              end
       files.sort.map do |f|
         DataMigration.new(f, logger: @logger)
       end

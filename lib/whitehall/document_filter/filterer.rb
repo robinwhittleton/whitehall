@@ -94,7 +94,7 @@ module Whitehall::DocumentFilter
                              klass.where(slug: slugs)
                            else
                              []
-      end
+                           end
     end
 
     def parse_date(date)

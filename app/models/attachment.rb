@@ -113,7 +113,7 @@ class Attachment < ActiveRecord::Base
                             nil
                           elsif price
                             price.to_f * 100
-    end
+                          end
   end
 
   def set_ordering

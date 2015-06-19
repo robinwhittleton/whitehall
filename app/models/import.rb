@@ -118,7 +118,7 @@ class Import < ActiveRecord::Base
           "Some still imported"
         elsif force_publishable_editions.empty?
           "None to publish"
-                end
+        end
       else
         "Attempt to force publish is already in progress"
       end

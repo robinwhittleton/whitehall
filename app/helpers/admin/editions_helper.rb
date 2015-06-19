@@ -174,7 +174,7 @@ module Admin::EditionsHelper
                  "Attachments <span class='badge'>#{edition.attachments.count}</span>".html_safe
                else
                  "Attachments"
-        end
+               end
         tabs[text] = admin_edition_attachments_path(edition)
       end
 

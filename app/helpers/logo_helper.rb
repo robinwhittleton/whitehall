@@ -21,7 +21,7 @@ module LogoHelper
              image_tag(organisation.logo.url, alt: organisation.name, class: "organisation-logo-custom")
            else
              organisation_logo_name(organisation)
-    end
+           end
     linked_logo = link_to_if(options[:linked], logo, organisation_path(organisation))
     if organisation.custom_logo_selected?
       linked_logo

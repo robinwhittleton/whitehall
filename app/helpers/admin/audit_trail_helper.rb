@@ -7,7 +7,7 @@ module Admin::AuditTrailHelper
              end
            else
              content_tag(:span, entry.action.capitalize, class: "action") + " by"
-    end
+           end
     html << " ".html_safe
     if actor
       html << content_tag(:span, class: "actor") { linked_author(actor) }

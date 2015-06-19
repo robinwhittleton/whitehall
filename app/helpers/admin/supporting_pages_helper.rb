@@ -5,7 +5,7 @@ module Admin::SupportingPagesHelper
                public_document_url(supporting_page, policy_id: policy.document)
              else
                preview_document_path(supporting_page, policy_id: policy.document)
-      end
+             end
 
       [href, "View with policy: #{policy.title}"]
     end

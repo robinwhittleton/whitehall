@@ -13,7 +13,7 @@ class EditionUnpublisher < EditionService
                           "The reason for unpublishing must be present"
                         elsif !edition.unpublishing.valid?
                           edition.unpublishing.errors.full_messages.to_sentence
-    end
+                        end
   end
 
   def verb

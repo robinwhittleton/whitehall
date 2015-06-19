@@ -137,7 +137,7 @@ class OrganisationsControllerTest < ActionController::TestCase
                   create(edition_type, :scheduled,
                     scheduled_publication: Time.zone.now + Whitehall.default_cache_max_age * 2,
                     organisations: [organisation])
-      end
+                end
 
       Timecop.freeze(Time.zone.now + Whitehall.default_cache_max_age * 1.5) do
         get :show, id: organisation

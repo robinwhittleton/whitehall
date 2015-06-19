@@ -10,7 +10,7 @@ module Admin::DefinitionListHelper
               end
             else
               default || default_definition_list_value
-    end
+            end
     content_tag(:dd, value)
   end
 

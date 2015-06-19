@@ -22,7 +22,7 @@ module DataHygiene
                 elsif link =~ /whitehall-admin/
                   "This links to the whitehall-admin domain. Please use paths, eg /government/admin/policies/3373, for documents created in publisher (see guidance on creating links) or full URLs for other GOV.UK links."
                 end
-        end
+              end
 
         {link: link, start: match.begin(0), end: match.end(0), fix: fix} if fix
       end

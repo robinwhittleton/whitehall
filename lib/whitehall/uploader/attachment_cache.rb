@@ -28,7 +28,7 @@ class Whitehall::Uploader::AttachmentCache
         :doc
       elsif file_type =~ /Microsoft PowerPoint/
         :ppt
-            end
+      end
     end
 
     IGNORED_CONTENT_TYPES = ["application/octet-stream"]

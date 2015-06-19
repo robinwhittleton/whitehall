@@ -63,7 +63,7 @@ module Govspeak
                    end.to_html.html_safe
                  else
                    anchor.inner_text
-      end
+                 end
 
       block_given? ? yield(new_html, edition) : new_html
     end
