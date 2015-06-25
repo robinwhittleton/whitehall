@@ -17,7 +17,6 @@ private
       document_collections: edition.published_document_collections.map(&:content_id),
       world_locations: edition.world_locations.map(&:content_id),
       worldwide_organisations: edition.worldwide_organisations.map(&:content_id),
-      worldwide_priorities: edition.worldwide_priorities.map(&:content_id),
     }
   end
 

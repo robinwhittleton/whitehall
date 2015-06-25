@@ -91,12 +91,6 @@ Whitehall::Application.routes.draw do
     resources :statistics, only: [:index, :show], localised: true
     resources :world_location_news_articles, path: 'world-location-news', only: [:index, :show], localised: true
 
-    resources :worldwide_priorities, path: "priority", only: [:index, :show], localised: true do
-      member do
-        get :activity
-      end
-    end
-
     resources :consultations, only: [:index, :show] do
       collection do
         get :open
@@ -302,7 +296,6 @@ Whitehall::Application.routes.draw do
 
         get "/policies/:policy_id/topics" => "policies#topics"
 
-        resources :worldwide_priorities, path: "priority", except: [:index]
         resources :news_articles, path: 'news', except: [:index]
         resources :world_location_news_articles, path: 'world-location-news', except: [:index]
         resources :fatality_notices, path: 'fatalities', except: [:index]

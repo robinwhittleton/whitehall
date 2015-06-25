@@ -17,7 +17,7 @@ class DocumentLocaleParamCanonicalisationTest < ActionDispatch::IntegrationTest
   normal_document_types = [
     "world_location_news_article",
     "publication", "consultation",
-    "statistical_data_set", "worldwide_priority",
+    "statistical_data_set",
     "case_study"
   ]
 

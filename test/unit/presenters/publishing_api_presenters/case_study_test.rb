@@ -50,7 +50,6 @@ class PublishingApiPresenters::CaseStudyTest < ActiveSupport::TestCase
         document_collections: [],
         world_locations: [],
         worldwide_organisations: [],
-        worldwide_priorities: [],
       }
     }
     presented_hash = present(case_study)
@@ -131,7 +130,6 @@ class PublishingApiPresenters::CaseStudyTest < ActiveSupport::TestCase
       document_collections: [],
       world_locations: [],
       worldwide_organisations: [],
-      worldwide_priorities: [],
     }
 
     assert_valid_against_schema(presented_hash, 'case_study')
@@ -179,16 +177,6 @@ class PublishingApiPresenters::CaseStudyTest < ActiveSupport::TestCase
 
     assert_valid_against_schema(presented_hash, 'case_study')
     assert_equal [policy_1["content_id"]], presented_hash[:links][:related_policies]
-  end
-
-  test "links hash includes worldwide priorities" do
-    priority = create(:worldwide_priority)
-    case_study = create(:published_case_study)
-    priority.document.edition_relations.create!(edition: case_study)
-    presented_hash = present(case_study)
-
-    assert_valid_against_schema(presented_hash, 'case_study')
-    assert_equal [priority.content_id], presented_hash[:links][:worldwide_priorities]
   end
 
   test "links hash includes document collections that the case study is part of" do
