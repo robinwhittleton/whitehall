@@ -44,7 +44,7 @@ module Whitehall
 
         assert_equal "Example Topic", filter_options.label_for("topics", "example-topic")
         assert_equal "Example Topical Event", filter_options.label_for("topics", "example-topical-event")
-        assert_equal "All topics", filter_options.label_for("topics", "all")
+        assert_equal "All policy areas", filter_options.label_for("topics", "all")
       end
 
       test '#label_for downcases official docs' do
@@ -148,7 +148,7 @@ module Whitehall
           "Topics" => [[topic.name, topic.slug]],
           "Topical events" => [[topical_event.name, topical_event.slug]]
         }
-        assert_equal ["All topics", "all"], options.all
+        assert_equal ["All policy areas", "all"], options.all
         assert_equal expected_grouped_options, options.grouped
         assert_equal [], options.ungrouped
       end
