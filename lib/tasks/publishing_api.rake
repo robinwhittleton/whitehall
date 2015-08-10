@@ -1,3 +1,5 @@
+require "gds_api/publishing_api"
+
 namespace :publishing_api do
   namespace :draft do
     namespace :populate do
@@ -24,5 +26,11 @@ namespace :publishing_api do
         Whitehall::PublishingApi::LiveEnvironmentPopulator.new(items: CaseStudy.latest_published_edition.find_each, logger: Logger.new(STDOUT)).call
       end
     end
+  end
+
+  desc "Publish special routes (eg /government)"
+  task publish_special_routes: :environment do
+    publishing_api = GdsApi::PublishingApi.new(Plek.find("publishing-api"))
+    SpecialRoute.publish_all(publishing_api)
   end
 end
