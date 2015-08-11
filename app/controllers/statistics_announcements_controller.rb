@@ -13,7 +13,7 @@ class StatisticsAnnouncementsController < PublicFacingController
   end
 
   def show
-    @announcement = StatisticsAnnouncement.friendly.find(params[:id])
+    @announcement = StatisticsAnnouncement.friendly.published.find(params[:id])
 
     if @announcement.publication.try :published?
       redirect_to public_document_url(@announcement.publication), status: :moved_permanently

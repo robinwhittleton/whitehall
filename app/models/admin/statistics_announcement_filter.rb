@@ -84,32 +84,38 @@ module Admin
       # GROUP combine to ensure the correct things are loaded and in the correct
       # order.
       StatisticsAnnouncement.includes(:current_release_date, statistics_announcement_topics: :topic, publication: :translations, organisations: :translations)
-                            .joins("INNER JOIN statistics_announcement_dates
-                              ON (statistics_announcement_dates.statistics_announcement_id = statistics_announcements.id)")
-                            .joins("LEFT OUTER JOIN statistics_announcement_dates sd2
-                              ON (sd2.statistics_announcement_id = statistics_announcements.id
-                              AND statistics_announcement_dates.created_at > sd2.created_at)")
-                            .group('statistics_announcement_dates.statistics_announcement_id')
-                            .page(options[:page])
+        .joins("INNER JOIN statistics_announcement_dates
+          ON (statistics_announcement_dates.statistics_announcement_id = statistics_announcements.id)")
+        .joins("LEFT OUTER JOIN statistics_announcement_dates sd2
+          ON (sd2.statistics_announcement_id = statistics_announcements.id
+          AND statistics_announcement_dates.created_at > sd2.created_at)")
+        .group('statistics_announcement_dates.statistics_announcement_id')
+        .page(options[:page])
+        .published
     end
 
     def unlinked_scope
-      StatisticsAnnouncement.where("publication_id is NULL")
+      StatisticsAnnouncement.where("publication_id is NULL").published
     end
 
     def date_and_order_scope
       case options[:dates]
       when 'past'
-        StatisticsAnnouncement.where("statistics_announcement_dates.release_date < ?", Time.zone.now)
-                              .order("statistics_announcement_dates.release_date DESC")
+        StatisticsAnnouncement.
+          where("statistics_announcement_dates.release_date < ?", Time.zone.now).
+          order("statistics_announcement_dates.release_date DESC").
+          published
       when 'future'
         StatisticsAnnouncement.where("statistics_announcement_dates.release_date > ?", Time.zone.now)
-                              .order("statistics_announcement_dates.release_date ASC")
+          .order("statistics_announcement_dates.release_date ASC")
+          .published
       when 'imminent'
-        StatisticsAnnouncement.where("statistics_announcement_dates.release_date > ? AND statistics_announcement_dates.release_date < ?", Time.zone.now, 2.weeks.from_now)
-                              .order("statistics_announcement_dates.release_date ASC")
+        StatisticsAnnouncement.
+          where("statistics_announcement_dates.release_date > ? AND statistics_announcement_dates.release_date < ?", Time.zone.now, 2.weeks.from_now).
+          order("statistics_announcement_dates.release_date ASC").
+          published
       else
-        StatisticsAnnouncement.order("statistics_announcement_dates.release_date DESC")
+        StatisticsAnnouncement.order("statistics_announcement_dates.release_date DESC").published
       end
     end
   end

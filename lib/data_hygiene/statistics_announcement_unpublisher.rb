@@ -22,7 +22,7 @@ module DataHygiene
     attr_reader :announcement_slug, :logger
 
     def announcement
-      @announcement ||= StatisticsAnnouncement.find_by(slug: announcement_slug)
+      @announcement ||= StatisticsAnnouncement.published.find_by(slug: announcement_slug)
     end
 
     def register_gone_route

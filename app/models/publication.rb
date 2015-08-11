@@ -124,7 +124,7 @@ class Publication < Publicationesque
 
   def assign_statistics_announcement
     if statistics_announcement_id.present?
-      self.statistics_announcement = StatisticsAnnouncement.find(statistics_announcement_id)
+      self.statistics_announcement = StatisticsAnnouncement.published.find(statistics_announcement_id)
     end
   end
 

@@ -36,6 +36,7 @@ class StatisticsAnnouncement < ActiveRecord::Base
   scope :in_organisations, Proc.new { |organisation_ids| joins(:statistics_announcement_organisations)
     .where(statistics_announcement_organisations: { organisation_id: organisation_ids })
   }
+  scope :published, -> { where(unpublished: false) }
 
   include Searchable
   searchable  only: :without_published_publication,
