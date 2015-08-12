@@ -1,7 +1,9 @@
 class Unpublishing < ActiveRecord::Base
   belongs_to :edition
+  belongs_to :statistics_announcement
 
-  validates :edition, :unpublishing_reason, :document_type, :slug, presence: true
+  validates :unpublishing_reason, :document_type, :slug, presence: true
+  validate :edition_or_statistics_announcement_present
   validates :explanation, presence: { message: "must be provided when withdrawing", if: :withdrawn? }
   validates :alternative_url, presence: { message: "must be provided to redirect the document", if: :redirect? }
   validates :alternative_url, uri: true, allow_blank: true
@@ -36,7 +38,11 @@ class Unpublishing < ActiveRecord::Base
   # Because the edition may have been deleted, we override the slug in case it
   # has bee pre-fixed with 'deleted-'
   def document_path
-    Whitehall.url_maker.public_document_path(edition, id: slug)
+    if edition
+      Whitehall.url_maker.public_document_path(edition, id: slug)
+    elsif statistics_announcement
+      raise "Not sure what this should be - maybe statistics_announcement.public_path ?"
+    end
   end
 
   # Because the edition may have been deleted, we need to find it unscoped to
@@ -55,6 +61,12 @@ private
       if document_path == alternative_path
         errors.add(:alternative_url, "cannot redirect to itself")
       end
+    end
+  end
+
+  def edition_or_statistics_announcement_present
+    if edition.nil? && statistics_announcement.nil?
+      errors.add(:base, "edition or statistics announcement needs to be set")
     end
   end
 

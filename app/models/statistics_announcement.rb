@@ -18,6 +18,8 @@ class StatisticsAnnouncement < ActiveRecord::Base
   has_many :statistics_announcement_organisations, inverse_of: :statistics_announcement, dependent: :destroy
   has_many :organisations, through: :statistics_announcement_organisations
 
+  has_one :unpublishing, dependent: :destroy
+
   validate  :publication_is_matching_type, if: :publication
   validates :title, :summary, :organisations, :topics, :creator, :current_release_date, presence: true
   validates :cancellation_reason, presence: {  message: "must be provided when cancelling an announcement" }, if: :cancelled?
@@ -36,6 +38,7 @@ class StatisticsAnnouncement < ActiveRecord::Base
   scope :in_organisations, Proc.new { |organisation_ids| joins(:statistics_announcement_organisations)
     .where(statistics_announcement_organisations: { organisation_id: organisation_ids })
   }
+  scope :published, -> { eager_load(:unpublishing).where(unpublishings: {id: nil}) }
 
   include Searchable
   searchable  only: :without_published_publication,

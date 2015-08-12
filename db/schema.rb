@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150811135445) do
+ActiveRecord::Schema.define(version: 20150812131926) do
 
   create_table "about_pages", force: :cascade do |t|
     t.integer  "topical_event_id",    limit: 4
@@ -1107,18 +1107,20 @@ ActiveRecord::Schema.define(version: 20150811135445) do
   add_index "take_part_pages", ["slug"], name: "index_take_part_pages_on_slug", unique: true, using: :btree
 
   create_table "unpublishings", force: :cascade do |t|
-    t.integer  "edition_id",             limit: 4
-    t.integer  "unpublishing_reason_id", limit: 4
-    t.text     "explanation",            limit: 65535
-    t.text     "alternative_url",        limit: 65535
+    t.integer  "edition_id",                 limit: 4
+    t.integer  "unpublishing_reason_id",     limit: 4
+    t.text     "explanation",                limit: 65535
+    t.text     "alternative_url",            limit: 65535
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "document_type",          limit: 255
-    t.string   "slug",                   limit: 255
-    t.boolean  "redirect",               limit: 1,     default: false
+    t.string   "document_type",              limit: 255
+    t.string   "slug",                       limit: 255
+    t.boolean  "redirect",                   limit: 1,     default: false
+    t.integer  "statistics_announcement_id", limit: 4
   end
 
   add_index "unpublishings", ["edition_id"], name: "index_unpublishings_on_edition_id", using: :btree
+  add_index "unpublishings", ["statistics_announcement_id"], name: "index_unpublishings_on_statistics_announcement_id", using: :btree
   add_index "unpublishings", ["unpublishing_reason_id"], name: "index_unpublishings_on_unpublishing_reason_id", using: :btree
 
   create_table "user_world_locations", force: :cascade do |t|

@@ -216,6 +216,13 @@ class StatisticsAnnouncementTest < ActiveSupport::TestCase
     end
   end
 
+  test '#destroy destroys unpublishing associations' do
+    statistics_announcement = create(:unpublished_statistics_announcement)
+    assert_difference %w(StatisticsAnnouncement.count Unpublishing.count), -1 do
+      statistics_announcement.destroy
+    end
+  end
+
   test 'StatisticsAnnouncement.with_topics scope returns announcements with matching topics' do
     topic1 = create(:topic)
     topic2 = create(:topic)
@@ -229,6 +236,12 @@ class StatisticsAnnouncementTest < ActiveSupport::TestCase
       StatisticsAnnouncement.with_topics([topic2])
   end
 
+  test 'StatisticsAnnouncement.published scope filters out unpublished announcements' do
+    announcement = create(:statistics_announcement)
+    create(:unpublished_statistics_announcement)
+
+    assert_equal [announcement], StatisticsAnnouncement.published
+  end
 private
 
   def create_announcement_with_changes

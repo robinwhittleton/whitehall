@@ -24,4 +24,8 @@ FactoryGirl.define do
     cancellation_reason "Cancelled for a reason"
     cancelled_at Time.zone.now
   end
+
+  factory :unpublished_statistics_announcement, parent: :statistics_announcement do
+    association :unpublishing, factory: :redirect_unpublishing
+  end
 end

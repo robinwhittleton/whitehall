@@ -6,9 +6,10 @@ class UnpublishingTest < ActiveSupport::TestCase
     refute unpublishing.valid?
   end
 
-  test 'is not valid without an edition' do
+  test 'is not valid without an edition or a statistics announcement' do
     unpublishing = build(:unpublishing)
     unpublishing.edition = nil
+    unpublishing.statistics_announcement = nil
 
     refute unpublishing.valid?
   end
@@ -45,6 +46,18 @@ class UnpublishingTest < ActiveSupport::TestCase
 
     refute unpublishing.valid?
     assert unpublishing.errors[:alternative_url].include?("cannot redirect to itself")
+  end
+
+  test 'alternative_url cannot be the same url as the statistics announcement' do
+    statistics_announcement = create(:statistics_announcement, slug: 'some-slug')
+    unpublishing = build(:unpublishing,
+      redirect: true,
+      alternative_url: 'https://www.dev.gov.uk/government/statistics/announcements/some-slug',
+      statistics_announcement: statistics_announcement,
+    )
+
+    refute unpublishing.valid?
+    assert unpublishing.errors[:alternative_url].include?("cannot redirect to itself"), unpublishing.alternative_url
   end
 
   test 'alternative_url must not be external (must be in the form of https://www.gov.uk/example)' do
